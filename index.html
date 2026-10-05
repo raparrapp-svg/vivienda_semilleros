@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINVIVIENDA - SISTEMA CIBERNÉTICO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+        
+        body {
+            background-color: #030610; 
+            color: #e0e0e0; 
+            font-family: 'Rajdhani', sans-serif; 
+            margin: 0; padding: 20px;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.05), transparent 60%);
+            background-size: 40px 40px, 40px 40px, 100% 100%;
+            overflow-x: hidden;
+        }
+
+        .cyber-panel {
+            background: rgba(4, 9, 20, 0.85); 
+            border: 1px solid #142038; 
+            position: relative; 
+            box-shadow: inset 0 0 30px rgba(0,255,136,0.05);
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+            padding: 18px;
+            transition: all 0.3s ease;
+        }
+        .cyber-panel:hover {
+            border-color: rgba(0, 255, 136, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1), inset 0 0 30px rgba(0,255,136,0.1);
+        }
+
+        .cyber-panel::after {
+            content: ''; position: absolute;
+            top: 0; left: 15px; width: 40px; height: 2px;
+            background: #00ff88; box-shadow: 0 0 10px #00ff88;
+        }
+        .cyber-panel-orange { box-shadow: inset 0 0 30px rgba(255,94,0,0.05); }
+        .cyber-panel-orange::after { background: #ff5e00; box-shadow: 0 0 10px #ff5e00; }
+
+        .panel-header { 
+            font-size: 13px; font-weight: 700; color: #7890b5; 
+            text-transform: uppercase; letter-spacing: 3px; 
+            padding-bottom: 8px; border-bottom: 1px solid rgba(120, 144, 181, 0.2); 
+            margin-bottom: 12px; display: flex; justify-content: space-between;
+        }
+        .panel-header::before { content: '■ '; color: #00ff88; font-size: 10px; }
+        .cyber-panel-orange .panel-header::before { color: #ff5e00; }
+
+        .neon-text-green { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.8); }
+        .neon-text-orange { color: #ff5e00; text-shadow: 0 0 15px rgba(255, 94, 0, 0.8); }
+        .hud-font { font-family: 'Share Tech Mono', monospace; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(20, 32, 56, 0.5); }
+        ::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff5e00; }
+
+        select { 
+            background: rgba(4, 9, 20, 0.9); border: 1px solid #00ff88; color: #00ff88; 
+            padding: 4px 8px; outline: none; font-family: 'Share Tech Mono'; width: 100%; font-size: 11px;
+            text-transform: uppercase; box-shadow: inset 0 0 10px rgba(0,255,136,0.2);
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+        }
+        label { font-size: 9px; color: #7890b5; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; }
+        
+        table { width: 100%; text-align: left; border-collapse: collapse; }
+        th { border-bottom: 1px solid #00ff88; padding: 6px; color: #00ff88; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;}
+        td { padding: 6px; border-bottom: 1px dashed #142038; font-size: 12px; font-family: 'Share Tech Mono'; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030610; }
+        ::-webkit-scrollbar-thumb { background: #00ff88; }
+        
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Estilos para el Drawer (Ventana Lateral) */
+        #sideDrawer {
+            position: fixed; top: 0; left: 0; width: 400px; height: 100vh;
+            background: rgba(4, 9, 20, 0.95); border-right: 2px solid #00ff88;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,255,136,0.1);
+            z-index: 50; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; display: flex; flex-direction: column; overflow-y: auto;
+        }
+        #sideDrawer.active { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <!-- Drawer Lateral para Detalles de Observación -->
+    <div id="sideDrawer">
+        <div class="flex justify-between items-start mb-6 border-b border-[#142038] pb-4">
+            <div>
+                <div class="text-[10px] text-[#00ff88] hud-font mb-1">PERFIL BENEFICIARIO</div>
+                <h2 id="drwName" class="text-xl font-bold text-white tracking-wider">NOMBRE</h2>
+                <div id="drwDoc" class="text-sm text-[#7890b5] hud-font">DOC: 123456789</div>
+            </div>
+            <button onclick="closeDrawer()" class="text-gray-500 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <div class="text-[10px] text-[#7890b5] tracking-widest">RESOLUCIÓN</div>
+                <div id="drwRes" class="text-[#00ff88] hud-font font-bold">---</div>
+            </div>
+            <div>
+                <div class="text-[10px] text-[#7890b5] tracking-widest">CIUDAD</div>
+                <div id="drwCity" class="text-white hud-font">---</div>
+            </div>
+            <div>
+                <div class="text-[10px] text-[#7890b5] tracking-widest">FECHA INICIO PAGOS</div>
+                <div id="drwFecIni" class="text-[#ff5e00] hud-font text-xs">---</div>
+            </div>
+            <div>
+                <div class="text-[10px] text-[#7890b5] tracking-widest">ESTADO ACTUAL</div>
+                <div id="drwAvance" class="text-[#00ccff] hud-font text-xs font-bold">---</div>
+            </div>
+            <div>
+                <div class="text-[10px] text-[#7890b5] tracking-widest">VALOR PAGADO</div>
+                <div id="drwVal" class="text-white hud-font font-bold">---</div>
+            </div>
+            <div>
+                <div class="text-[10px] text-[#7890b5] tracking-widest">PENDIENTE</div>
+                <div id="drwPend" class="text-red-400 hud-font text-xs font-bold">---</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="text-[10px] text-[#7890b5] tracking-widest border-b border-[#142038] pb-1 mb-2">ARRENDADOR</div>
+            <div id="drwArrendador" class="text-white hud-font text-sm">---</div>
+        </div>
+
+        <div class="mb-4 p-3 border border-[#ff5e00]/30 bg-[#ff5e00]/5 rounded">
+            <div class="text-[10px] text-[#ff5e00] tracking-widest border-b border-[#ff5e00]/30 pb-1 mb-2 font-bold">REPORTE DE NOVEDADES</div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <div class="text-[8px] text-[#7890b5] tracking-widest">¿PRESENTA NOVEDAD?</div>
+                    <div id="drwPresNov" class="text-white hud-font text-xs">---</div>
+                </div>
+                <div>
+                    <div class="text-[8px] text-[#7890b5] tracking-widest">ESTADO ACTUAL</div>
+                    <div id="drwEstAct" class="text-white hud-font text-xs">---</div>
+                </div>
+                <div>
+                    <div class="text-[8px] text-[#7890b5] tracking-widest">FECHA DE LA NOVEDAD</div>
+                    <div id="drwFecNov" class="text-[#00ccff] hud-font text-xs">---</div>
+                </div>
+                <div>
+                    <div class="text-[8px] text-[#7890b5] tracking-widest">TIPO DE NOVEDAD</div>
+                    <div id="drwTipoNov" class="text-red-400 hud-font text-xs">---</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow">
+            <div class="text-[10px] text-[#00ff88] tracking-widest border-b border-[#00ff88] pb-1 mb-3">OBSERVACIONES TÉCNICAS</div>
+            <div id="drwObs" class="text-gray-300 text-sm font-sans leading-relaxed p-4 bg-[#030610] rounded border border-[#142038] shadow-inner" style="min-height: 150px;">
+                Sin observaciones.
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center text-[9px] text-gray-600 hud-font tracking-widest">
+            MINVIVIENDA - SUBSIDY DATA STREAM
+        </div>
+    </div>
+
+    <!-- Encabezado Sci-Fi HUD -->
+    <div class="flex flex-col xl:flex-row xl:items-center justify-between mb-2 mt-2 border-b border-[#00ff88]/30 pb-2 w-full gap-1 relative">
+        
+        <!-- TRAPEZIO 1: MINVIVIENDA (Naranja) - Izquierdo / \ -->
+        <div style="flex: 2; clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #ff5e00; padding: 1px;">
+            <div style="clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #030610; height: 100%; min-height: 40px;" class="flex items-center justify-center py-2 px-6 text-[#ff5e00] font-bold tracking-widest text-[10px] xl:text-xs hud-font">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                MINVIVIENDA
+            </div>
+        </div>
+        
+        <!-- TRAPEZIO 2: BALANCE DE PAGOS SEMILLEROS (Verde) - Invertido \ / -->
+        <div style="flex: 5; clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 15px 100%); background: #00ff88; padding: 1px;">
+            <div style="clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 15px 100%); background: #030610; height: 100%; min-height: 40px;" class="flex items-center justify-center py-2 px-6 text-[#00ff88] font-bold tracking-[0.2em] text-[10px] xl:text-xs hud-font">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                BALANCE DE PAGOS SEMILLEROS
+            </div>
+        </div>
+
+        <!-- TRAPEZIO 3: FECHA (Verde) - Derecho / \ -->
+        <div style="flex: 2; clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #00ff88; padding: 1px;">
+            <div style="clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #030610; height: 100%; min-height: 40px;" class="flex flex-col items-center justify-center py-1 px-6 text-[#00ff88] hud-font">
+                <div class="font-bold tracking-widest text-[10px] xl:text-xs" id="headDate">-- --- ----</div>
+                <div class="text-[9px] tracking-widest" id="headTime">--:-- COT</div>
+            </div>
+        </div>
+        
+    </div>
+        
+        <!-- Filtros Integrados -->
+        <div class="flex flex-wrap gap-2 items-end w-full mb-6 mt-2">
+            <div style="width: 100px;"><label>Resolución</label><select id="f_resolucion" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
+            <div style="width: 110px;"><label>Ciudad</label><select id="f_ciudad" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
+            <div style="width: 80px;"><label>Periodo</label><select id="f_periodo" onchange="applyFilters()"><option value="TODAS">TODOS</option></select></div>
+            <div style="width: 100px;"><label>¿Novedad?</label><select id="f_presnov" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
+            <div style="width: 120px;"><label>Tipo Novedad</label><select id="f_tnov" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
+            <div style="width: 100px;"><label>Estado Actual</label><select id="f_estact" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
+            <div class="ml-auto flex gap-2">
+                <button onclick="resetFilters()" class="h-[26px] px-3 bg-[#142038] text-[#ff5e00] text-[10px] font-bold tracking-widest border border-[#ff5e00] hover:bg-[#ff5e00] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">BORRAR</button>
+                <button onclick="downloadDataset()" class="h-[26px] px-3 bg-[#00ff88]/10 text-[#00ff88] text-[10px] font-bold tracking-widest border border-[#00ff88] hover:bg-[#00ff88] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">💾 DATA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Principal -->
+    <div class="grid grid-cols-12 gap-5 mb-5">
+        
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="col-span-4 flex flex-col gap-5">
+            <div class="grid grid-cols-2 gap-3">
+                
+                <!-- KPI Beneficiarios -->
+                <div class="cyber-panel p-3 flex flex-col justify-between relative">
+                    <div class="text-[10px] text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
+                    <div class="flex justify-between items-end">
+                        <div id="kpiBeneficiarios" class="text-xl font-bold neon-text-green hud-font">0</div>
+                        <div class="relative w-14 h-14 flex-shrink-0">
+                            <svg class="w-14 h-14 transform -rotate-90">
+                                <circle cx="28" cy="28" r="24" fill="transparent" stroke="#142038" stroke-width="4" />
+                                <circle id="circBen" cx="28" cy="28" r="24" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                            </svg>
+                            <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[10px] text-[#00ff88] hud-font font-bold">100%</div>
+                        </div>
+                    </div>
+                    <div class="w-full h-1.5 bg-[#142038] mt-3 rounded overflow-hidden">
+                        <div id="lineBen" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 100%;"></div>
+                    </div>
+                </div>
+                
+                <!-- KPI Pagado -->
+                <div class="cyber-panel cyber-panel-orange p-3 flex flex-col justify-between relative">
+                    <div class="text-[10px] text-[#ff5e00] tracking-widest mb-1">TOTAL DESEMBOLSADO</div>
+                    <div class="flex justify-between items-end">
+                        <div id="kpiPagado" class="text-[16px] font-bold neon-text-orange hud-font">$0</div>
+                        <div class="relative w-14 h-14 flex-shrink-0">
+                            <svg class="w-14 h-14 transform -rotate-90">
+                                <circle cx="28" cy="28" r="24" fill="transparent" stroke="#381805" stroke-width="4" />
+                                <circle id="circVal" cx="28" cy="28" r="24" fill="transparent" stroke="#ff5e00" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                            </svg>
+                            <div id="circValText" class="absolute inset-0 flex items-center justify-center text-[10px] text-[#ff5e00] hud-font font-bold">100%</div>
+                        </div>
+                    </div>
+                    <div class="w-full h-1.5 bg-[#381805] mt-3 rounded overflow-hidden">
+                        <div id="lineVal" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width: 100%;"></div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="cyber-panel p-4" style="height: 330px;">
+                <div class="panel-header"><span>AVANCE TOP CIUDADES</span><span class="text-[9px] hud-font text-gray-500">SYS.RANKING</span></div>
+                <div id="radialChart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- COLUMNA CENTRAL: MAPA DE RED GEOGRÁFICO -->
+        <div class="col-span-4 flex flex-col gap-5">
+            <div class="cyber-panel p-4 flex flex-col relative" style="height: 435px;">
+                <div id="mapChart" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA -->
+        <div class="col-span-4 flex flex-col gap-5">
+            <div class="cyber-panel p-4" style="height: 220px;">
+                <div class="panel-header"><span>TENDENCIA FLUJO M.</span><span class="text-[9px] hud-font text-gray-500">TIME.SERIES</span></div>
+                <div id="lineChart" style="width: 100%; height: 100%;"></div>
+            </div>
+            
+            <div class="cyber-panel cyber-panel-orange p-4" style="height: 195px;">
+                <div class="panel-header text-[#ff5e00]"><span>TIPO NOVEDAD</span></div>
+                <div id="pieLegalizado" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gran Tabla de Datos Inferior -->
+    <div class="cyber-panel p-4">
+        <div class="panel-header flex-col md:flex-row gap-2 items-start md:items-center">
+            <span>TERMINAL_BASE_DE_DATOS</span>
+            <div class="flex items-center gap-2">
+                <span class="text-[#00ff88] text-[10px] hud-font">BÚSQUEDA GLOBAL:</span>
+                <input type="text" id="globalSearch" onkeyup="applyFilters()" placeholder="Cédula, Beneficiario o Arrendador..." 
+                    class="bg-[#142038] border border-[#00ff88] text-white px-2 py-1 text-xs w-64 outline-none hud-font placeholder-gray-600 transition-all focus:shadow-[0_0_10px_rgba(0,255,136,0.5)]">
+                <span id="tableCounter" class="hidden"></span>
+            </div>
+        </div>
+        <div class="overflow-x-auto overflow-y-auto" style="max-height: 175px;">
+            <table id="dataTable">
+                <thead class="sticky top-0 bg-[#030610] z-10 shadow-md">
+                    <tr>
+                        <th onclick="sortTable('res')" class="cursor-pointer hover:text-white group">RESOLUCIÓN <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('id')" class="cursor-pointer hover:text-white group">ID <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('docPpt')" class="cursor-pointer hover:text-white group">DOCUMENTO PPT <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('ben')" class="cursor-pointer hover:text-white group">NOMBRE BENEFICIARIO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('ciu')" class="cursor-pointer hover:text-white group">CIUDAD <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('est')" class="cursor-pointer hover:text-white group">ESTADO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('per')" class="cursor-pointer hover:text-white group">PERIODO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('val')" class="cursor-pointer hover:text-white group">VALOR PAGADO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th onclick="sortTable('tnov')" class="cursor-pointer hover:text-white group">NOVEDAD <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                        <th>OBSERVACIONES TÉCNICAS</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let allData = [], filteredData = [], charts = {};
+        let expandedCity = null;
+        let currentTableData = []; 
+        
+        const formatMoney = (n) => "$" + parseInt(n||0).toLocaleString();
+        const formatMoneyShort = (n) => {
+            if(n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+            if(n >= 1000) return '$' + (n/1000).toFixed(0) + 'K';
+            return '$' + n;
+        };
+        
+        const cityCoords = {
+            "BOGOTA": [-74.08, 4.60], "BOGOTÁ": [-74.08, 4.60], "BOGOTÁ, D.C.": [-74.08, 4.60],
+            "MEDELLIN": [-75.56, 6.25], "MEDELLÍN": [-75.56, 6.25], "CALI": [-76.52, 3.45], "SANTIAGO DE CALI": [-76.52, 3.45],
+            "BARRANQUILLA": [-74.79, 10.96], "SOLEDAD": [-74.76, 10.91],
+            "BUCARAMANGA": [-73.12, 7.12], "FLORIDABLANCA": [-73.09, 7.06],
+            "CARTAGENA": [-75.48, 10.39], "CARTAGENA DE INDIAS": [-75.48, 10.39],
+            "CUCUTA": [-72.50, 7.89], "CÚCUTA": [-72.50, 7.89], "SAN JOSÉ DE CÚCUTA": [-72.50, 7.89], "VILLA DEL ROSARIO": [-72.47, 7.83],
+            "SANTA MARTA": [-74.20, 11.24], "IBAGUE": [-75.23, 4.43], "IBAGUÉ": [-75.23, 4.43], 
+            "PEREIRA": [-75.69, 4.81], "MANIZALES": [-75.51, 5.06], "BELLO": [-75.55, 6.33],
+            "VILLAVICENCIO": [-73.62, 4.14], "VALLEDUPAR": [-73.24, 10.46], 
+            "MONTERIA": [-75.88, 8.75], "MONTERÍA": [-75.88, 8.75], "PASTO": [-77.28, 1.21], 
+            "NEIVA": [-75.29, 2.92], "ARMENIA": [-75.68, 4.53],
+            "QUIBDO": [-76.66, 5.69], "QUIBDÓ": [-76.66, 5.69],
+            "ARAUCA": [-70.76, 7.08], "SARAVENA": [-71.87, 6.95], "FONSECA": [-72.85, 8.86]
+        };
+
+        const col = { doc: '', ciu: '', res: '', est: '', leg: '', nov: '', per: '', val: '', obs: '', ben: '', tnov: '', arrDoc: '', arrNom: '', fecIni: '', id: '', docPpt: '' };
+
+        function findKey(obj, searchStr) { return Object.keys(obj).find(k => k.includes(searchStr)) || searchStr; }
+
+        async function init() {
+            charts.radial = echarts.init(document.getElementById('radialChart'), 'dark');
+            charts.pie = echarts.init(document.getElementById('pieLegalizado'), 'dark');
+            charts.line = echarts.init(document.getElementById('lineChart'), 'dark');
+            charts.map = echarts.init(document.getElementById('mapChart'), 'dark');
+            window.addEventListener('resize', () => { Object.values(charts).forEach(c => c.resize()); });
+
+            charts.map.on('click', function(params) {
+                if(params.componentType === 'series' && params.name) {
+                    if (document.getElementById('f_ciudad').value === params.name) {
+                        document.getElementById('f_ciudad').value = "TODAS";
+                        expandedCity = null;
+                    } else {
+                        document.getElementById('f_ciudad').value = params.name;
+                        expandedCity = params.name;
+                    }
+                    applyFilters();
+                }
+            });
+
+            try {
+                const mapRes = await fetch('./colombia.json');
+                const geoJson = await mapRes.json();
+                echarts.registerMap('colombia', geoJson);
+
+                const response = await fetch('./data_github.json');
+                allData = await response.json();
+                
+                if(allData.length > 0) {
+                    let r = allData[0];
+                    col.doc = findKey(r, 'NUMERO DE DOCUMENTO'); col.ciu = findKey(r, 'CIUDAD');
+                    col.res = findKey(r, 'RESOLUCION'); col.est = findKey(r, 'ESTADO GENERAL');
+                    col.leg = findKey(r, 'LEGALIZADO');
+                    col.per = findKey(r, 'PERIODO_PAGO'); col.val = findKey(r, 'VALOR_PAGADO');
+                    col.obs = findKey(r, 'OBSERVACIONES'); col.ben = findKey(r, 'NOMBRE BENEFICIARIO');
+                    col.nov = findKey(r, 'PRESENTA NOVEDAD');
+                    col.fnov = findKey(r, 'FECHA DE LA NOVEDAD');
+                    col.tnov = findKey(r, 'TIPO DE NOVEDAD');
+                    col.estAct = findKey(r, 'ESTADO ACTUAL');
+                    col.pend = findKey(r, 'PENDIENTE POR PAGAR');
+                    col.valMen = findKey(r, 'VALOR SUBSIDIO AL CANON ARRIENDO MENSUAL');
+                    col.arrDoc = findKey(r, '# DOCUMENTO DEL ARRENDADOR');
+                    col.arrNom = findKey(r, 'NOMBRE ARRENDADOR');
+                    col.fecIni = findKey(r, 'FECHA INICIO');
+                    col.id = findKey(r, 'ID');
+                    col.docPpt = findKey(r, 'NUMERO DE DOCUMENTO PPT') || col.doc;
+                }
+                filteredData = [...allData];
+                populateDropdowns();
+                updateDashboard();
+                
+                // Static Metadata for GitHub
+                document.getElementById('headDate').innerText = '04 OCT 2026';
+                document.getElementById('headTime').innerText = '00:00 COT';
+            } catch(e) { console.error("Error cargando los datos estáticos de GitHub:", e); }
+        }
+
+        function populateDropdowns() {
+            const getUnique = (key) => {
+                let unique = [...new Set(allData.map(d => d[key]).filter(x => x !== null && x !== ''))];
+                if (key === col.per) {
+                    unique.sort((a,b) => (parseInt(a.replace(/[^0-9]/g,''))||0) - (parseInt(b.replace(/[^0-9]/g,''))||0));
+                } else {
+                    unique.sort();
+                }
+                return unique;
+            };
+            const fill = (id, vals) => { const sel = document.getElementById(id); vals.forEach(v => sel.add(new Option(v, v))); };
+            fill('f_resolucion', getUnique(col.res)); fill('f_ciudad', getUnique(col.ciu));
+            fill('f_periodo', getUnique(col.per));
+            fill('f_presnov', getUnique(col.nov));
+            fill('f_tnov', getUnique(col.tnov));
+            fill('f_estact', getUnique(col.estAct));
+        }
+
+        function resetFilters() {
+            document.getElementById('f_resolucion').value = "TODAS";
+            document.getElementById('f_ciudad').value = "TODAS";
+            document.getElementById('f_periodo').value = "TODAS";
+            document.getElementById('f_presnov').value = "TODAS";
+            document.getElementById('f_tnov').value = "TODAS";
+            document.getElementById('f_estact').value = "TODAS";
+            document.getElementById('globalSearch').value = "";
+            expandedCity = null;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            let f = {
+                res: document.getElementById('f_resolucion').value, ciu: document.getElementById('f_ciudad').value,
+                per: document.getElementById('f_periodo').value,
+                presnov: document.getElementById('f_presnov').value,
+                tnov: document.getElementById('f_tnov').value,
+                estact: document.getElementById('f_estact').value
+            };
+            let searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
+            
+            filteredData = allData.filter(d => {
+                let matchFilters = (f.res === "TODAS" || d[col.res] == f.res) && 
+                                   (f.ciu === "TODAS" || d[col.ciu] == f.ciu) &&
+                                   (f.per === "TODAS" || d[col.per] == f.per) &&
+                                   (f.presnov === "TODAS" || d[col.nov] == f.presnov) &&
+                                   (f.tnov === "TODAS" || d[col.tnov] == f.tnov) &&
+                                   (f.estact === "TODAS" || d[col.estAct] == f.estact);
+                
+                let matchSearch = true;
+                if(searchTerm) {
+                    let str = String(d[col.ben]||'') + " " + String(d[col.doc]||'') + " " + String(d[col.arrNom]||'') + " " + String(d[col.arrDoc]||'');
+                    str = str.toLowerCase();
+                    let searchTerms = searchTerm.split(' ').filter(x => x.length > 0);
+                    matchSearch = searchTerms.every(term => str.includes(term));
+                }
+                return matchFilters && matchSearch;
+            });
+            expandedCity = (f.ciu === "TODAS") ? null : f.ciu;
+            updateDashboard();
+        }
+
+        let sortCol = null;
+        let sortAsc = true;
+        
+        function sortTable(keyId) {
+            let actualKey = col[keyId];
+            if(sortCol === actualKey) sortAsc = !sortAsc;
+            else { sortCol = actualKey; sortAsc = true; }
+            
+            filteredData.sort((a, b) => {
+                let valA = a[actualKey] || '';
+                let valB = b[actualKey] || '';
+                
+                if(actualKey === col.val) {
+                    valA = parseFloat(valA) || 0;
+                    valB = parseFloat(valB) || 0;
+                } else {
+                    valA = String(valA).toLowerCase();
+                    valB = String(valB).toLowerCase();
+                }
+
+                if(valA < valB) return sortAsc ? -1 : 1;
+                if(valA > valB) return sortAsc ? 1 : -1;
+                return 0;
+            });
+            updateDashboard();
+        }
+
+        function updatePyramidChart(dataset) {
+            let allPeriods = [...new Set(allData.map(d => d[col.per]).filter(Boolean))];
+            allPeriods.sort((a,b) => (parseInt(String(a).replace(/[^0-9]/g,''))||0) - (parseInt(String(b).replace(/[^0-9]/g,''))||0));
+            
+            let periodosObj = {};
+            allPeriods.forEach(p => periodosObj[p] = 0);
+            dataset.forEach(d => { if(d[col.per]) periodosObj[d[col.per]] += (parseFloat(d[col.val])||0); });
+
+            charts.line.setOption({
+                backgroundColor: 'transparent', grid: { top: 60, bottom: 45, left: 65, right: 15 },
+                xAxis: { 
+                    type: 'category', 
+                    data: allPeriods.map((s, i) => { let n = String(s).replace(/[^0-9]/g,''); return n ? n : String(i+1); }), 
+                    axisLabel: { show: true, color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0, margin: 10 } 
+                },
+                yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono', formatter: p => formatMoneyShort(p) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                series: [{ 
+                    data: allPeriods.map(k => periodosObj[k]), type: 'pictorialBar', symbol: 'path://M0,10 L10,0 L20,10 z', barWidth: '60%',
+                    itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,94,0,0.8)' }, { offset: 1, color: 'rgba(255,94,0,0.1)' }]), borderColor: '#ff5e00', borderWidth: 1.5, shadowColor: '#ff5e00', shadowBlur: 5 },
+                    label: { 
+                        show: true, position: 'top', rotate: 45, color: '#ff5e00', 
+                        fontFamily: 'Share Tech Mono', fontSize: 9, align: 'left', verticalAlign: 'middle',
+                        formatter: p => p.value > 0 ? formatMoney(p.value) : '' 
+                    }
+                }]
+            });
+        }
+
+        // Funciones del Drawer
+        function openDrawer(index) {
+            const d = currentTableData[index];
+            if(!d) return;
+
+            let personData = allData.filter(x => x[col.doc] === d[col.doc]);
+            let totalVal = personData.reduce((sum, x) => sum + (parseFloat(x[col.val])||0), 0);
+            let countPagos = personData.filter(x => parseFloat(x[col.val]) > 0).length;
+
+            let maxAvance = Math.max(...personData.map(x => parseFloat(x[col.est])||0));
+            let pendienteVal = parseFloat(personData[0]?.[col.pend] || 0);
+            let valMensual = parseFloat(personData[0]?.[col.valMen] || 1);
+            let pagosPendientes = Math.round(pendienteVal / valMensual);
+
+            updatePyramidChart(personData); // Filtra las piramides para este usuario
+
+            const formatEstado = (val) => {
+                let num = parseFloat(val);
+                if (!isNaN(num) && num <= 1 && num >= 0) {
+                    if (num === 1) return '100%';
+                    if (num === 0) return '0%';
+                    return (num * 100).toFixed(1) + '%';
+                }
+                return val;
+            };
+
+            document.getElementById('drwName').innerText = d[col.ben] || 'SIN NOMBRE';
+            document.getElementById('drwDoc').innerText = "DOC: " + (d[col.doc] || '---');
+            document.getElementById('drwRes').innerText = d[col.res] || '---';
+            document.getElementById('drwCity').innerText = d[col.ciu] || '---';
+            
+            let fecIniRaw = d[col.fecIni];
+            let fecIniStr = '---';
+            if (fecIniRaw) {
+                if (typeof fecIniRaw === 'number') {
+                    if (fecIniRaw < 100000) fecIniStr = new Date(Math.round((fecIniRaw - 25569) * 86400 * 1000)).toISOString().split('T')[0];
+                    else fecIniStr = new Date(fecIniRaw).toISOString().split('T')[0];
+                } else { fecIniStr = String(fecIniRaw).split('T')[0]; }
+            }
+            document.getElementById('drwFecIni').innerText = fecIniStr;
+            
+            document.getElementById('drwAvance').innerText = formatEstado(maxAvance) || '---';
+            document.getElementById('drwVal').innerText = formatMoney(totalVal) + ` (${countPagos} pagos)`;
+            document.getElementById('drwPend').innerText = formatMoney(pendienteVal) + ` (${pagosPendientes} pendientes)`;
+            
+            let arrName = d[col.arrNom] || 'SIN ARRENDADOR';
+            let arrDoc = d[col.arrDoc] ? ` (DOC: ${d[col.arrDoc]})` : '';
+            document.getElementById('drwArrendador').innerText = arrName + arrDoc;
+            
+            document.getElementById('drwPresNov').innerText = d[col.nov] || 'NO';
+            document.getElementById('drwEstAct').innerText = d[col.estAct] || '---';
+            
+            let fnovRaw = d[col.fnov];
+            let dateStr = '---';
+            if (fnovRaw) {
+                if (typeof fnovRaw === 'number') {
+                    // Check if it's an Excel serial date (< 100000) or an Epoch timestamp (> 100000)
+                    if (fnovRaw < 100000) dateStr = new Date(Math.round((fnovRaw - 25569) * 86400 * 1000)).toISOString().split('T')[0];
+                    else dateStr = new Date(fnovRaw).toISOString().split('T')[0];
+                } else {
+                    dateStr = String(fnovRaw).split('T')[0];
+                }
+            }
+            document.getElementById('drwFecNov').innerText = dateStr;
+            
+            document.getElementById('drwTipoNov').innerText = d[col.tnov] || 'NINGUNA';
+            
+            document.getElementById('drwObs').innerText = d[col.obs] || 'El sistema no registra observaciones detalladas para este beneficiario en el periodo actual.';
+
+            document.getElementById('sideDrawer').classList.add('active');
+        }
+
+        function closeDrawer() {
+            document.getElementById('sideDrawer').classList.remove('active');
+            updatePyramidChart(filteredData); // Restaura las piramides a los datos filtrados
+        }
+
+        // Cerrar el drawer al hacer clic fuera de él
+        document.addEventListener('click', function(e) {
+            let drawer = document.getElementById('sideDrawer');
+            if (drawer.classList.contains('active')) {
+                if (!drawer.contains(e.target) && !e.target.closest('tr')) {
+                    closeDrawer();
+                }
+            }
+        });
+
+        function downloadDataset() {
+            if(!allData || allData.length === 0) return;
+            let headers = Object.keys(allData[0]);
+            let csvContent = "\uFEFF" + headers.join(";") + "\n";
+            
+            allData.forEach(row => {
+                let rowValues = headers.map(h => {
+                    let val = row[h];
+                    if(val === null || val === undefined) return '""';
+                    return '"' + String(val).replace(/"/g, '""') + '"';
+                });
+                csvContent += rowValues.join(";") + "\n";
+            });
+            
+            let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            let link = document.createElement("a");
+            if (link.download !== undefined) {
+                let url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "Minvivienda_Dataset.csv");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function updateDashboard() {
+            // Total global (unfiltered) para calcular porcentajes
+            let totalBenUnfiltered = new Set(allData.map(d => d[col.doc])).size || 1;
+            let totalValUnfiltered = allData.reduce((sum, d) => sum + (parseFloat(d[col.val]) || 0), 0) || 1;
+
+            // Filtrados actuales
+            let currentBen = new Set(filteredData.map(d => d[col.doc])).size;
+            let currentVal = filteredData.reduce((sum, d) => sum + (parseFloat(d[col.val]) || 0), 0);
+
+            let pctBen = (currentBen / totalBenUnfiltered) * 100;
+            let pctVal = (currentVal / totalValUnfiltered) * 100;
+
+            document.getElementById('kpiBeneficiarios').innerText = currentBen.toLocaleString();
+            document.getElementById('kpiPagado').innerText = formatMoneyShort(currentVal);
+
+            // Actualizar circulos (stroke-dasharray="150.8")
+            document.getElementById('circBen').style.strokeDashoffset = 150.8 - (pctBen * 150.8 / 100);
+            document.getElementById('circBenText').innerText = pctBen.toFixed(1) + "%";
+            document.getElementById('lineBen').style.width = pctBen + "%";
+
+            document.getElementById('circVal').style.strokeDashoffset = 150.8 - (pctVal * 150.8 / 100);
+            document.getElementById('circValText').innerText = pctVal.toFixed(1) + "%";
+            document.getElementById('lineVal').style.width = pctVal + "%";
+
+            let mapDataObj = {};
+            filteredData.forEach(d => { if(d[col.ciu]) mapDataObj[d[col.ciu]] = (mapDataObj[d[col.ciu]]||0) + (parseFloat(d[col.val])||0); });
+            
+            let maxVal = Math.max(...Object.values(mapDataObj), 1);
+            let minVal = Math.min(...Object.values(mapDataObj), 0);
+            
+            let mapNodes = Object.entries(mapDataObj).map(e => {
+                let coords = cityCoords[e[0].toUpperCase()] || [-74 + (Math.random()-0.5)*2, 4 + (Math.random()-0.5)*2];
+                return { 
+                    name: e[0], 
+                    value: [coords[0], coords[1], e[1]]
+                };
+            });
+            
+            let edges = [];
+            let detailNodes = [];
+            
+            if(mapNodes.length > 1) {
+                let center = mapNodes.find(n => n.name.includes("BOGOTA")) || mapNodes[0];
+                mapNodes.forEach(n => { if(n.name !== center.name) edges.push({ coords: [center.value, n.value] }); });
+            }
+
+            if(expandedCity && mapDataObj[expandedCity]) {
+                let baseCoords = cityCoords[expandedCity.toUpperCase()] || [-74, 4];
+                let cityData = filteredData.filter(d => d[col.ciu] === expandedCity);
+                let periodosCity = {};
+                cityData.forEach(d => { if(d[col.per]) periodosCity[d[col.per]] = (periodosCity[d[col.per]]||0) + (parseFloat(d[col.val])||0); });
+                
+                let pKeys = Object.keys(periodosCity);
+                let radius = 0.5;
+                pKeys.forEach((k, i) => {
+                    let angle = (i / pKeys.length) * Math.PI * 2;
+                    let pLon = baseCoords[0] + Math.cos(angle)*radius;
+                    let pLat = baseCoords[1] + Math.sin(angle)*radius;
+                    detailNodes.push({
+                        name: k,
+                        value: [pLon, pLat, periodosCity[k]],
+                        itemStyle: { color: '#00ccff', shadowColor: '#00ccff' } 
+                    });
+                    edges.push({ coords: [baseCoords, [pLon, pLat]], lineStyle: { color: '#00ccff', opacity: 0.5 } });
+                });
+            }
+
+            charts.map.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { formatter: p => p.name ? (p.name + '<br/>' + formatMoney(p.value[2])) : '' },
+                visualMap: {
+                    type: 'continuous',
+                    seriesIndex: 1, 
+                    min: minVal,
+                    max: maxVal,
+                    calculable: true,
+                    realtime: false,
+                    inRange: { color: ['#ff3300', '#ffcc00', '#00ff88'] },
+                    text: ['Mayor $', 'Menor $'],
+                    textStyle: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono' },
+                    bottom: 10, right: 10, itemHeight: 80, itemWidth: 10,
+                    formatter: (value) => formatMoneyShort(value)
+                },
+                geo: {
+                    map: 'colombia',
+                    roam: true,
+                    zoom: 2.1,
+                    center: [-74.0, 7.5],
+                    aspectScale: 1.0,
+                    layoutCenter: ['50%', '50%'], 
+                    layoutSize: '100%',
+                    itemStyle: {
+                        areaColor: 'rgba(20, 32, 56, 0.4)',
+                        borderColor: 'rgba(0, 255, 136, 0.25)', 
+                        borderWidth: 0.5,
+                        shadowColor: 'transparent',
+                        shadowBlur: 0
+                    },
+                    emphasis: {
+                        itemStyle: { areaColor: 'rgba(0, 255, 136, 0.1)' },
+                        label: { show: false }
+                    }
+                },
+                series: [
+                    {
+                        type: 'lines', coordinateSystem: 'geo',
+                        data: edges, lineStyle: { color: '#00ff88', opacity: 0.2, width: 1, curveness: 0.2 },
+                        effect: { show: true, period: 3, trailLength: 0.5, color: '#fff', symbolSize: 2 }
+                    },
+                    {
+                        type: 'effectScatter', coordinateSystem: 'geo',
+                        symbolSize: val => Math.max(5, Math.min(18, val[2] / (maxVal/18))), 
+                        data: mapNodes,
+                        label: { show: true, formatter: '{b}', position: 'right', color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono' },
+                        rippleEffect: { period: 4, scale: 2.5, brushType: 'stroke' }
+                    },
+                    {
+                        type: 'scatter', coordinateSystem: 'geo',
+                        symbolSize: 6,
+                        data: detailNodes,
+                        label: { show: true, formatter: '{b}', position: 'top', color: '#00ccff', fontSize: 8, fontFamily: 'Share Tech Mono' },
+                    }
+                ]
+            });
+
+            updatePyramidChart(filteredData);
+
+            // Calculate ranking ignoring city filter for fading effect
+            let f_ciu = document.getElementById('f_ciudad').value;
+            let f_res = document.getElementById('f_resolucion').value;
+            let f_per = document.getElementById('f_periodo').value;
+            let f_presnov = document.getElementById('f_presnov').value;
+            let f_tnov = document.getElementById('f_tnov').value;
+            let f_estact = document.getElementById('f_estact').value;
+            let searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
+            
+            let rankingData = allData.filter(d => {
+                let matchFilters = (f_res === "TODAS" || d[col.res] == f_res) && 
+                                   (f_per === "TODAS" || d[col.per] == f_per) && 
+                                   (f_presnov === "TODAS" || d[col.nov] == f_presnov) &&
+                                   (f_tnov === "TODAS" || d[col.tnov] == f_tnov) &&
+                                   (f_estact === "TODAS" || d[col.estAct] == f_estact);
+                let matchSearch = true;
+                if(searchTerm) {
+                    let str = String(d[col.ben]||'') + " " + String(d[col.doc]||'') + " " + String(d[col.arrNom]||'') + " " + String(d[col.arrDoc]||'');
+                    matchSearch = searchTerm.split(' ').filter(x => x.length > 0).every(term => str.toLowerCase().includes(term));
+                }
+                return matchFilters && matchSearch;
+            });
+            
+            let rankingObj = {};
+            rankingData.forEach(d => { if(d[col.ciu]) rankingObj[d[col.ciu]] = (rankingObj[d[col.ciu]]||0) + (parseFloat(d[col.val])||0); });
+
+            let topCiu = Object.entries(rankingObj).sort((a,b) => a[1]-b[1]);
+            let topIndex = topCiu.length - 1;
+            let filteredCiu = f_ciu === "TODAS" ? null : f_ciu;
+
+            charts.radial.setOption({
+                backgroundColor: 'transparent',
+                grid: { top: 10, bottom: 10, left: 110, right: 90 },
+                dataZoom: [
+                    { 
+                        type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false, moveOnMouseWheel: true,
+                        startValue: Math.max(0, topCiu.length - 15), endValue: topCiu.length - 1
+                    }
+                ],
+                xAxis: { type: 'value', show: false },
+                yAxis: { 
+                    type: 'category', 
+                    data: topCiu.map(t=>t[0]), 
+                    axisLabel: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono', interval: 0, width: 100, overflow: 'truncate' }, 
+                    axisLine: { show: false }, 
+                    axisTick: { show: false } 
+                },
+                series: [{
+                    type: 'bar', 
+                    data: topCiu.map((t, i) => ({ 
+                        value: t[1], 
+                        itemStyle: { 
+                            color: (filteredCiu && t[0] !== filteredCiu) ? 'rgba(0, 204, 255, 0.15)' : new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                                { offset: 0, color: i === topIndex ? '#00ff88' : '#00ccff' }, 
+                                { offset: 1, color: 'rgba(0, 255, 136, 0.1)' }
+                            ]),
+                            borderRadius: [0, 4, 4, 0]
+                        } 
+                    })),
+                    barMaxWidth: 15,
+                    label: { 
+                        show: true, position: 'right', 
+                        formatter: p => formatMoney(p.value),
+                        color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono'
+                    }
+                }]
+            });
+
+            const countTNovArr = Object.entries(filteredData.reduce((obj, d) => { 
+                let v = d[col.tnov] || 'N/A'; 
+                obj[v] = (obj[v]||0)+1; 
+                return obj; 
+            }, {})).sort((a,b) => a[1]-b[1]);
+            
+            let totalTNov = countTNovArr.reduce((s, x) => s + x[1], 0);
+            let maxTNov = countTNovArr.length > 0 ? countTNovArr[countTNovArr.length - 1][1] : 1;
+
+            charts.pie.setOption({
+                backgroundColor: 'transparent',
+                grid: { top: 15, bottom: 20, left: 160, right: 90 },
+                dataZoom: [
+                    { 
+                        type: 'inside', yAxisIndex: [0, 1], zoomOnMouseWheel: false, moveOnMouseWheel: true,
+                        startValue: Math.max(0, countTNovArr.length - 6), endValue: countTNovArr.length - 1
+                    },
+                    { 
+                        type: 'slider', yAxisIndex: [0, 1], width: 4, right: 2, 
+                        borderColor: 'transparent', fillerColor: 'rgba(255, 94, 0, 0.5)', 
+                        backgroundColor: 'rgba(20, 32, 56, 0.5)', handleSize: 0, showDetail: false,
+                        startValue: Math.max(0, countTNovArr.length - 6), endValue: countTNovArr.length - 1
+                    }
+                ],
+                xAxis: { type: 'value', show: false },
+                yAxis: [
+                    { 
+                        type: 'category', 
+                        data: countTNovArr.map(e => e[0]), 
+                        axisLabel: { 
+                            show: true, color: '#fff', fontSize: 10, width: 150, overflow: 'truncate', fontFamily: 'Share Tech Mono'
+                        },
+                        axisLine: { show: false }, axisTick: { show: false }
+                    },
+                    { 
+                        type: 'category', 
+                        data: countTNovArr.map(e => `${e[1]} (${(e[1]/(totalTNov||1)*100).toFixed(1)}%)`), 
+                        axisLabel: { 
+                            show: true, color: '#00ff88', fontSize: 11, fontFamily: 'Share Tech Mono', margin: 15, align: 'left'
+                        },
+                        axisLine: { show: false }, axisTick: { show: false }
+                    }
+                ],
+                series: [{
+                    type: 'bar',
+                    data: countTNovArr.map(e => e[1]),
+                    itemStyle: { color: '#ff5e00', borderRadius: [0, 3, 3, 0] },
+                    barMaxWidth: 15,
+                    label: { show: false }
+                }]
+            }, true);
+
+            const formatEstado = (val) => {
+                let num = parseFloat(val);
+                if (!isNaN(num) && num <= 1 && num >= 0) {
+                    if (num === 1) return '100%';
+                    if (num === 0) return '0%';
+                    return (num * 100).toFixed(1) + '%';
+                }
+                return val;
+            };
+
+            currentTableData = filteredData.slice(0, 100);
+            document.getElementById('tableCounter').innerText = `RECS: ${currentTableData.length}/${filteredData.length}`;
+            document.getElementById('tableBody').innerHTML = currentTableData.map((d, i) => `
+                <tr onclick="openDrawer(${i})" class="cursor-pointer hover:bg-[#00ff88]/10 transition-colors" title="Clic para ver detalles de observación">
+                    <td class="text-[#00ff88]/70">${d[col.res] || ''}</td>
+                    <td class="text-[#7890b5]">${d[col.id] || ''}</td>
+                    <td class="text-[#00ff88]">${d[col.docPpt] || ''}</td>
+                    <td class="text-white">${d[col.ben] || ''}</td>
+                    <td>${d[col.ciu] || ''}</td>
+                    <td><span class="px-2 py-1 bg-[#00ff88]/20 border border-[#00ff88]/50 rounded text-[10px] text-[#00ff88] font-bold">${formatEstado(d[col.est]) || ''}</span></td>
+                    <td class="text-[#ff5e00]">${d[col.per] || ''}</td>
+                    <td class="text-[#00ff88]">${formatMoney(d[col.val])}</td>
+                    <td class="text-[#ff5e00] font-bold">${d[col.tnov] || 'OK'}</td>
+                    <td class="text-[#00ff88]/70" style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <span class="bg-[#00ff88]/20 border border-[#00ff88]/50 text-[#00ff88] px-2 py-0.5 rounded text-[9px] mr-1">VER MÁS</span> 
+                        ${d[col.obs] || '---'}
+                    </td>
+                </tr>
+            `).join('');
+            if(!currentTableData.length) document.getElementById('tableBody').innerHTML = "<tr><td colspan='12' class='text-center text-[#ff5e00] py-4 blink'>NO_DATA_FOUND</td></tr>";
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -10,17 +10,22 @@
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
         
         body {
-            background-color: #030610; 
-            color: #e0e0e0; 
-            font-family: 'Rajdhani', sans-serif; 
-            margin: 0; padding: 20px;
+            background-color: #030610;
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            margin: 0; padding: 5px 20px 20px 20px;
+            box-sizing: border-box;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             background-image: 
                 linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px),
                 radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.05), transparent 60%);
             background-size: 40px 40px, 40px 40px, 100% 100%;
-            overflow-x: hidden;
         }
+        * { box-sizing: border-box; }
 
         .cyber-panel {
             background: rgba(4, 9, 20, 0.85); 
@@ -41,6 +46,7 @@
             top: 0; left: 15px; width: 40px; height: 2px;
             background: #00ff88; box-shadow: 0 0 10px #00ff88;
         }
+        .cyber-panel-purple { border-left: 2px solid #b026ff; box-shadow: inset 0 0 10px rgba(176, 38, 255, 0.05); }
         .cyber-panel-orange { box-shadow: inset 0 0 30px rgba(255,94,0,0.05); }
         .cyber-panel-orange::after { background: #ff5e00; box-shadow: 0 0 10px #ff5e00; }
 
@@ -139,7 +145,7 @@
 
         <div class="mb-4 p-3 border border-[#ff5e00]/30 bg-[#ff5e00]/5 rounded">
             <div class="text-[10px] text-[#ff5e00] tracking-widest border-b border-[#ff5e00]/30 pb-1 mb-2 font-bold">REPORTE DE NOVEDADES</div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-2">
                 <div>
                     <div class="text-[8px] text-[#7890b5] tracking-widest">¿PRESENTA NOVEDAD?</div>
                     <div id="drwPresNov" class="text-white hud-font text-xs">---</div>
@@ -169,14 +175,14 @@
         <div class="mt-8 text-center text-[9px] text-gray-600 hud-font tracking-widest">
             MINVIVIENDA - SUBSIDY DATA STREAM
         </div>
-    </div>
+    </div> <!-- End sideDrawer -->
 
     <!-- Encabezado Sci-Fi HUD -->
-    <div class="flex flex-col xl:flex-row xl:items-center justify-between mb-2 mt-2 border-b border-[#00ff88]/30 pb-2 w-full gap-1 relative">
+    <div class="flex flex-col xl:flex-row xl:items-center justify-between mb-1 mt-1 border-b border-[#00ff88]/30 pb-1 w-full gap-1 relative">
         
         <!-- TRAPEZIO 1: MINVIVIENDA (Naranja) - Izquierdo / \ -->
         <div style="flex: 2; clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #ff5e00; padding: 1px;">
-            <div style="clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #030610; height: 100%; min-height: 40px;" class="flex items-center justify-center py-2 px-6 text-[#ff5e00] font-bold tracking-widest text-[10px] xl:text-xs hud-font">
+            <div style="clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #030610; height: 100%; min-height: 20px;" class="flex items-center justify-center px-4 text-[#ff5e00] font-bold tracking-widest text-[9px] xl:text-[10px] hud-font">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 MINVIVIENDA
             </div>
@@ -184,7 +190,7 @@
         
         <!-- TRAPEZIO 2: BALANCE DE PAGOS SEMILLEROS (Verde) - Invertido \ / -->
         <div style="flex: 5; clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 15px 100%); background: #00ff88; padding: 1px;">
-            <div style="clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 15px 100%); background: #030610; height: 100%; min-height: 40px;" class="flex items-center justify-center py-2 px-6 text-[#00ff88] font-bold tracking-[0.2em] text-[10px] xl:text-xs hud-font">
+            <div style="clip-path: polygon(0 0, 100% 0, calc(100% - 15px) 100%, 15px 100%); background: #030610; height: 100%; min-height: 20px;" class="flex items-center justify-center px-4 text-[#00ff88] font-bold tracking-[0.2em] text-[9px] xl:text-[10px] hud-font">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                 BALANCE DE PAGOS SEMILLEROS
             </div>
@@ -192,47 +198,65 @@
 
         <!-- TRAPEZIO 3: FECHA (Verde) - Derecho / \ -->
         <div style="flex: 2; clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #00ff88; padding: 1px;">
-            <div style="clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #030610; height: 100%; min-height: 40px;" class="flex flex-col items-center justify-center py-1 px-6 text-[#00ff88] hud-font">
-                <div class="font-bold tracking-widest text-[10px] xl:text-xs" id="headDate">-- --- ----</div>
-                <div class="text-[9px] tracking-widest" id="headTime">--:-- COT</div>
+            <div style="clip-path: polygon(15px 0, calc(100% - 15px) 0, 100% 100%, 0 100%); background: #030610; height: 100%; min-height: 20px;" class="flex flex-row items-center justify-center px-4 text-[#00ff88] hud-font font-bold tracking-widest text-[9px] xl:text-[10px]">
+                <span id="headDate">-- --- ----</span>
+                <span class="mx-2 text-[#00ff88]/40">|</span>
+                <span id="headTime">--:-- COT</span>
             </div>
         </div>
         
     </div>
-        
+    
+    <!-- Tabs Navegación -->
+    <div class="flex gap-4 mb-2 border-b border-[#142038] pb-1">
+        <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-xs font-bold transition-all">OPERACIÓN DIARIA</button>
+        <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all">ANÁLISIS DE EJECUCIÓN</button>
+<button onclick="switchTab('laboratorio')" id="tab_laboratorio" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all">LABORATORIO VISUAL</button>
+    </div>
+
+
         <!-- Filtros Integrados -->
-        <div class="flex flex-wrap gap-2 items-end w-full mb-6 mt-2">
-            <div style="width: 100px;"><label>Resolución</label><select id="f_resolucion" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
-            <div style="width: 110px;"><label>Ciudad</label><select id="f_ciudad" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
-            <div style="width: 80px;"><label>Periodo</label><select id="f_periodo" onchange="applyFilters()"><option value="TODAS">TODOS</option></select></div>
-            <div style="width: 100px;"><label>¿Novedad?</label><select id="f_presnov" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
-            <div style="width: 120px;"><label>Tipo Novedad</label><select id="f_tnov" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
-            <div style="width: 100px;"><label>Estado Actual</label><select id="f_estact" onchange="applyFilters()"><option value="TODAS">TODAS</option></select></div>
+        <div class="flex flex-wrap gap-2 items-center w-full mb-3 mt-1">
+            <div style="width: 110px;"><select id="f_resolucion" onchange="applyFilters()"><option value="TODAS">RESOLUCIÓN</option></select></div>
+            <div style="width: 120px;"><select id="f_ciudad" onchange="applyFilters()"><option value="TODAS">CIUDAD</option></select></div>
+            <div style="width: 90px;"><select id="f_periodo" onchange="applyFilters()"><option value="TODAS">PERIODO</option></select></div>
+            
+            <div style="width: 130px;"><select id="f_tnov" onchange="applyFilters()"><option value="TODAS">TIPO NOVEDAD</option></select></div>
+            <div style="width: 120px;"><select id="f_estact" onchange="applyFilters()"><option value="TODAS">ESTADO ACTUAL</option></select></div>
             <div class="ml-auto flex gap-2">
                 <button onclick="resetFilters()" class="h-[26px] px-3 bg-[#142038] text-[#ff5e00] text-[10px] font-bold tracking-widest border border-[#ff5e00] hover:bg-[#ff5e00] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">BORRAR</button>
                 <button onclick="downloadDataset()" class="h-[26px] px-3 bg-[#00ff88]/10 text-[#00ff88] text-[10px] font-bold tracking-widest border border-[#00ff88] hover:bg-[#00ff88] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">💾 DATA</button>
             </div>
         </div>
-    </div>
+
+
+
+    <!-- VISTA 1: OPERACIÓN DIARIA -->
+    <div id="view_operacion" style="display: block;">
+        
+    <!-- Removed stray div -->
 
     <!-- Layout Principal -->
-    <div class="grid grid-cols-12 gap-5 mb-5">
+    <div class="grid grid-cols-12 gap-3 mb-3">
         
         <!-- COLUMNA IZQUIERDA -->
-        <div class="col-span-4 flex flex-col gap-5">
-            <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-4 flex flex-col gap-3">
+            <div class="grid grid-cols-2 gap-2">
                 
                 <!-- KPI Beneficiarios -->
                 <div class="cyber-panel p-3 flex flex-col justify-between relative">
-                    <div class="text-[10px] text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
+                    <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
                     <div class="flex justify-between items-end">
-                        <div id="kpiBeneficiarios" class="text-xl font-bold neon-text-green hud-font">0</div>
+                        <div class="flex flex-col">
+                            <div id="kpiBeneficiarios" class="text-xl font-bold neon-text-green hud-font">0</div>
+                            <div id="kpiBenTotal" class="text-[11px] text-[#7890b5] hud-font -mt-1 font-bold">de 0</div>
+                        </div>
                         <div class="relative w-14 h-14 flex-shrink-0">
                             <svg class="w-14 h-14 transform -rotate-90">
                                 <circle cx="28" cy="28" r="24" fill="transparent" stroke="#142038" stroke-width="4" />
                                 <circle id="circBen" cx="28" cy="28" r="24" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                             </svg>
-                            <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[10px] text-[#00ff88] hud-font font-bold">100%</div>
+                            <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ff88] hud-font font-bold">100%</div>
                         </div>
                     </div>
                     <div class="w-full h-1.5 bg-[#142038] mt-3 rounded overflow-hidden">
@@ -242,15 +266,18 @@
                 
                 <!-- KPI Pagado -->
                 <div class="cyber-panel cyber-panel-orange p-3 flex flex-col justify-between relative">
-                    <div class="text-[10px] text-[#ff5e00] tracking-widest mb-1">TOTAL DESEMBOLSADO</div>
+                    <div class="text-[11px] font-bold text-[#ff5e00] tracking-widest mb-1">TOTAL DESEMBOLSADO</div>
                     <div class="flex justify-between items-end">
-                        <div id="kpiPagado" class="text-[16px] font-bold neon-text-orange hud-font">$0</div>
+                        <div class="flex flex-col">
+                            <div id="kpiPagado" class="text-[16px] font-bold neon-text-orange hud-font">$0</div>
+                            <div id="kpiPagTotal" class="text-[11px] text-[#7890b5] hud-font -mt-1 font-bold">de $0</div>
+                        </div>
                         <div class="relative w-14 h-14 flex-shrink-0">
                             <svg class="w-14 h-14 transform -rotate-90">
                                 <circle cx="28" cy="28" r="24" fill="transparent" stroke="#381805" stroke-width="4" />
                                 <circle id="circVal" cx="28" cy="28" r="24" fill="transparent" stroke="#ff5e00" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                             </svg>
-                            <div id="circValText" class="absolute inset-0 flex items-center justify-center text-[10px] text-[#ff5e00] hud-font font-bold">100%</div>
+                            <div id="circValText" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#ff5e00] hud-font font-bold">100%</div>
                         </div>
                     </div>
                     <div class="w-full h-1.5 bg-[#381805] mt-3 rounded overflow-hidden">
@@ -260,73 +287,357 @@
                 
             </div>
             
-            <div class="cyber-panel p-4" style="height: 330px;">
-                <div class="panel-header"><span>AVANCE TOP CIUDADES</span><span class="text-[9px] hud-font text-gray-500">SYS.RANKING</span></div>
+            <div class="cyber-panel p-3" style="height: 295px;">
+                <div class="panel-header"><span class="text-[#00ccff]">AVANCE TOP CIUDADES</span><span class="text-[9px] hud-font text-gray-500">SYS.RANKING</span></div>
                 <div id="radialChart" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
         <!-- COLUMNA CENTRAL: MAPA DE RED GEOGRÁFICO -->
-        <div class="col-span-4 flex flex-col gap-5">
-            <div class="cyber-panel p-4 flex flex-col relative" style="height: 435px;">
+        <div class="col-span-3 flex flex-col gap-3">
+            <div class="cyber-panel p-3 flex flex-col relative shrink-0" style="height: 425px;">
                 <div id="mapChart" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
         <!-- COLUMNA DERECHA -->
-        <div class="col-span-4 flex flex-col gap-5">
-            <div class="cyber-panel p-4" style="height: 220px;">
-                <div class="panel-header"><span>TENDENCIA FLUJO M.</span><span class="text-[9px] hud-font text-gray-500">TIME.SERIES</span></div>
+        <div class="col-span-5 flex flex-col gap-3">
+            <div class="cyber-panel p-3" style="height: 220px;">
+                <div class="panel-header"><span class="text-[#00ccff]">TENDENCIA FLUJO M.</span><span class="text-[9px] hud-font text-gray-500">TIME.SERIES</span></div>
                 <div id="lineChart" style="width: 100%; height: 100%;"></div>
             </div>
             
-            <div class="cyber-panel cyber-panel-orange p-4" style="height: 195px;">
-                <div class="panel-header text-[#ff5e00]"><span>TIPO NOVEDAD</span></div>
-                <div id="pieLegalizado" style="width: 100%; height: 100%;"></div>
+            <div class="cyber-panel p-3" style="height: 193px;">
+                <div class="panel-header flex justify-between">
+                    <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA</span>
+                    <span class="hud-font normal-case text-[12px] tracking-wider"><span class="text-[#00ff88] font-bold">Verde=Pagado</span> <span class="text-[#7890b5] mx-1">/</span> <span class="text-[#ff5e00] font-bold">Naranja=Pendiente</span></span>
+                </div>
+                <div id="chartBarExec" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Gran Tabla de Datos Inferior -->
-    <div class="cyber-panel p-4">
-        <div class="panel-header flex-col md:flex-row gap-2 items-start md:items-center">
-            <span>TERMINAL_BASE_DE_DATOS</span>
-            <div class="flex items-center gap-2">
-                <span class="text-[#00ff88] text-[10px] hud-font">BÚSQUEDA GLOBAL:</span>
-                <input type="text" id="globalSearch" onkeyup="applyFilters()" placeholder="Cédula, Beneficiario o Arrendador..." 
-                    class="bg-[#142038] border border-[#00ff88] text-white px-2 py-1 text-xs w-64 outline-none hud-font placeholder-gray-600 transition-all focus:shadow-[0_0_10px_rgba(0,255,136,0.5)]">
-                <span id="tableCounter" class="hidden"></span>
+<!-- Fila Inferior: Sankey y Radial Novedad -->
+<div class="grid grid-cols-12 gap-3 mb-3">
+    <!-- Flujo de Capital (Sankey Diagram) movido desde VISTA 2 -->
+    <div class="col-span-8 cyber-panel p-3 flex flex-col w-full" style="height: 400px;">
+        <div class="panel-header flex justify-between items-center whitespace-nowrap overflow-hidden">
+            <span>FLUJO DE CAPITAL</span>
+            <select id="drill_hierarchy" onchange="renderExecutionView()" class="h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font ml-4">
+                <option value="res_ciu">Administrativa (Res ➔ Ciu)</option>
+                <option value="ciu_res">Territorial (Ciu ➔ Res)</option>
+            </select>
+        </div>
+        <div id="chartSankey" class="flex-grow w-full"></div>
+    </div>
+    
+    <!-- Tipo Novedad (Radial Chart) -->
+    <div class="col-span-4 cyber-panel p-3 flex flex-col w-full" style="height: 400px;">
+        <div class="panel-header flex justify-between items-center">
+            <span class="text-[#00ff88]">TIPO NOVEDAD</span>
+            <span class="text-[9px] hud-font text-gray-500">RADIAL CHARTS</span>
+        </div>
+        <div id="chartRadialNovedad" style="width: 100%; height: 100%;"></div>
+    </div>
+</div>
+</div> <!-- End view_operacion -->
+
+    <!-- VISTA 2: ANÁLISIS DE EJECUCIÓN -->
+    <div id="view_ejecucion" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0">
+
+        <!-- KPIs Tab 2 -->
+        <div class="w-full grid grid-cols-5 gap-3 shrink-0">
+            <!-- KPI 1 -->
+            <div class="cyber-panel p-3 flex flex-col justify-between relative">
+                <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
+                <div class="flex justify-between items-end">
+                    <div class="flex flex-col">
+                        <div id="t2_kpiBen" class="text-lg font-bold neon-text-green hud-font">0</div>
+                        <div id="t2_kpiBenTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">de 0</div>
+                    </div>
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <svg class="w-12 h-12 transform -rotate-90">
+                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#142038" stroke-width="4" />
+                            <circle id="t2_circBen" cx="24" cy="24" r="20" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                        </svg>
+                        <div id="t2_circBenTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ff88] hud-font font-bold">100%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                    <div id="t2_lineBen" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+                        <!-- KPI Transacciones -->
+            <div class="cyber-panel cyber-panel-purple p-3 flex flex-col justify-between relative">
+                <div class="text-[11px] font-bold text-[#b026ff] tracking-widest mb-1">PAGOS / REGISTROS</div>
+                <div class="flex justify-between items-end">
+                    <div class="flex flex-col">
+                        <div id="t2_kpiReg" class="text-[18px] font-bold text-[#b026ff] hud-font">0</div>
+                        <div id="t2_kpiRegTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">de 0</div>
+                    </div>
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <svg class="w-12 h-12 transform -rotate-90">
+                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#2a0a4a" stroke-width="4" />
+                            <circle id="t2_circReg" cx="24" cy="24" r="20" fill="transparent" stroke="#b026ff" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                        </svg>
+                        <div id="t2_circRegTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#b026ff] hud-font font-bold">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                    <div id="t2_lineReg" class="h-full bg-[#b026ff] transition-all duration-1000" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- KPI 2 -->
+            <div class="cyber-panel cyber-panel-orange p-3 flex flex-col justify-between relative">
+                <div class="text-[11px] font-bold text-[#ff5e00] tracking-widest mb-1">DESEMBOLSADO</div>
+                <div class="flex justify-between items-end">
+                    <div class="flex flex-col">
+                        <div id="t2_kpiPag" class="text-[14px] font-bold neon-text-orange hud-font">$0</div>
+                        <div id="t2_kpiPagTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">de $0</div>
+                    </div>
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <svg class="w-12 h-12 transform -rotate-90">
+                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#381805" stroke-width="4" />
+                            <circle id="t2_circPag" cx="24" cy="24" r="20" fill="transparent" stroke="#ff5e00" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                        </svg>
+                        <div id="t2_circPagTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#ff5e00] hud-font font-bold">100%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                    <div id="t2_linePag" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width: 100%;"></div>
+                </div>
+            </div>
+
+
+
+            <!-- KPI 4 -->
+            <div class="cyber-panel cyber-panel-blue p-3 flex flex-col justify-between relative">
+                <div class="text-[11px] font-bold text-[#00ccff] tracking-widest mb-1">TIPO NOV: <span id="t2_titleTNov">TODAS</span></div>
+                <div class="flex justify-between items-end">
+                    <div class="flex flex-col">
+                        <div id="t2_kpiTNov" class="text-[18px] font-bold text-[#00ccff] hud-font leading-tight">0</div>
+                        <div id="t2_kpiTNovTot" class="text-[9px] text-[#7890b5] hud-font mt-1 font-bold">Freq: 0</div>
+                    </div>
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <svg class="w-12 h-12 transform -rotate-90">
+                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#003366" stroke-width="4" />
+                            <circle id="t2_circTNov" cx="24" cy="24" r="20" fill="transparent" stroke="#00ccff" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                        </svg>
+                        <div id="t2_circTNovTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ccff] hud-font font-bold">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                    <div id="t2_lineTNov" class="h-full bg-[#00ccff] transition-all duration-1000" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- KPI 5 -->
+            <div class="cyber-panel p-3 flex flex-col justify-between relative">
+                <div class="text-[11px] font-bold text-[#00ff88] tracking-widest mb-1">ESTADO: <span id="t2_titleEst">TODAS</span></div>
+                <div class="flex justify-between items-end">
+                    <div class="flex flex-col">
+                        <div id="t2_kpiEst" class="text-[18px] font-bold text-[#00ff88] hud-font">0</div>
+                        <div id="t2_kpiEstTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">Freq: 0</div>
+                    </div>
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <svg class="w-12 h-12 transform -rotate-90">
+                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#142038" stroke-width="4" />
+                            <circle id="t2_circEst" cx="24" cy="24" r="20" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                        </svg>
+                        <div id="t2_circEstTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ff88] hud-font font-bold">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                    <div id="t2_lineEst" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 0%;"></div>
+                </div>
             </div>
         </div>
-        <div class="overflow-x-auto overflow-y-auto" style="max-height: 175px;">
-            <table id="dataTable">
-                <thead class="sticky top-0 bg-[#030610] z-10 shadow-md">
-                    <tr>
-                        <th onclick="sortTable('res')" class="cursor-pointer hover:text-white group">RESOLUCIÓN <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('id')" class="cursor-pointer hover:text-white group">ID <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('docPpt')" class="cursor-pointer hover:text-white group">DOCUMENTO PPT <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('ben')" class="cursor-pointer hover:text-white group">NOMBRE BENEFICIARIO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('ciu')" class="cursor-pointer hover:text-white group">CIUDAD <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('est')" class="cursor-pointer hover:text-white group">ESTADO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('per')" class="cursor-pointer hover:text-white group">PERIODO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('val')" class="cursor-pointer hover:text-white group">VALOR PAGADO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th onclick="sortTable('tnov')" class="cursor-pointer hover:text-white group">NOVEDAD <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
-                        <th>OBSERVACIONES TÉCNICAS</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+
+        <div class="w-full grid grid-cols-12 gap-3 flex-1 min-h-0">
+            <!-- Columna Izquierda: Mapa y Novedad -->
+        <div class="col-span-12 xl:col-span-3 flex flex-col gap-3 min-h-0">
+            <!-- Mapa Regional -->
+            <div class="cyber-panel p-3 flex flex-col relative shrink-0" style="height: 425px;">
+                        <div class="flex items-center w-full justify-between gap-1 mb-2">
+                            <div class="panel-header flex items-center shrink overflow-hidden">
+                                <span id="tab2MapTitle" class="truncate"><span class="text-[#00ccff]">EJECUCIÓN REGIONAL TERRITORIAL</span></span>
+                            </div>
+                            <button id="btnTab2Back" onclick="tab2GoBack()" class="hidden shrink-0 bg-[#0a1128] border border-[#00ccff] text-[#00ccff] hover:bg-[#00ccff] hover:text-[#030610] px-3 py-1 text-[10px] font-bold rounded cursor-pointer transition-all uppercase tracking-widest z-20 whitespace-nowrap">
+                                &larr; VOLVER
+                            </button>
+                        </div>
+                <div id="chartExecMap" style="width: 100%; height: 380px;"></div>
+            </div>
+                <!-- Treemap Panel -->
+                <div id="panelTreemap" class="cyber-panel p-3 flex flex-col flex-1 min-h-0" style="display: flex;">
+                    <div class="panel-header mb-2 flex justify-between items-center">
+                        <span class="text-[#00ff88] text-[10px]">PROPORCIÓN DE EJECUCIÓN (TAMAÑO = VALOR TOTAL)</span>
+                    </div>
+                    <div class="relative w-full flex-1" style="min-height: 0;">
+                        <div id="chartTreemap" class="absolute inset-0 w-full h-full"></div>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Columna Derecha: Tabla de Datos -->
+        <div class="col-span-12 xl:col-span-9 grid grid-cols-12 grid-rows-2 gap-3 min-h-0">
+            <div class="col-span-12 xl:col-span-8 row-span-1 cyber-panel p-3 w-full flex flex-col min-h-0 relative">
+                <div class="panel-header flex-col md:flex-row gap-2 items-start md:items-center mb-4">
+                    <span>TERMINAL_BASE_DE_DATOS</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[#00ff88] text-[10px] hud-font">BÚSQUEDA GLOBAL:</span>
+                        <input type="text" id="globalSearch" onkeyup="applyFilters()" placeholder="Cédula, Beneficiario o Arrendador..."
+                            class="bg-[#142038] border border-[#00ff88] text-white px-2 py-1 text-xs w-64 outline-none hud-font placeholder-gray-600 transition-all focus:shadow-[0_0_10px_rgba(0,255,136,0.5)]">
+                        <span id="tableCounter" class="hidden"></span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto overflow-y-auto flex-grow" style="height: 100%;">
+                    <table id="dataTable" class="w-full" style="table-layout: fixed; min-width: 1000px;">
+                        <thead class="sticky top-0 bg-[#030610] z-10 shadow-md">
+                            <tr>
+                                <th onclick="sortTable('res')" class="cursor-pointer hover:text-white group">RESOLUCIÓN <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('id')" class="cursor-pointer hover:text-white group">ID <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('docPpt')" class="cursor-pointer hover:text-white group">DOC PPT <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th style="width: 20%;" onclick="sortTable('ben')" class="cursor-pointer hover:text-white group">NOMBRE BENEFICIARIO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('ciu')" class="cursor-pointer hover:text-white group">CIUDAD <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('est')" class="cursor-pointer hover:text-white group">ESTADO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('per')" class="cursor-pointer hover:text-white group">PERIODO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('val')" class="cursor-pointer hover:text-white group">VALOR PAGADO <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th onclick="sortTable('tnov')" class="cursor-pointer hover:text-white group">NOVEDAD <span class="text-[8px] opacity-50 group-hover:opacity-100">↕</span></th>
+                                <th style="width: 20%;">OBSERVACIONES TÉCNICAS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+                    
+                    <!-- Top Right: Radar -->
+                    <div class="col-span-12 xl:col-span-4 row-span-1 cyber-panel p-3 flex flex-col min-h-0">
+                        <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                            <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
+                            <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Salud Ciudades</span>
+                        </div>
+                        <div id="execRadar" class="flex-1 w-full min-h-0"></div>
+                    </div>
+
+                    <!-- Bottom Left: Heatmap -->
+                    <div class="col-span-12 xl:col-span-8 row-span-1 cyber-panel p-3 flex flex-col min-h-0">
+                        <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                            <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
+                            <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Matriz Novedades</span>
+                        </div>
+                        <div id="execHeatmap" class="flex-1 w-full min-h-0"></div>
+                    </div>
+
+                    <!-- Bottom Right: Sunburst -->
+                    <div class="col-span-12 xl:col-span-4 row-span-1 cyber-panel p-3 flex flex-col min-h-0">
+                        <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                            <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_5px_#ffcc00]"></div>
+                            <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Desglose Profundo</span>
+                        </div>
+                        <div id="execSunburst" class="flex-1 w-full min-h-0"></div>
+                    </div>
         </div>
     </div>
+</div> <!-- End view_ejecucion -->
+
+    <!-- LABORATORIO VISUAL TAB -->
+    <div id="view_laboratorio" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+        <div class="grid grid-cols-12 gap-3 w-full">
+            <!-- Terminal Log -->
+            <div class="col-span-12 xl:col-span-4 cyber-panel p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
+                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Sys.Log [Terminal En Vivo]</span>
+                </div>
+                <div id="labTerminal" class="flex-1 overflow-y-auto text-[10px] font-mono text-[#7890b5] leading-relaxed flex flex-col-reverse custom-menu">
+                    <!-- Logs will be injected here -->
+                </div>
+            </div>
+            
+            <!-- Radar Chart -->
+            <div class="col-span-12 xl:col-span-4 cyber-panel p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
+                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Salud de Ciudades Top (Radar)</span>
+                </div>
+                <div id="labRadar" class="flex-1 w-full h-full"></div>
+            </div>
+            
+            <!-- Area Chart -->
+            <div class="col-span-12 xl:col-span-4 cyber-panel p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
+                    <div class="w-1.5 h-1.5 bg-[#00ccff] shadow-[0_0_5px_#00ccff]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Tendencia Temporal (Area)</span>
+                </div>
+                <div id="labArea" class="flex-1 w-full h-full"></div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-12 gap-3 w-full mt-2">
+            <!-- Sunburst Chart -->
+            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[400px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
+                    <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_5px_#ffcc00]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Distribución Profunda (Sunburst)</span>
+                </div>
+                <div id="labSunburst" class="flex-1 w-full h-full"></div>
+            </div>
+            
+            <!-- Heatmap Chart -->
+            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[400px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
+                    <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_5px_#ff0033]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Matriz de Novedades (Heatmap)</span>
+                </div>
+                <div id="labHeatmap" class="flex-1 w-full h-full"></div>
+            </div>
+        </div>
+    </div> <!-- End view_laboratorio -->
+
 
     <script>
-        let allData = [], filteredData = [], charts = {};
+                let allData = [], filteredData = [], charts = {};
+        let activeSankeyNode = null;
         let expandedCity = null;
         let currentTableData = []; 
+        let currentTab = 'operacion';
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.getElementById('view_operacion').style.display = tabId === 'operacion' ? 'block' : 'none';
+            document.getElementById('view_laboratorio').style.display = tabId === 'laboratorio' ? 'flex' : 'none';
+            document.getElementById('view_ejecucion').style.display = tabId === 'ejecucion' ? 'flex' : 'none';
+
+            const btnOp = document.getElementById('tab_operacion');
+        const btnEj = document.getElementById('tab_ejecucion');
+        const btnLab = document.getElementById('tab_laboratorio');
+        
+        let inactiveClass = "text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all";
+        if(btnOp) btnOp.className = inactiveClass;
+        if(btnEj) btnEj.className = inactiveClass;
+        if(btnLab) btnLab.className = inactiveClass.replace('#00ccff', '#ff0033') + ' ml-4'; // Laboratorio hover in red
+        
+        if(tabId === 'operacion' && btnOp) {
+            btnOp.className = "text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-xs font-bold transition-all";
+        } else if(tabId === 'ejecucion' && btnEj) {
+            btnEj.className = "text-[#00ccff] border-b-2 border-[#00ccff] pb-1 tracking-widest text-xs font-bold transition-all";
+        } else if(tabId === 'laboratorio' && btnLab) {
+            btnLab.className = "text-[#ff0033] border-b-2 border-[#ff0033] pb-1 tracking-widest text-xs font-bold transition-all ml-4";
+        }
+
+            // Resize charts for the active tab
+            setTimeout(() => {
+                Object.values(charts).forEach(c => c && c.resize());
+            }, 50);
+        }
         
         const formatMoney = (n) => "$" + parseInt(n||0).toLocaleString();
         const formatMoneyShort = (n) => {
-            if(n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+            if(n >= 1000000) return '$' + (n/1000000).toFixed(1).replace('.0', '') + 'M';
             if(n >= 1000) return '$' + (n/1000).toFixed(0) + 'K';
             return '$' + n;
         };
@@ -344,39 +655,678 @@
             "MONTERIA": [-75.88, 8.75], "MONTERÍA": [-75.88, 8.75], "PASTO": [-77.28, 1.21], 
             "NEIVA": [-75.29, 2.92], "ARMENIA": [-75.68, 4.53],
             "QUIBDO": [-76.66, 5.69], "QUIBDÓ": [-76.66, 5.69],
-            "ARAUCA": [-70.76, 7.08], "SARAVENA": [-71.87, 6.95], "FONSECA": [-72.85, 8.86]
+            "ARAUCA": [-70.76, 7.08], "SARAVENA": [-71.87, 6.95], "FONSECA": [-72.85, 10.89]
         };
 
         const col = { doc: '', ciu: '', res: '', est: '', leg: '', nov: '', per: '', val: '', obs: '', ben: '', tnov: '', arrDoc: '', arrNom: '', fecIni: '', id: '', docPpt: '' };
 
         function findKey(obj, searchStr) { return Object.keys(obj).find(k => k.includes(searchStr)) || searchStr; }
 
+// ESTADO TERRITORIO INTERACTIVO
+// ESTADO TERRITORIO INTERACTIVO
+// ESTADO TERRITORIO INTERACTIVO
+// ESTADO TERRITORIO INTERACTIVO
+let tab2Level = 0; // 0: Mapa Nacional, 1: Constelación Resoluciones, 2: Enjambre Beneficiarios
+let tab2SelectedCity = null;
+let tab2SelectedRes = null;
+
+function tab2GoBack() {
+    if (tab2Level === 2) {
+        tab2Level = 1;
+        tab2SelectedRes = null;
+        syncFilterToMapClick('f_resolucion', null);
+    } else if (tab2Level === 1) {
+        tab2Level = 0;
+        tab2SelectedCity = null;
+        syncFilterToMapClick('f_ciudad', null);
+    }
+}
+
+function getQuartileColor(pct) {
+    if (pct >= 75) return '#00ff88'; // Verde
+    if (pct >= 50) return '#ffcc00'; // Amarillo
+    if (pct >= 25) return '#ff5e00'; // Naranja
+    return '#ff0033'; // Rojo
+}
+
+function getLabelPosition(angle) {
+    let deg = angle % 360;
+    if (deg < 0) deg += 360;
+    if (deg <= 45 || deg >= 315) return 'right';
+    if (deg > 45 && deg < 135) return 'bottom'; // Note: math angle 90 is bottom in standard canvas y-down
+    if (deg >= 135 && deg <= 225) return 'left';
+    return 'top';
+}
+
+function syncFilterToMapClick(filterId, value) {
+    const select = document.getElementById(filterId);
+    if(!select) return;
+    if(!select.getCustomValues) {
+        select.value = value || 'TODAS';
+        applyFilters();
+        return;
+    }
+    const container = select.nextElementSibling;
+    if(!container) return;
+    const btnSpan = container.querySelector('div > span');
+    const menu = container.querySelector('.custom-menu');
+    if(!btnSpan || !menu) return;
+    let checkboxes = menu.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(cb => { cb.checked = value ? (cb.value === value) : false; });
+    if(value) {
+        btnSpan.innerText = value;
+    } else {
+        if(filterId === 'f_ciudad') btnSpan.innerText = 'CIUDAD';
+        else if(filterId === 'f_resolucion') btnSpan.innerText = 'RESOLUCIÓN';
+    }
+    applyFilters();
+}
+function renderTab2Map() {
+    if (!charts.execMap) return;
+
+    if (!charts.execMap.__hasClickListenerTab2) {
+        charts.execMap.on('click', function(params) {
+            if (tab2Level === 0 && params.seriesType !== 'lines' && params.name) {
+                tab2Level = 1;
+                tab2SelectedCity = params.name;
+                syncFilterToMapClick('f_ciudad', params.name);
+            } else if (tab2Level === 1 && params.data && params.data._isResolution) {
+                tab2Level = 2;
+                tab2SelectedRes = params.name;
+                syncFilterToMapClick('f_resolucion', params.name);
+            }
+        });
+        charts.execMap.__hasClickListenerTab2 = true;
+    }
+
+    const btnBack = document.getElementById('btnTab2Back');
+    
+    const title = document.getElementById('tab2MapTitle');
+
+    if (tab2Level === 0) {
+        btnBack.classList.add('hidden');
+        
+        title.innerHTML = '<span class="text-[#00ccff]">EJECUCIÓN REGIONAL TERRITORIAL</span>';
+        
+        let mapDataObj = {};
+        filteredData.forEach(d => {
+            let ciu = d[col.ciu];
+            if(ciu && ciu !== 'SIN CIUDAD' && ciu !== '') {
+                if(!mapDataObj[ciu]) mapDataObj[ciu] = { pagado: 0, pendiente: 0, total: 0, docs: new Set() };
+                let valPagado = parseFloat(d[col.val]) || 0;
+                let valPend = parseFloat(d[col.pend]) || 0;
+                mapDataObj[ciu].pagado += valPagado;
+                mapDataObj[ciu].pendiente += valPend;
+                mapDataObj[ciu].total += (valPagado + valPend); mapDataObj[ciu].docs.add(d[col.doc] || d[col.ben] || 'NO_ID');
+            }
+        });
+
+        let maxVal = Math.max(...Object.values(mapDataObj).map(x => x.total), 1);
+        let minVal = Math.min(...Object.values(mapDataObj).map(x => x.total), 0);
+
+        let mapNodes = Object.entries(mapDataObj).map(e => {
+            let cityName = e[0].toUpperCase();
+            let coords = cityCoords[cityName] || [-74 + (Math.random()-0.5)*2, 4 + (Math.random()-0.5)*2];
+            let labelPos = 'right';
+            if (cityName === 'FLORIDABLANCA') labelPos = 'bottom';
+            if (cityName === 'BUCARAMANGA') labelPos = 'top';
+            if (cityName === 'MEDELLIN' || cityName === 'MEDELLÍN') labelPos = 'bottom';
+            if (cityName === 'BELLO') labelPos = 'top';
+            if (cityName.includes('CUCUTA') || cityName.includes('CÚCUTA')) labelPos = 'top';
+            if (cityName === 'VILLA DEL ROSARIO') labelPos = 'bottom';
+            if (cityName === 'SOLEDAD') labelPos = 'bottom';
+            if (cityName === 'BARRANQUILLA') labelPos = 'top';
+            if (cityName === 'PEREIRA') labelPos = 'bottom';
+            if (cityName === 'ARAUCA') labelPos = 'left';
+            if (cityName.includes('CALI')) labelPos = 'right';
+            if (cityName === 'MANIZALES') labelPos = 'top';
+            
+            return {
+                name: e[0],
+                value: [coords[0], coords[1], e[1].total],
+                pagado: e[1].pagado,
+                pendiente: e[1].pendiente,
+                label: { position: labelPos, formatter: '{b}', show: true, fontSize: 8, color: '#fff' }
+            };
+        });
+
+        let edges = [];
+        if(mapNodes.length > 1) {
+            let center = mapNodes.find(n => n.name.includes("BOGOTA")) || mapNodes[0];
+            mapNodes.forEach(n => { if(n.name !== center.name) edges.push({ coords: [center.value, n.value] }); });
+        }
+
+            document.getElementById('panelTreemap').style.display = 'flex';
+            let treeData = Object.entries(mapDataObj).map(e => {
+                let ciu = e[0]; let tot = e[1].total; let pag = e[1].pagado;
+                let execPct = tot > 0 ? (pag / tot * 100) : 0;
+            let bens = e[1].docs.size;
+            let pen = e[1].pendiente;
+            let pctPen = tot > 0 ? (pen/tot*100) : 0;
+            let color = getQuartileColor(execPct);
+            let htm = `<b style="color:${color}; font-size: 14px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px; text-transform: uppercase;">${ciu}</b>
+Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${execPct.toFixed(1)}%)</span><br/>
+Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span><br/>
+Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${bens}</span>`;
+            return { name: ciu, value: tot, itemStyle: { color: color }, tooltip: { formatter: htm } };
+            });
+            setTimeout(() => {
+                if(charts.treemap) {
+                    charts.treemap.resize();
+                    charts.treemap.setOption({
+                        backgroundColor: 'transparent', tooltip: { show: true, trigger: 'item', confine: true, appendToBody: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;', textStyle: { color: '#ffffff', fontSize: 12, fontFamily: 'Share Tech Mono' } },
+                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
+                    }, true);
+                }
+            }, 50);
+                    charts.execMap.clear();
+        charts.execMap.setOption({
+            backgroundColor: 'transparent',
+            tooltip: {
+                    show: true, trigger: 'item', confine: true, appendToBody: true,
+                    show: true, trigger: 'item',
+                backgroundColor: 'rgba(3, 6, 16, 0.95)',
+                borderColor: '#ff5e00',
+                borderWidth: 1,
+                extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                textStyle: { color: '#ffffff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                formatter: p => {
+                    if(!p.name) return '';
+                    let tot = p.value[2] || 0;
+                    let pag = p.data.pagado || 0;
+                    let pen = p.data.pendiente || 0;
+                    let pctPag = tot>0 ? (pag/tot*100).toFixed(1) : 0;
+                    let pctPen = tot>0 ? (pen/tot*100).toFixed(1) : 0;
+                    return `<b style="color:#00ff88; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.name}</b>
+                            Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+                            Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${pctPag}%)</span><br/>
+                            Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen}%)</span>`;
+                }
+            },
+            visualMap: {
+                type: 'continuous',
+                seriesIndex: 1,
+                min: minVal,
+                max: maxVal,
+                calculable: true,
+                realtime: false,
+                inRange: { color: ['#ff5e00', '#ffcc00', '#00ff88'] },
+                text: ['Mayor $', 'Menor $'],
+                textStyle: { color: '#7890b5', fontSize: 9 },
+                bottom: 10, right: 10, itemWidth: 8, itemHeight: 60
+            },
+            geo: {
+                map: 'colombia',
+                roam: false,
+                boundingCoords: [
+                    [-76.8, 11.3], // Top-Left (Quibdo/Cali lon, Santa Marta lat)
+                    [-70.5, 3.2]   // Bottom-Right (Arauca lon, Cali lat)
+                ],
+                aspectScale: 1,
+                itemStyle: { areaColor: '#071022', borderColor: '#00ccff', borderWidth: 0.5 },
+                emphasis: { itemStyle: { areaColor: '#071022', shadowBlur: 0, borderWidth: 0.5 }, label: { show: false } }
+            },
+            series: [
+                {
+                    type: 'lines',
+                    coordinateSystem: 'geo',
+                    zlevel: 1,
+                    effect: { show: true, period: 4, trailLength: 0.2, color: '#00ff88', symbolSize: 3 },
+                    lineStyle: { color: '#00ccff', width: 0.5, opacity: 0.4, curveness: 0.2 },
+                    data: edges
+                },
+                {
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 2,
+                    rippleEffect: { brushType: 'stroke', scale: 3 },
+                    symbolSize: val => Math.max(4, (val[2] / maxVal) * 15),
+                    data: mapNodes
+                }
+            ]
+        }, true);
+        
+        
+
+    } else if (tab2Level === 1) {
+        btnBack.classList.remove('hidden');
+        
+        
+        title.innerHTML = `<span class="text-[#00ccff]">TERRITORIO:</span> <span class="text-[#00ff88]">${tab2SelectedCity}</span>`;
+
+        let resObj = {};
+        filteredData.filter(d => d[col.ciu] === tab2SelectedCity).forEach(d => {
+            let r = d[col.res].replace(/RESOLUCI[O\u00D3]N\s+/i, '');
+            if(!resObj[r]) resObj[r] = { pagado: 0, total: 0, docs: new Set() };
+            let pag = parseFloat(d[col.val]) || 0;
+            let pen = parseFloat(d[col.pend]) || 0;
+            resObj[r].pagado += pag;
+            resObj[r].total += (pag + pen); resObj[r].docs.add(d[col.doc] || d[col.ben] || 'NO_ID');
+        });
+
+        let resData = Object.entries(resObj).map(e => ({ name: e[0], ...e[1] }));
+        resData.forEach(r => {
+            r.execPct = r.total > 0 ? (r.pagado / r.total * 100) : 0;
+        });
+        resData.sort((a, b) => b.total - a.total);
+        
+        let pcts = resData.map(r => r.execPct);
+        let minActualPct = pcts.length ? Math.min(...pcts) : 0;
+        let maxActualPct = pcts.length ? Math.max(...pcts) : 100;
+        
+        let axisMin = Math.max(0, Math.floor(minActualPct / 10) * 10);
+        let axisMaxRaw = Math.min(100, Math.ceil(maxActualPct / 10) * 10);
+        let diff = axisMaxRaw - axisMin;
+        
+        let axisMax = axisMaxRaw + Math.max(10, diff * 0.15); 
+        let interval = diff <= 30 ? 5 : 10;
+        let scaleFactor = 6; // 1% = 6 pixels
+
+        let nodes = [];
+            
+            let ringSeries = [];
+            for(let p = axisMin; p <= axisMaxRaw; p += interval) {
+                let r = (axisMax - p) * scaleFactor;
+                let circleData = [];
+                for(let a=0; a<=360; a+=2) {
+                    let rad = a * Math.PI / 180;
+                    circleData.push([r * Math.cos(rad), r * Math.sin(rad)]);
+                }
+                ringSeries.push({
+                    type: 'line', coordinateSystem: 'cartesian2d', data: circleData,
+                    smooth: false, symbol: 'none', lineStyle: { color: '#1e293b', type: 'dashed', width: 1 },
+                    silent: true, z: -1
+                });
+                ringSeries.push({
+                    type: 'scatter', coordinateSystem: 'cartesian2d', data: [{
+                        value: [0, -r], label: { show: true, formatter: p + '%', position: 'bottom', color: '#475569', fontSize: 9 }
+                    }],
+                    symbolSize: 0, silent: true, z: -1
+                });
+            }
+
+
+        // Center Node
+        nodes.push({
+            name: tab2SelectedCity, value: [0, 0], category: 4,
+            symbolSize: 0, 
+            itemStyle: { opacity: 0 },
+            label: { show: false },
+            z: 2, silent: true, _isCity: true
+        });
+        
+            let r_max = (axisMax - axisMin) * scaleFactor;
+            let initialView = r_max + 60;
+            let maxBoundary = axisMax * scaleFactor + 400;
+            let dummyBase = { category: 4, symbolSize: 0, itemStyle: { opacity: 0 }, label: { show: false }, tooltip: { show: false }, silent: true, z: -10, _isDummy: true };
+            nodes.push({ name: 'bb1', value: [maxBoundary, maxBoundary], ...dummyBase });
+            nodes.push({ name: 'bb2', value: [-maxBoundary, maxBoundary], ...dummyBase });
+            nodes.push({ name: 'bb3', value: [maxBoundary, -maxBoundary], ...dummyBase });
+            nodes.push({ name: 'bb4', value: [-maxBoundary, -maxBoundary], ...dummyBase });
+                                                        let links = [];
+
+        let n = resData.length;
+        let maxVal = Math.max(...resData.map(r => r.total), 1);
+
+        resData.forEach((res, i) => {
+            let r = (axisMax - res.execPct) * scaleFactor;
+            let angle = (i / (n||1)) * 360; 
+            let angleRad = (angle - 90) * (Math.PI / 180); // Start at top
+            let nx = r * Math.cos(angleRad);
+            let ny = r * Math.sin(angleRad); // In canvas, y grows downwards, so this is correct visually for clockwise
+            
+            let size = 15 + (res.total / maxVal) * 40; 
+            let color = getQuartileColor(res.execPct);
+            let lblPos = getLabelPosition(angle);
+            
+            let catIndex = 3;
+            if (res.execPct >= 75) catIndex = 0;
+            else if (res.execPct >= 50) catIndex = 1;
+            else if (res.execPct >= 25) catIndex = 2;
+            nodes.push({ name: res.name, category: catIndex, 
+                value: [nx, ny],
+                symbolSize: size, itemStyle: { color: color, borderColor: '#030610', borderWidth: 1, shadowBlur: 10, shadowColor: color },
+                label: { show: true, formatter: '{b}', position: lblPos, distance: size/2 + 5, color: '#7890b5', fontSize: 9, width: 80, overflow: 'truncate' },
+                z: 2, dataValue: [res.total, res.execPct, res.pagado], _isResolution: true
+            });
+            
+            links.push({ source: tab2SelectedCity, target: res.name, lineStyle: { color: '#334155', width: 1, opacity: 0.3, curveness: 0 }, silent: true });
+        });
+
+            document.getElementById('panelTreemap').style.display = 'flex';
+            let el = document.getElementById('chartExecMap');
+            let sqSize = Math.min(el.clientWidth || 300, el.clientHeight || 300) - 20;
+        let treeData = resData.map(res => {
+            let tot = res.total;
+            let pag = res.pagado;
+            let pen = tot - pag;
+            let pctPen = tot > 0 ? (pen/tot*100) : 0;
+            let bens = res.docs ? res.docs.size : 0;
+            let execPct = res.execPct;
+            let color = getQuartileColor(execPct);
+            let htm = `<b style="color:${color}; font-size: 14px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px; text-transform: uppercase;">RESOLUCIÓN ${res.name}</b>
+Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${execPct.toFixed(1)}%)</span><br/>
+Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span><br/>
+Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${bens}</span>`;
+            return {
+                name: "RES " + res.name, value: tot, itemStyle: { color: color },
+                tooltip: { formatter: htm }
+            };
+        });
+            setTimeout(() => {
+                if(charts.treemap) {
+                    charts.treemap.resize();
+                    charts.treemap.setOption({
+                        backgroundColor: 'transparent', tooltip: { show: true, trigger: 'item', confine: true, appendToBody: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;', textStyle: { color: '#ffffff', fontSize: 12, fontFamily: 'Share Tech Mono' } },
+                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
+                    }, true);
+                }
+            }, 50);
+                    charts.execMap.clear();
+        charts.execMap.setOption({
+            backgroundColor: 'transparent',
+
+            xAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            yAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            grid: { width: sqSize, height: sqSize, left: 'center', top: 10 },
+            legend: { data: ['≥75%', '50-74%', '25-49%', '<25%'], top: 5, right: 10, left: 'auto', bottom: 'auto', orient: 'vertical', textStyle: { color: '#e2e8f0', fontSize: 10, fontFamily: 'Share Tech Mono' }, itemWidth: 10, itemHeight: 10, icon: 'circle' },
+            dataZoom: [{ type: 'inside', xAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }, { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }],
+
+
+            xAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            yAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            grid: { width: sqSize, height: sqSize, left: 'center', top: 10 },
+            legend: { data: ['≥75%', '50-74%', '25-49%', '<25%'], top: 5, right: 10, left: 'auto', bottom: 'auto', orient: 'vertical', textStyle: { color: '#e2e8f0', fontSize: 10, fontFamily: 'Share Tech Mono' }, itemWidth: 10, itemHeight: 10, icon: 'circle' },
+            dataZoom: [{ type: 'inside', xAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }, { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }],
+            
+            tooltip: {
+                    show: true, trigger: 'item', confine: true, appendToBody: true,
+                backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1,
+                extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                textStyle: { color: '#ffffff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                formatter: p => {
+                    if (p.dataType !== 'node') return '';
+                    if (p.data._isRing || p.data._isCity || p.data._isResCenter) return '';
+                    
+                    let tot = p.data.dataValue[0] || 0;
+                    let pctExec = p.data.dataValue[1] || 0;
+                    let pag = p.data.dataValue[2] || 0;
+                    let pen = tot - pag;
+                    let pctPen = tot > 0 ? (pen/tot*100) : 0;
+                    
+                    return `<b style="color:${p.data.itemStyle.color}; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.data.trueName || p.name}</b>
+                            Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+                            Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${pctExec.toFixed(1)}%)</span><br/>
+                            Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span>`;
+                }
+            },
+            series: [
+                ...ringSeries,
+                {
+                    type: 'graph', coordinateSystem: 'cartesian2d', layout: 'none', roam: false, categories: [{ name: '≥75%' }, { name: '50-74%' }, { name: '25-49%' }, { name: '<25%' }, { name: 'system' }],
+                    data: nodes, links: links,
+                    emphasis: { scale: true }
+                }
+            ]
+        }, true);
+
+    } else if (tab2Level === 2) {
+        btnBack.classList.remove('hidden');
+        
+        title.innerHTML = `<span class="text-[#00ccff]">TERRITORIO:</span> <span class="text-[#00ff88]">${tab2SelectedCity}</span>`;
+
+        let rawBenData = filteredData.filter(d => d[col.ciu] === tab2SelectedCity && (d[col.res] || "").replace(/RESOLUCI[O\u00D3]N\s+/i, "") === tab2SelectedRes);
+        let benMap = new Map();
+        rawBenData.forEach(b => {
+            let doc = b[col.doc] || b[col.ben] || 'SIN ID';
+            let pag = parseFloat(b[col.val]) || 0;
+            let pen = parseFloat(b[col.pend]) || 0;
+            if(!benMap.has(doc)) {
+                benMap.set(doc, { raw: b, tot: 0, pag: 0 });
+            }
+            let entry = benMap.get(doc);
+            entry.pag += pag;
+            entry.tot += (pag + pen);
+        });
+        let benData = Array.from(benMap.values()).map(e => {
+            e.execPct = e.tot > 0 ? (e.pag / e.tot * 100) : 0;
+            return e;
+        });
+        
+        let pcts = benData.map(b => b.execPct);
+        let minActualPct = pcts.length ? Math.min(...pcts) : 0;
+        let maxActualPct = pcts.length ? Math.max(...pcts) : 100;
+        
+        let axisMin = Math.max(0, Math.floor(minActualPct / 10) * 10);
+        let axisMaxRaw = Math.min(100, Math.ceil(maxActualPct / 10) * 10);
+        let diff = axisMaxRaw - axisMin;
+        
+        let axisMax = axisMaxRaw + Math.max(10, diff * 0.15); 
+        let interval = diff <= 30 ? 5 : 10;
+        let scaleFactor = 6;
+
+        let nodes = [];
+            
+            let ringSeries2 = [];
+            for(let p = axisMin; p <= axisMaxRaw; p += interval) {
+                let r = (axisMax - p) * scaleFactor;
+                let circleData = [];
+                for(let a=0; a<=360; a+=2) {
+                    let rad = a * Math.PI / 180;
+                    circleData.push([r * Math.cos(rad), r * Math.sin(rad)]);
+                }
+                ringSeries2.push({
+                    type: 'line', coordinateSystem: 'cartesian2d', data: circleData,
+                    smooth: false, symbol: 'none', lineStyle: { color: '#1e293b', type: 'dashed', width: 1 },
+                    silent: true, z: -1
+                });
+                ringSeries2.push({
+                    type: 'scatter', coordinateSystem: 'cartesian2d', data: [{
+                        value: [0, -r], label: { show: true, formatter: p + '%', position: 'bottom', color: '#475569', fontSize: 9 }
+                    }],
+                    symbolSize: 0, silent: true, z: -1
+                });
+            }
+
+
+        nodes.push({
+            name: tab2SelectedRes, value: [0, 0], category: 4,
+            symbolSize: 0, 
+            itemStyle: { opacity: 0 },
+            label: { show: false },
+            z: 2, silent: true, _isResCenter: true
+        });
+        
+            let r_max = (axisMax - axisMin) * scaleFactor;
+            let initialView = r_max + 60;
+            let maxBoundary2 = axisMax * scaleFactor + 400;
+            let dummyBase2 = { category: 4, symbolSize: 0, itemStyle: { opacity: 0 }, label: { show: false }, tooltip: { show: false }, silent: true, z: -10, _isDummy: true };
+            nodes.push({ name: 'bb1_2', value: [maxBoundary2, maxBoundary2], ...dummyBase2 });
+            nodes.push({ name: 'bb2_2', value: [-maxBoundary2, maxBoundary2], ...dummyBase2 });
+            nodes.push({ name: 'bb3_2', value: [maxBoundary2, -maxBoundary2], ...dummyBase2 });
+            nodes.push({ name: 'bb4_2', value: [-maxBoundary2, -maxBoundary2], ...dummyBase2 });
+                                                        let links = [];
+        let maxVal = Math.max(...benData.map(b => b.tot), 1);
+        
+        benData.forEach((b, i) => {
+            let jitterPct = b.execPct + (Math.random() * 4 - 2);
+            if(jitterPct > 100) jitterPct = 100;
+            if(jitterPct < 0) jitterPct = 0;
+            
+            let r = (axisMax - jitterPct) * scaleFactor;
+            let angle = (i / (benData.length || 1)) * 360 + (Math.random() * 20 - 10);
+            let angleRad = (angle - 90) * (Math.PI / 180);
+            let nx = r * Math.cos(angleRad);
+            let ny = r * Math.sin(angleRad);
+            
+            let size = 5 + (b.tot / maxVal) * 20;
+            let color = getQuartileColor(b.execPct);
+            let bName = b.raw[col.ben] || b.raw[col.doc];
+            
+            let catIndex = 3;
+            if (b.execPct >= 75) catIndex = 0;
+            else if (b.execPct >= 50) catIndex = 1;
+            else if (b.execPct >= 25) catIndex = 2;
+            nodes.push({ name: bName + "_" + i, category: catIndex,
+                trueName: bName,
+                value: [nx, ny],
+                symbolSize: size, itemStyle: { color: color, opacity: 0.8 },
+                z: 2, dataValue: [b.tot, b.execPct, b.pag], _isBen: true
+            });
+            links.push({ source: tab2SelectedRes, target: bName + "_" + i, lineStyle: { color: color, width: 0.5, opacity: 0.15 }, silent: true });
+        });
+
+            document.getElementById('panelTreemap').style.display = 'flex';
+            let el = document.getElementById('chartExecMap');
+            let sqSize = Math.min(el.clientWidth || 300, el.clientHeight || 300) - 20;
+            let treeData = benData.map((b, i) => {
+            let bName = b.raw[col.ben] || 'SIN NOMBRE';
+            let shortName = bName.split(' ')[0] + ' ' + (bName.split(' ')[1] || '');
+            let tot = b.tot;
+            let pag = b.pag;
+            let pen = tot - pag;
+            let execPct = b.execPct;
+            let pctPen = tot > 0 ? (pen/tot*100) : 0;
+            let color = getQuartileColor(execPct);
+            let htm = `<b style="color:${color}; font-size: 14px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px; text-transform: uppercase;">${shortName}</b>
+Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${execPct.toFixed(1)}%)</span><br/>
+Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span>`;
+            return { name: shortName, value: tot, itemStyle: { color: color }, tooltip: { formatter: htm } };
+        });
+            setTimeout(() => {
+                if(charts.treemap) {
+                    charts.treemap.resize();
+                    charts.treemap.setOption({
+                        backgroundColor: 'transparent', tooltip: { show: true, trigger: 'item', confine: true, appendToBody: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;', textStyle: { color: '#ffffff', fontSize: 12, fontFamily: 'Share Tech Mono' } },
+                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
+                    }, true);
+                }
+            }, 50);
+                    charts.execMap.clear();
+        charts.execMap.setOption({
+            backgroundColor: 'transparent',
+
+            xAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            yAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            grid: { width: sqSize, height: sqSize, left: 'center', top: 10 },
+            legend: { data: ['≥75%', '50-74%', '25-49%', '<25%'], top: 5, right: 10, left: 'auto', bottom: 'auto', orient: 'vertical', textStyle: { color: '#e2e8f0', fontSize: 10, fontFamily: 'Share Tech Mono' }, itemWidth: 10, itemHeight: 10, icon: 'circle' },
+            dataZoom: [{ type: 'inside', xAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }, { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }],
+
+
+            xAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            yAxis: { type: 'value', min: 'dataMin', max: 'dataMax', show: false },
+            grid: { width: sqSize, height: sqSize, left: 'center', top: 10 },
+            legend: { data: ['≥75%', '50-74%', '25-49%', '<25%'], top: 5, right: 10, left: 'auto', bottom: 'auto', orient: 'vertical', textStyle: { color: '#e2e8f0', fontSize: 10, fontFamily: 'Share Tech Mono' }, itemWidth: 10, itemHeight: 10, icon: 'circle' },
+            dataZoom: [{ type: 'inside', xAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }, { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: true, moveOnMouseWheel: true, filterMode: 'none', startValue: -initialView, endValue: initialView }],
+            
+            tooltip: {
+                    show: true, trigger: 'item', confine: true, appendToBody: true,
+                backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1,
+                extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                textStyle: { color: '#ffffff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                formatter: p => {
+                    if (p.dataType !== 'node') return '';
+                    if (p.data._isRing || p.data._isCity || p.data._isResCenter) return '';
+                    
+                    let tot = p.data.dataValue[0] || 0;
+                    let pctExec = p.data.dataValue[1] || 0;
+                    let pag = p.data.dataValue[2] || 0;
+                    let pen = tot - pag;
+                    let pctPen = tot > 0 ? (pen/tot*100) : 0;
+                    
+                    return `<b style="color:${p.data.itemStyle.color}; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.data.trueName || p.name}</b>
+                            Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+                            Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${pctExec.toFixed(1)}%)</span><br/>
+                            Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span>`;
+                }
+            },
+            series: [
+                ...ringSeries2,
+                {
+                    type: 'graph', coordinateSystem: 'cartesian2d', layout: 'none', roam: false, categories: [{ name: '≥75%' }, { name: '50-74%' }, { name: '25-49%' }, { name: '<25%' }, { name: 'system' }],
+                    data: nodes, links: links,
+                    emphasis: { scale: true }
+                }
+            ]
+        }, true);
+    }
+}
+
         async function init() {
             charts.radial = echarts.init(document.getElementById('radialChart'), 'dark');
-            charts.pie = echarts.init(document.getElementById('pieLegalizado'), 'dark');
+            if(document.getElementById('chartRadialNovedad')) charts.radialNovedad = echarts.init(document.getElementById('chartRadialNovedad'), 'dark');
             charts.line = echarts.init(document.getElementById('lineChart'), 'dark');
             charts.map = echarts.init(document.getElementById('mapChart'), 'dark');
-            window.addEventListener('resize', () => { Object.values(charts).forEach(c => c.resize()); });
+            charts.sankey = echarts.init(document.getElementById('chartSankey'), 'dark');
+            charts.barExec = echarts.init(document.getElementById('chartBarExec'), 'dark');
+            charts.execMap = echarts.init(document.getElementById('chartExecMap'), 'dark', { height: 380 });
+        charts.treemap = echarts.init(document.getElementById('chartTreemap'));
+        if(document.getElementById('execRadar')) charts.execRadar = echarts.init(document.getElementById('execRadar'));
+        if(document.getElementById('execHeatmap')) charts.execHeatmap = echarts.init(document.getElementById('execHeatmap'));
+        if(document.getElementById('execSunburst')) charts.execSunburst = echarts.init(document.getElementById('execSunburst'));
+        if(document.getElementById('labRadar')) charts.labRadar = echarts.init(document.getElementById('labRadar'));
+        if(document.getElementById('labSunburst')) charts.labSunburst = echarts.init(document.getElementById('labSunburst'));
+        if(document.getElementById('labArea')) charts.labArea = echarts.init(document.getElementById('labArea'));
+        if(document.getElementById('labHeatmap')) charts.labHeatmap = echarts.init(document.getElementById('labHeatmap'));
+                        
+            window.addEventListener('resize', () => { Object.values(charts).forEach(c => c && c.resize()); });
 
             charts.map.on('click', function(params) {
                 if(params.componentType === 'series' && params.name) {
-                    if (document.getElementById('f_ciudad').value === params.name) {
-                        document.getElementById('f_ciudad').value = "TODAS";
-                        expandedCity = null;
+                    let sel = document.getElementById('f_ciudad');
+                    let currentVals = sel.getCustomValues ? sel.getCustomValues() : [sel.value];
+                    
+                    if (currentVals.length === 1 && currentVals[0] === params.name) {
+                        if (sel.selectCustom) sel.selectCustom("TODAS");
+                        else sel.value = "TODAS";
                     } else {
-                        document.getElementById('f_ciudad').value = params.name;
-                        expandedCity = params.name;
+                        if (sel.selectCustom) sel.selectCustom(params.name);
+                        else sel.value = params.name;
                     }
                     applyFilters();
                 }
             });
+            
+            // Listener para click-to-focus
+            charts.radial.off('click');
+            charts.radial.on('click', function(params) {
+                let name = params.name || params.value;
+                if (name) {
+                    let sel = document.getElementById('f_ciudad');
+                    if (sel.selectCustom) sel.selectCustom(name);
+                    else sel.value = name;
+                    applyFilters();
+                }
+            });
+
+            charts.sankey.off('click');
+            charts.sankey.on('click', function(params) {
+                if (params.dataType === 'node') {
+                    if (activeSankeyNode === params.name) {
+                        activeSankeyNode = null; // Toggle off
+                    } else {
+                        activeSankeyNode = params.name; // Toggle on
+                    }
+                    renderExecutionView(); // Re-render to apply opacity
+                } else if (params.dataType === 'edge') {
+                    // Click on edge also toggles off
+                    activeSankeyNode = null;
+                    renderExecutionView();
+                }
+            });
+            // Click outside chart body could also reset, but echarts doesn't natively support easy canvas background click for sankey, so we leave it as clicking node toggles.
+
+
 
             try {
-                const mapRes = await fetch('./colombia.json');
+                const mapRes = await fetch('colombia.json');
                 const geoJson = await mapRes.json();
                 echarts.registerMap('colombia', geoJson);
 
-                const response = await fetch('./data_github.json');
+                const response = await fetch('data_github.json');
                 allData = await response.json();
                 
                 if(allData.length > 0) {
@@ -389,6 +1339,21 @@
                     col.nov = findKey(r, 'PRESENTA NOVEDAD');
                     col.fnov = findKey(r, 'FECHA DE LA NOVEDAD');
                     col.tnov = findKey(r, 'TIPO DE NOVEDAD');
+
+        // Normalize strings for TIPO NOVEDAD
+        allData.forEach(d => {
+            let t = (d[col.tnov] || '').toString().trim().toUpperCase();
+            if(t.includes('LOCALIZACI')) t = 'NO LOCALIZACIÓN'; // Fix encoding issue
+            d[col.tnov] = t === '' ? 'NINGUNA' : t;
+
+        d[col.nov] = d[col.tnov] === 'NINGUNA' ? 'NINGUNA' : 'SÍ';
+
+
+        let est = (d[col.estAct] || '').toString().trim().toUpperCase();
+        d[col.estAct] = est === '' ? 'N/A' : est;
+        
+        });
+
                     col.estAct = findKey(r, 'ESTADO ACTUAL');
                     col.pend = findKey(r, 'PENDIENTE POR PAGAR');
                     col.valMen = findKey(r, 'VALOR SUBSIDIO AL CANON ARRIENDO MENSUAL');
@@ -402,12 +1367,455 @@
                 populateDropdowns();
                 updateDashboard();
                 
-                // Static Metadata for GitHub
-                document.getElementById('headDate').innerText = '04 OCT 2026';
-                document.getElementById('headTime').innerText = '00:00 COT';
-            } catch(e) { console.error("Error cargando los datos estáticos de GitHub:", e); }
+                // Fetch Date/Time from backend based on Excel file
+                try {
+                    let metaRes = Promise.resolve({ok: true, json: () => Promise.resolve({fileDate: '01 OCT 2026', fileTime: '12:24 COT'})});
+                    let meta = await metaRes.json();
+                    document.getElementById('headDate').innerText = meta.fileDate || '-- --- ----';
+                    document.getElementById('headTime').innerText = meta.fileTime || '--:-- COT';
+                } catch(e) { console.error('Metadata no cargada:', e); }
+                
+            } catch(e) { console.error(e); }
         }
 
+        function buildAggregatedTree(dataArray, mode) {
+            const personMap = new Map();
+            dataArray.forEach(r => {
+                const doc = r[col.doc];
+                
+                let pendVal = parseFloat(r[col.pend]);
+                if (isNaN(pendVal)) pendVal = 0;
+                
+                let valPagado = parseFloat(r[col.val]);
+                if (isNaN(valPagado)) valPagado = 0;
+                
+                if(!personMap.has(doc)) {
+                    personMap.set(doc, { 
+                res: (r[col.res] || 'SIN RES').replace(/RESOLUCI[OÓ]N/ig, 'RES'),
+                        ciu: r[col.ciu] || 'SIN CIUDAD',
+                        ben: r[col.ben] || 'SIN NOMBRE',
+                        pagado: 0,
+                        pendiente: pendVal
+                    });
+                }
+                personMap.get(doc).pagado += valPagado;
+            });
+            
+            const tree = {};
+            const citiesMap = {}; 
+            const resMap = {};
+            
+            personMap.forEach((data, doc) => {
+                const lvl1 = mode === 'res_ciu' ? data.res : data.ciu;
+                const lvl2 = mode === 'res_ciu' ? data.ciu : data.res;
+                
+                if(!tree[lvl1]) tree[lvl1] = {};
+                if(!tree[lvl1][lvl2]) tree[lvl1][lvl2] = { pagado: 0, pendiente: 0, count: 0, docs: [] };
+                
+                tree[lvl1][lvl2].pagado += data.pagado;
+                tree[lvl1][lvl2].pendiente += data.pendiente;
+                tree[lvl1][lvl2].count += 1;
+                tree[lvl1][lvl2].docs.push(doc);
+                
+                if(!citiesMap[data.ciu]) citiesMap[data.ciu] = { pagado: 0, pendiente: 0 };
+                citiesMap[data.ciu].pagado += data.pagado;
+                citiesMap[data.ciu].pendiente += data.pendiente;
+
+                if(!resMap[data.res]) resMap[data.res] = { pagado: 0, pendiente: 0 };
+                resMap[data.res].pagado += data.pagado;
+                resMap[data.res].pendiente += data.pendiente;
+            });
+
+            return { personMap, tree, citiesMap, resMap };
+        }
+
+        function renderExecutionView() {
+            if(!filteredData.length || !charts.sankey) return;
+            
+            const mode = document.getElementById('drill_hierarchy').value || 'res_ciu';
+            const { personMap, tree, citiesMap, resMap } = buildAggregatedTree(filteredData, mode);
+            
+            // 3. Formatear para Sankey y Barras
+            const sankeyNodes = [];
+            const sankeyLinks = [];
+            const barData = []; // Para el ranking
+            let grandTotal = 0;
+            let grandPagado = 0;
+            let grandPendiente = 0;
+            
+            const tempLvl1 = [];
+            const tempLvl2 = [];
+            const tempLinks = [];
+            
+            Object.keys(tree).forEach(lvl1 => {
+                let lvl1Pagado = 0;
+                let lvl1Pendiente = 0;
+                
+                Object.keys(tree[lvl1]).forEach(lvl2 => {
+                    const node = tree[lvl1][lvl2];
+                    const nodeTotal = node.pagado + node.pendiente;
+                    if(nodeTotal === 0) return;
+                    
+                    lvl1Pagado += node.pagado;
+                    lvl1Pendiente += node.pendiente;
+                    
+                    let lvl2Name = lvl2 + (mode === 'res_ciu' ? ' (Ciu)' : ' (Res)');
+                    let lvl2Node = tempLvl2.find(n => n.name === lvl2Name);
+                    if(!lvl2Node) {
+                        lvl2Node = { name: lvl2Name, realName: lvl2, pagado: 0, pendiente: 0 };
+                        tempLvl2.push(lvl2Node);
+                    }
+                    lvl2Node.pagado += node.pagado;
+                    lvl2Node.pendiente += node.pendiente;
+                    
+                    tempLinks.push({
+                        source: lvl1,
+                        target: lvl2Name,
+                        value: nodeTotal,
+                        pagado: node.pagado,
+                        pendiente: node.pendiente
+                    });
+                });
+                
+                const lvl1Total = lvl1Pagado + lvl1Pendiente;
+                if(lvl1Total === 0) return;
+                
+                grandTotal += lvl1Total;
+                grandPagado += lvl1Pagado;
+                grandPendiente += lvl1Pendiente;
+                
+                const lvl1Pct = (lvl1Pagado / lvl1Total * 100).toFixed(1);
+                const colorLvl1 = lvl1Pct == 100 ? '#00ff88' : lvl1Pct >= 50 ? '#ffcc00' : '#ff5e00';
+                
+                tempLvl1.push({
+                    name: lvl1,
+                    pct: parseFloat(lvl1Pct),
+                    value: lvl1Total,
+                    pagado: lvl1Pagado,
+                    pendiente: lvl1Pendiente,
+                    itemStyle: { color: colorLvl1 }
+                });
+                
+                if(mode === 'res_ciu') {
+                    barData.push({ name: lvl1, pagado: lvl1Pagado, pendiente: lvl1Pendiente, total: lvl1Total, pct: lvl1Pct });
+                }
+            });
+            
+            // Assign colors and values to Lvl2 nodes
+            tempLvl2.forEach(n => {
+                n.value = n.pagado + n.pendiente;
+                const pct = n.value > 0 ? (n.pagado / n.value * 100).toFixed(1) : 0;
+                n.itemStyle = { color: pct == 100 ? '#00ff88' : pct >= 50 ? '#ffcc00' : '#ff5e00' };
+            });
+            
+            // Construir Sankey en Orden
+            tempLvl1.sort((a,b) => {
+                const isASin = a.name.startsWith('SIN ');
+                const isBSin = b.name.startsWith('SIN ');
+                if (isASin && !isBSin) return 1;
+                if (!isASin && isBSin) return -1;
+                return b.value - a.value; // Mayor a menor
+            });
+            tempLvl2.sort((a,b) => {
+                const isASin = a.realName.startsWith('SIN ');
+                const isBSin = b.realName.startsWith('SIN ');
+                if (isASin && !isBSin) return 1;
+                if (!isASin && isBSin) return -1;
+                return a.realName.localeCompare(b.realName);
+            });
+            
+            const rootName = 'PRESUPUESTO TOTAL\n' + formatMoney(grandTotal);
+            sankeyNodes.push({ name: rootName, itemStyle: { color: '#00ccff' }, value: grandTotal, pagado: grandPagado, pendiente: grandPendiente });
+            
+            tempLvl1.forEach(n => {
+                sankeyNodes.push({ name: n.name, itemStyle: n.itemStyle, value: n.value, pagado: n.pagado, pendiente: n.pendiente });
+                sankeyLinks.push({ source: rootName, target: n.name, value: n.value, pagado: n.pagado, pendiente: n.pendiente });
+            });
+            tempLvl2.forEach(n => {
+                sankeyNodes.push({ name: n.name, itemStyle: n.itemStyle, value: n.value, pagado: n.pagado, pendiente: n.pendiente });
+            });
+            tempLinks.forEach(l => sankeyLinks.push(l));
+
+            // Construir Barras Ranking
+            if (mode === 'ciu_res') {
+                const resMap = {};
+                personMap.forEach(d => {
+                    if(!resMap[d.res]) resMap[d.res] = {pagado:0, pendiente:0};
+                    resMap[d.res].pagado += d.pagado;
+                    resMap[d.res].pendiente += d.pendiente;
+                });
+                Object.keys(resMap).forEach(res => {
+                    const tot = resMap[res].pagado + resMap[res].pendiente;
+                    if(tot > 0) {
+                        barData.push({
+                            name: res,
+                            pagado: resMap[res].pagado,
+                            pendiente: resMap[res].pendiente,
+                            total: tot,
+                            pct: (resMap[res].pagado / tot * 100).toFixed(1)
+                        });
+                    }
+                });
+            }
+            
+            barData.sort((a,b) => a.total - b.total); // Para Echarts Bar, ascendente pinta de abajo hacia arriba
+
+
+            // --- INICIO LÓGICA DE CLICK-TO-FOCUS ---
+            if (activeSankeyNode) {
+                let connectedNodes = new Set([activeSankeyNode]);
+                
+                // Pass 1: Add targets and sources of clicked node
+                sankeyLinks.forEach(l => {
+                    if (l.source === activeSankeyNode) connectedNodes.add(l.target);
+                    if (l.target === activeSankeyNode) connectedNodes.add(l.source);
+                });
+                
+                // Pass 2: Add nodes connected to the ones we just added (to get full path Presupuesto -> Lvl1 -> Lvl2)
+                sankeyLinks.forEach(l => {
+                    if (connectedNodes.has(l.target)) connectedNodes.add(l.source);
+                    if (connectedNodes.has(l.source)) connectedNodes.add(l.target);
+                });
+
+                // Apply opacity to non-connected nodes and links
+                sankeyNodes.forEach(n => {
+                    if (!connectedNodes.has(n.name)) {
+                        n.itemStyle = { ...n.itemStyle, opacity: 0.1 };
+                    }
+                });
+                sankeyLinks.forEach(l => {
+                    if (!connectedNodes.has(l.source) || !connectedNodes.has(l.target)) {
+                        l.lineStyle = { ...l.lineStyle, opacity: 0.05 };
+                    }
+                });
+            }
+            // --- FIN LÓGICA DE CLICK-TO-FOCUS ---
+
+            // Configurar Sankey
+            charts.sankey.setOption({
+                tooltip: { 
+                    trigger: 'item',
+                    backgroundColor: 'rgba(3, 6, 16, 0.95)',
+                    borderColor: '#ff5e00',
+                    borderWidth: 1,
+                    extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                    textStyle: { color: '#ffffff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    formatter: (p) => {
+                        let valTotal = p.data.value || 0;
+                        let valPag = p.data.pagado || 0;
+                        let valPen = p.data.pendiente || 0;
+                        let pct = valTotal > 0 ? (valPag / valTotal * 100).toFixed(1) : 0;
+                        let pctPen = valTotal > 0 ? (valPen / valTotal * 100).toFixed(1) : 0;
+                        
+                        let html = '';
+                        if (p.dataType === 'node') {
+                            html = `<b style="color:#00ff88; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.name.replace(/\n.*/,'')}</b>`;
+                        } else {
+                            html = `<b style="color:#00ff88; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.data.source.replace(/\n.*/,'')} ➔ ${p.data.target}</b>`;
+                        }
+                        
+                        return html + `Total: <span style="float:right; margin-left:15px;">${formatMoney(valTotal)}</span><br/>
+                        Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(valPag)} (${pct}%)</span><br/>
+                        Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(valPen)} (${pctPen}%)</span>`;
+                    }
+                },
+                series: {
+                    type: 'sankey',
+                    layout: 'none',
+                    nodeAlign: 'left', // Ayuda al orden
+                    layoutIterations: 0, // Fuerza el orden exacto del arreglo
+                    data: sankeyNodes,
+                    links: sankeyLinks,
+                    emphasis: { focus: 'self' },
+                    lineStyle: { color: 'source', curveness: 0.5, opacity: 0.3 },
+                    label: { color: '#fff', fontSize: 10 }
+                }
+            }, true);
+            
+            // Configurar BarExec
+            
+            // RENDER RADIAL NOVEDAD
+            if (charts.radialNovedad) {
+            let novCounts = {};
+            filteredData.forEach(d => {
+                let t = d[col.tnov];
+                if (t) { // Incluimos todas, incluso NINGUNA
+                    novCounts[t] = (novCounts[t] || 0) + 1;
+                }
+            });
+            
+            // Tomar TODAS las novedades (o un máximo razonable como 12)
+            let novArr = Object.entries(novCounts).sort((a,b) => b[1] - a[1]); // Mostrar todas las novedades
+            let totalFilteredForNov = novArr.reduce((sum, item) => sum + item[1], 0) || 1;
+            let maxNov = Math.max(...novArr.map(x => x[1]), 1);
+            
+            // Valor mínimo visual para que siempre se dibuje aunque sea 1 caso
+            let minVisual = maxNov * 0.05;
+
+            let chartData = novArr.map((d, i) => {
+                let colors = ['#00ff88', '#55ff66', '#aaff44', '#ffcc00', '#ff5e00', '#ff3300', '#ff0055', '#cc00ff'];
+                return {
+                    value: Math.max(d[1], minVisual), // Valor visual inflado si es muy pequeño
+                    realValue: d[1], // Valor real para tooltips
+                    name: d[0],
+                    itemStyle: { 
+                        color: colors[i % colors.length],
+                        shadowBlur: 10,
+                        shadowColor: colors[i % colors.length]
+                    }
+                };
+            });
+            // Echarts expects inner to outer, so reverse
+            chartData.reverse();
+
+            charts.radialNovedad.setOption({
+xAxis: { type: 'value', show: false },
+                backgroundColor: 'transparent',
+                polar: {
+                    radius: ['10%', '100%'],
+                    center: ['65%', '50%'] // Movido a la derecha para dar espacio a textos largos
+                },
+                angleAxis: {
+                    max: maxNov * 1.3, // Leave a gap
+                    startAngle: 90, 
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { show: false },
+                    splitLine: { show: false }
+                },
+                radiusAxis: {
+                    type: 'category',
+                    data: chartData.map(d => d.name.substring(0, 30) + (d.name.length>30?'...':'')),
+                    axisLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { show: true, color: '#fff', fontSize: 7.5, fontFamily: 'Share Tech Mono', interval: 0, margin: 5, align: 'right' },
+                    z: 10
+                },
+                tooltip: { 
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' },
+                    show: true,
+                    backgroundColor: 'rgba(7, 16, 34, 0.9)',
+                    borderColor: '#00ccff',
+                    borderWidth: 1,
+                    textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    formatter: function(params) {
+                        if (Array.isArray(params)) params = params[0];
+                        let pct = ((params.data.realValue / totalFilteredForNov) * 100).toFixed(1);
+                        return `<div style="padding: 3px;">
+                                    <span style="color:${params.color}; font-weight:bold;">${params.name}</span><br/>
+                                    Casos: <span style="color:#fff;">${params.data.realValue}</span><br/>
+                                    Porcentaje: <span style="color:#00ff88;">${pct}%</span>
+                                </div>`;
+                    }
+                },
+                series: [{
+                    type: 'bar',
+                    data: chartData,
+                    coordinateSystem: 'polar',
+                    roundCap: true,
+                    label: {
+                        show: true,
+                        position: 'end', // <--- Poner los porcentajes fuera (al final de la barra)
+                        formatter: function(params) {
+                            let pct = ((params.data.realValue / totalFilteredForNov) * 100).toFixed(0);
+                            return pct + '%';
+                        },
+                        color: '#fff',
+                        fontSize: 10,
+                        fontFamily: 'Share Tech Mono',
+                        fontWeight: 'bold'
+                    }
+                }]
+            });
+
+            charts.radialNovedad.off('click'); // remove old listeners if any
+            charts.radialNovedad.on('click', function(params) {
+                let name = params.name;
+                let sel = document.getElementById('f_tnov');
+                if (sel.setCustomValue) {
+                    sel.setCustomValue(name);
+                } else {
+                    sel.value = name;
+                }
+                applyFilters();
+            });
+
+            }
+            charts.barExec.setOption({
+xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabel: { formatter: (v) => formatMoneyShort(v), color: '#7890b5', fontSize: 10 } },
+                tooltip: { 
+                    trigger: 'axis', 
+                    axisPointer: { type: 'shadow' },
+                    backgroundColor: 'rgba(3, 6, 16, 0.95)',
+                    borderColor: '#ff5e00',
+                    borderWidth: 1,
+                    extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                    textStyle: { color: '#ffffff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    formatter: (params) => {
+                        let total = 0;
+                        let pagado = 0;
+                        let pendiente = 0;
+                        params.forEach(p => {
+                            total += p.value;
+                            if(p.seriesName === 'Pagado') pagado += p.value;
+                            if(p.seriesName === 'Pendiente') pendiente += p.value;
+                        });
+                        let pctPagado = total > 0 ? (pagado/total*100).toFixed(1) : 0;
+                        let pctPendiente = total > 0 ? (pendiente/total*100).toFixed(1) : 0;
+                        
+                        return `<b style="color:#00ff88; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${params[0].name}</b>
+                        Total: <span style="float:right; margin-left:15px;">${formatMoney(total)}</span><br/>
+                        Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pagado)} (${pctPagado}%)</span><br/>
+                        Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pendiente)} (${pctPendiente}%)</span>`;
+                    }
+                },
+                legend: { textStyle: { color: '#7890b5' }, bottom: 0 },
+                grid: { left: '3%', right: '4%', bottom: '15%', top: '5%', containLabel: true },
+                dataZoom: [
+                        { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false, moveOnMouseWheel: true },
+                        { 
+                    type: 'slider', 
+                    yAxisIndex: 0, 
+                    startValue: Math.max(0, barData.length - 10), 
+                    endValue: barData.length - 1, 
+                    width: 8, 
+                    right: 5, 
+                    handleSize: '100%', 
+                    showDetail: false,
+                    borderColor: 'transparent',
+                    fillerColor: 'rgba(0, 255, 136, 0.4)',
+                    backgroundColor: 'rgba(20, 32, 56, 0.8)',
+                    handleStyle: { color: '#00ccff', borderWidth: 0 }
+                }],
+                yAxis: { type: 'category', data: barData.map(d => d.name), axisLabel: { color: '#7890b5', fontSize: 10 } },
+                series: [
+                    { name: 'Pagado', type: 'bar', stack: 'total', itemStyle: { color: '#00ff88' }, data: barData.map(d => d.pagado) },
+                    { name: 'Pendiente', type: 'bar', stack: 'total', itemStyle: { color: '#ff5e00' }, data: barData.map(d => d.pendiente) }
+                ]
+            }, true);
+            
+        }
+
+        let execMapLevel = 0;
+        let execMapSelectedCity = null;
+        let execMapSelectedRes = null;
+
+        function resetMapDrillDown() {
+            if(execMapLevel === 2) {
+                execMapLevel = 1; execMapSelectedRes = null;
+                document.getElementById('f_resolucion').value = 'TODAS';
+                applyFilters();
+            } else if(execMapLevel === 1) {
+                execMapLevel = 0; execMapSelectedCity = null;
+                document.getElementById('btnMapBack').classList.add('hidden');
+                document.getElementById('f_ciudad').value = 'TODAS';
+                document.getElementById('f_resolucion').value = 'TODAS';
+                applyFilters();
+            }
+        }
+
+        
         function populateDropdowns() {
             const getUnique = (key) => {
                 let unique = [...new Set(allData.map(d => d[key]).filter(x => x !== null && x !== ''))];
@@ -421,40 +1829,134 @@
             const fill = (id, vals) => { const sel = document.getElementById(id); vals.forEach(v => sel.add(new Option(v, v))); };
             fill('f_resolucion', getUnique(col.res)); fill('f_ciudad', getUnique(col.ciu));
             fill('f_periodo', getUnique(col.per));
-            fill('f_presnov', getUnique(col.nov));
+            
             fill('f_tnov', getUnique(col.tnov));
             fill('f_estact', getUnique(col.estAct));
+            
+            initMultiSelect('f_resolucion', 'RESOLUCIÓN');
+            initMultiSelect('f_ciudad', 'CIUDAD');
+            initMultiSelect('f_periodo', 'PERIODO');
+            
+            initMultiSelect('f_tnov', 'TIPO NOVEDAD');
+            initMultiSelect('f_estact', 'ESTADO ACTUAL');
+        }
+
+        
+        function getVal(id) {
+            let sel = document.getElementById(id);
+            return sel.getCustomValues ? sel.getCustomValues() : sel.value;
+        }
+
+        function initMultiSelect(selectId, defaultText) {
+            const select = document.getElementById(selectId);
+            if(select.getCustomValues) return; // already init
+            
+            select.style.display = 'none';
+
+            const container = document.createElement('div');
+            container.className = 'relative w-full';
+            
+            const btn = document.createElement('div');
+            btn.className = 'h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font cursor-pointer flex items-center justify-between whitespace-nowrap overflow-hidden';
+            btn.innerHTML = `<span class="truncate">${defaultText}</span> <svg class="w-3 h-3 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`;
+            
+            const menu = document.createElement('div');
+            menu.className = 'absolute top-full left-0 mt-1 w-56 bg-[#030610] border border-[#00ff88] z-50 hidden flex-col max-h-48 overflow-y-auto hud-font shadow-[0_0_15px_rgba(0,255,136,0.3)] custom-menu scrollbar-thin';
+            
+            Array.from(select.options).forEach((opt, idx) => {
+                if (idx === 0) return; // Skip TODAS
+                const label = document.createElement('label');
+                label.className = 'px-2 py-1 text-[10px] text-white hover:bg-[#142038] cursor-pointer flex items-center gap-2 border-b border-[#142038]/50';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.value = opt.value;
+                cb.className = 'accent-[#00ff88] w-3 h-3';
+                cb.onchange = () => {
+                    let checked = Array.from(menu.querySelectorAll('input:checked'));
+                    if (checked.length === 0) btn.querySelector('span').innerText = defaultText;
+                    else if (checked.length === 1) btn.querySelector('span').innerText = checked[0].value;
+                    else btn.querySelector('span').innerText = checked.length + ' SELECCIONES';
+                    applyFilters();
+                };
+                label.appendChild(cb);
+                label.appendChild(document.createTextNode(opt.text));
+                menu.appendChild(label);
+            });
+
+            btn.onclick = (e) => {
+                document.querySelectorAll('.custom-menu').forEach(m => { if(m !== menu) m.classList.add('hidden') });
+                menu.classList.toggle('hidden');
+                e.stopPropagation();
+            };
+            
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) menu.classList.add('hidden');
+            });
+
+            container.appendChild(btn);
+            container.appendChild(menu);
+            select.parentNode.appendChild(container);
+            
+            select.getCustomValues = () => {
+                let checked = Array.from(menu.querySelectorAll('input:checked'));
+                if (checked.length === 0) return "TODAS";
+                return checked.map(c => c.value);
+            };
+            
+
+    select.setCustomValue = (val) => {
+        menu.querySelectorAll('input').forEach(cb => {
+            cb.checked = (cb.value === val);
+        });
+        btn.querySelector('span').innerText = val;
+    };
+
+            select.resetCustom = () => {
+                menu.querySelectorAll('input').forEach(cb => cb.checked = false);
+                btn.querySelector('span').innerText = defaultText;
+            };
+            
+            select.selectCustom = (val) => {
+                select.resetCustom();
+                let cb = menu.querySelector(`input[value="${val}"]`);
+                if (cb) {
+                    cb.checked = true;
+                    btn.querySelector('span').innerText = val;
+                }
+            };
         }
 
         function resetFilters() {
-            document.getElementById('f_resolucion').value = "TODAS";
-            document.getElementById('f_ciudad').value = "TODAS";
-            document.getElementById('f_periodo').value = "TODAS";
-            document.getElementById('f_presnov').value = "TODAS";
-            document.getElementById('f_tnov').value = "TODAS";
-            document.getElementById('f_estact').value = "TODAS";
+            ['f_resolucion', 'f_ciudad', 'f_periodo', 'f_tnov', 'f_estact'].forEach(id => {
+                let sel = document.getElementById(id);
+                if (sel.resetCustom) sel.resetCustom();
+                else sel.value = "TODAS";
+            });
             document.getElementById('globalSearch').value = "";
             expandedCity = null;
+    if(typeof tab2Level !== 'undefined') {
+        tab2Level = 0;
+        tab2SelectedCity = '';
+        tab2SelectedRes = '';
+    }
             applyFilters();
         }
 
         function applyFilters() {
             let f = {
-                res: document.getElementById('f_resolucion').value, ciu: document.getElementById('f_ciudad').value,
-                per: document.getElementById('f_periodo').value,
-                presnov: document.getElementById('f_presnov').value,
-                tnov: document.getElementById('f_tnov').value,
-                estact: document.getElementById('f_estact').value
+                res: getVal('f_resolucion'), ciu: getVal('f_ciudad'),
+                per: getVal('f_periodo'), 
+                tnov: getVal('f_tnov'), estact: getVal('f_estact')
             };
             let searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
             
             filteredData = allData.filter(d => {
-                let matchFilters = (f.res === "TODAS" || d[col.res] == f.res) && 
-                                   (f.ciu === "TODAS" || d[col.ciu] == f.ciu) &&
-                                   (f.per === "TODAS" || d[col.per] == f.per) &&
-                                   (f.presnov === "TODAS" || d[col.nov] == f.presnov) &&
-                                   (f.tnov === "TODAS" || d[col.tnov] == f.tnov) &&
-                                   (f.estact === "TODAS" || d[col.estAct] == f.estact);
+                let matchFilters = (f.res === "TODAS" || (Array.isArray(f.res) ? f.res.includes(d[col.res]) : d[col.res] == f.res)) && 
+                                   (f.ciu === "TODAS" || (Array.isArray(f.ciu) ? f.ciu.includes(d[col.ciu]) : d[col.ciu] == f.ciu)) &&
+                                   (f.per === "TODAS" || (Array.isArray(f.per) ? f.per.includes(d[col.per]) : d[col.per] == f.per)) &&
+                                   
+                                   (f.tnov === "TODAS" || (Array.isArray(f.tnov) ? f.tnov.includes(d[col.tnov]) : d[col.tnov] == f.tnov)) &&
+                                   (f.estact === "TODAS" || (Array.isArray(f.estact) ? f.estact.includes(d[col.estAct]) : d[col.estAct] == f.estact));
                 
                 let matchSearch = true;
                 if(searchTerm) {
@@ -465,7 +1967,16 @@
                 }
                 return matchFilters && matchSearch;
             });
-            expandedCity = (f.ciu === "TODAS") ? null : f.ciu;
+            if (f.ciu !== "TODAS" && (!Array.isArray(f.ciu) || f.ciu.length === 1)) {
+                expandedCity = Array.isArray(f.ciu) ? f.ciu[0] : f.ciu;
+            } else {
+                expandedCity = null;
+    if(typeof tab2Level !== 'undefined') {
+        tab2Level = 0;
+        tab2SelectedCity = '';
+        tab2SelectedRes = '';
+    }
+            }
             updateDashboard();
         }
 
@@ -505,19 +2016,19 @@
             dataset.forEach(d => { if(d[col.per]) periodosObj[d[col.per]] += (parseFloat(d[col.val])||0); });
 
             charts.line.setOption({
-                backgroundColor: 'transparent', grid: { top: 60, bottom: 45, left: 65, right: 15 },
+                backgroundColor: 'transparent', grid: { top: 55, bottom: 20, left: 60, right: 20 },
+yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', formatter: p => formatMoneyShort(p) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
                 xAxis: { 
                     type: 'category', 
                     data: allPeriods.map((s, i) => { let n = String(s).replace(/[^0-9]/g,''); return n ? n : String(i+1); }), 
                     axisLabel: { show: true, color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0, margin: 10 } 
                 },
-                yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono', formatter: p => formatMoneyShort(p) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
                 series: [{ 
-                    data: allPeriods.map(k => periodosObj[k]), type: 'pictorialBar', symbol: 'path://M0,10 L10,0 L20,10 z', barWidth: '60%',
+                    data: allPeriods.map(k => periodosObj[k]), type: 'pictorialBar', symbol: 'path://M0,10 L10,0 L20,10 z', barWidth: '40%',
                     itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,94,0,0.8)' }, { offset: 1, color: 'rgba(255,94,0,0.1)' }]), borderColor: '#ff5e00', borderWidth: 1.5, shadowColor: '#ff5e00', shadowBlur: 5 },
                     label: { 
                         show: true, position: 'top', rotate: 45, color: '#ff5e00', 
-                        fontFamily: 'Share Tech Mono', fontSize: 9, align: 'left', verticalAlign: 'middle',
+                        fontFamily: 'Share Tech Mono', fontSize: 10, align: 'left', verticalAlign: 'middle',
                         formatter: p => p.value > 0 ? formatMoney(p.value) : '' 
                     }
                 }]
@@ -638,7 +2149,308 @@
             }
         }
 
-        function updateDashboard() {
+        
+        
+        function renderExecCharts() {
+            if(!charts.execRadar) return;
+
+            // 1. Radar Chart Data (Top 5 Ciudades para el Radar)
+            let cityMap = {};
+            filteredData.forEach(d => {
+                let c = d[col.ciu];
+                if(c) {
+                    if(!cityMap[c]) cityMap[c] = { pagado: 0, total: 0, bens: new Set() };
+                    let val = parseFloat(d[col.val]) || 0;
+                    let pen = parseFloat(d[col.pend]) || 0;
+                    cityMap[c].pagado += val;
+                    cityMap[c].total += (val + pen);
+                    cityMap[c].bens.add(d[col.doc] || d[col.ben] || 'NO_ID');
+                }
+            });
+            let allCitiesSorted = Object.entries(cityMap).map(e => ({
+                name: e[0], pagado: e[1].pagado, total: e[1].total, bens: e[1].bens.size,
+                pct: e[1].total > 0 ? (e[1].pagado / e[1].total) * 100 : 0
+            })).sort((a,b) => b.total - a.total);
+            
+            // Radar will only use Top 5 to not be crowded
+            let cityArrRadar = allCitiesSorted.slice(0, 5);
+            
+            let maxTotal = Math.max(...cityArrRadar.map(c => c.total), 1);
+            let maxBens = Math.max(...cityArrRadar.map(c => c.bens), 1);
+            
+            charts.execRadar.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { show: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                radar: {
+                    radius: '75%', // Enlarged!
+                    indicator: cityArrRadar.length ? cityArrRadar.map(c => ({ name: c.name.substring(0,10), max: 100 })) : [{name:'N/A', max:100}],
+                    shape: 'polygon', splitNumber: 4,
+                    axisName: { color: '#00ccff', fontSize: 10, fontFamily: 'Rajdhani', fontWeight: 'bold' },
+                    splitLine: { lineStyle: { color: ['rgba(0, 204, 255, 0.1)', 'rgba(0, 204, 255, 0.3)', 'rgba(0, 204, 255, 0.5)', 'rgba(0, 204, 255, 0.8)'] } },
+                    splitArea: { show: false }, axisLine: { lineStyle: { color: 'rgba(0, 204, 255, 0.5)' } }
+                },
+                series: [
+                    { type: 'radar', symbolSize: 6, lineStyle: { width: 3 }, data: [
+                        { value: cityArrRadar.map(c => c.pct), name: '% Ejecución', itemStyle: { color: '#00ff88' }, areaStyle: { color: 'rgba(0, 255, 136, 0.4)' } },
+                        { value: cityArrRadar.map(c => (c.total/maxTotal)*100), name: 'Presupuesto (Rel)', itemStyle: { color: '#00ccff' }, lineStyle: { type: 'dashed', width: 2 } },
+                        { value: cityArrRadar.map(c => (c.bens/maxBens)*100), name: 'Beneficiarios (Rel)', itemStyle: { color: '#ff5e00' }, lineStyle: { type: 'dotted', width: 2 } }
+                    ]}
+                ]
+            });
+
+            // 2. Heatmap Chart (Expanded to Top 12 Cities)
+            let novs = new Set();
+            filteredData.forEach(d => { if(d[col.tnov]) novs.add(d[col.tnov]); });
+            let novArr = Array.from(novs);
+            if(novArr.length === 0) novArr = ['NINGUNA'];
+            
+            let cityArrHm = allCitiesSorted.slice(0, 12); // Up to 12 cities!
+            let hmMap = {};
+            cityArrHm.forEach(c => { hmMap[c.name] = {}; novArr.forEach(n => hmMap[c.name][n] = 0); });
+            filteredData.forEach(d => {
+                let ciu = d[col.ciu];
+                let nov = d[col.tnov] || 'NINGUNA';
+                if(hmMap[ciu] && hmMap[ciu][nov] !== undefined) hmMap[ciu][nov] += 1;
+            });
+            let hmData = [];
+            cityArrHm.forEach((c, y) => {
+                novArr.forEach((n, x) => { hmData.push([x, y, hmMap[c.name][n]]); });
+            });
+            
+            // Generate visual pieces so 0 is gray, and >0 uses a gradient from yellow to red
+            let maxHm = Math.max(...hmData.map(d=>d[2]), 1);
+            
+            charts.execHeatmap.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { position: 'top', backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff0033', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                grid: { top: 10, bottom: 85, left: 100, right: 10 }, // Increased bottom margin to 90
+                xAxis: { type: 'category', data: novArr, axisLabel: { color: '#7890b5', fontSize: 8, rotate: 45, margin: 8, formatter: function(val){ 
+    const shortMap = {
+        "BENEFICIARIA MANIFIESTA NO HABER RECIBIDO": "NO RECIBIDO",
+        "BENEFICIARIO NO RESIDE EN LA VIVIENDA": "NO RESIDE",
+        "ACTUALIZACIÓN DE DATOS DE CONTACTO": "ACT. DATOS",
+        "FALLECIMIENTO (SOPORTES FORMALIZADOS)": "FALLECIMIENTO",
+        "ERROR EN LA CUENTA DE COBRO": "ERROR CTA. COBRO",
+        "CUENTA DE COBRO NO RECIBIDA": "NO RECIBIÓ CTA.",
+        "VISITA FALLIDA / REPROGRAMAR": "VISITA FALLIDA",
+        "ABANDONO DEL INMUEBLE": "ABANDONO",
+        "RENUNCIA VOLUNTARIA": "RENUNCIA",
+        "SEGUIMIENTO ADMINISTRATIVO": "SEG. ADMIN.",
+        "CAMBIO DE ARRENDADOR": "C. ARRENDADOR",
+        "CAMBIO DE RESIDENCIA": "C. RESIDENCIA",
+        "MUERTE DEL ARRENDADOR": "MUERTE ARREND."
+    };
+    let s = shortMap[val] || val;
+    return s.length > 18 ? s.substring(0,18) + '...' : s;
+} } }, // Increased rotation and margin
+                yAxis: { type: 'category', data: cityArrHm.map(c=>c.name), axisLabel: { color: '#7890b5', fontSize: 9 } },
+                visualMap: { 
+                    type: 'piecewise', show: false,
+                    pieces: [
+                        { value: 0, color: '#142038' }, // 0 values are just the dark background
+                        { min: 1, max: maxHm * 0.2, color: '#00ccff' }, // Low = Cyan
+                        { min: maxHm * 0.2, max: maxHm * 0.6, color: '#ffcc00' }, // Medium = Yellow
+                        { min: maxHm * 0.6, max: maxHm * 10, color: '#ff0033' }  // High = Red
+                    ]
+                },
+                series: [{ type: 'heatmap', data: hmData, label: { show: true, color: '#fff', fontSize: 10 }, itemStyle: { borderColor: '#030610', borderWidth: 1 } }]
+            });
+
+            // 3. Sunburst Chart (Ciudades -> Novedades)
+            let sbMap = {};
+            filteredData.forEach(d => {
+                let ciu = d[col.ciu] || 'OTRA';
+                let nov = d[col.tnov] || 'NINGUNA';
+                
+                if(!sbMap[ciu]) sbMap[ciu] = {};
+                if(!sbMap[ciu][nov]) sbMap[ciu][nov] = 0;
+                sbMap[ciu][nov] += 1;
+            });
+            
+            // Limit to top 8 cities by total count
+            let topCiu = Object.entries(sbMap)
+                .map(e => ({ name: e[0], count: Object.values(e[1]).reduce((a,b)=>a+b,0), novs: e[1] }))
+                .sort((a,b) => b.count - a.count).slice(0, 8);
+                
+            let sbData = topCiu.map((ciuData, index) => {
+                let colors = ['#00ff88', '#00ccff', '#ff5e00', '#ffcc00', '#bf00ff', '#ff0033', '#00ffcc', '#ff3399'];
+                let baseColor = colors[index % colors.length];
+                
+                return {
+                    name: ciuData.name.length > 12 ? ciuData.name.substring(0,12) + '...' : ciuData.name,
+                    itemStyle: { color: baseColor },
+                    children: Object.entries(ciuData.novs).sort((a,b)=>b[1]-a[1]).map(eNov => {
+                        let isNinguna = eNov[0] === 'NINGUNA';
+                        let shortNov = eNov[0].length > 15 ? eNov[0].substring(0, 15) + '...' : eNov[0];
+                        return {
+                            name: shortNov, value: eNov[1],
+                            itemStyle: { color: isNinguna ? '#142038' : '#ff0033', borderColor: baseColor, borderWidth: 1 }
+                        };
+                    })
+                };
+            });
+            
+            charts.execSunburst.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { show: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#00ccff', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                series: [{
+                    type: 'sunburst', data: sbData, radius: [0, '90%'], sort: null,
+                    itemStyle: { borderColor: '#030610', borderWidth: 2 },
+                    label: { rotate: 'radial', color: '#fff', fontSize: 9, minAngle: 12 }
+                }]
+            });
+        }
+
+
+        function renderLaboratorio() {
+            if(!charts.labRadar) return;
+
+            // 1. Radar Chart Data (Top 5 Ciudades)
+            let cityMap = {};
+            filteredData.forEach(d => {
+                let c = d[col.ciu];
+                if(c) {
+                    if(!cityMap[c]) cityMap[c] = { pagado: 0, total: 0, bens: new Set() };
+                    let val = parseFloat(d[col.val]) || 0;
+                    let pen = parseFloat(d[col.pend]) || 0;
+                    cityMap[c].pagado += val;
+                    cityMap[c].total += (val + pen);
+                    cityMap[c].bens.add(d[col.doc] || d[col.ben] || 'NO_ID');
+                }
+            });
+            let cityArr = Object.entries(cityMap).map(e => ({
+                name: e[0], pagado: e[1].pagado, total: e[1].total, bens: e[1].bens.size,
+                pct: e[1].total > 0 ? (e[1].pagado / e[1].total) * 100 : 0
+            })).sort((a,b) => b.total - a.total).slice(0, 5);
+            
+            let maxTotal = Math.max(...cityArr.map(c => c.total), 1);
+            let maxBens = Math.max(...cityArr.map(c => c.bens), 1);
+            
+            charts.labRadar.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { show: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#00ccff', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                radar: {
+                    indicator: cityArr.map(c => ({ name: c.name.substring(0,10), max: 100 })),
+                    shape: 'polygon', splitNumber: 4,
+                    axisName: { color: '#00ccff', fontSize: 9, fontFamily: 'Rajdhani' },
+                    splitLine: { lineStyle: { color: ['rgba(0, 204, 255, 0.1)', 'rgba(0, 204, 255, 0.2)', 'rgba(0, 204, 255, 0.4)', 'rgba(0, 204, 255, 0.6)'] } },
+                    splitArea: { show: false }, axisLine: { lineStyle: { color: 'rgba(0, 204, 255, 0.5)' } }
+                },
+                series: [
+                    { type: 'radar', data: [
+                        { value: cityArr.map(c => c.pct), name: '% Ejecución', itemStyle: { color: '#00ff88' }, areaStyle: { color: 'rgba(0, 255, 136, 0.3)' } },
+                        { value: cityArr.map(c => (c.total/maxTotal)*100), name: 'Volumen Presupuesto (Relativo)', itemStyle: { color: '#00ccff' }, lineStyle: { type: 'dashed' } },
+                        { value: cityArr.map(c => (c.bens/maxBens)*100), name: 'Beneficiarios (Relativo)', itemStyle: { color: '#ff5e00' }, lineStyle: { type: 'dotted' } }
+                    ]}
+                ]
+            });
+
+            // 2. Area Chart Data (Trend)
+            let perMap = {};
+            filteredData.forEach(d => {
+                let p = d[col.per] || 'SIN PERIODO';
+                if(!perMap[p]) perMap[p] = 0;
+                perMap[p] += (parseFloat(d[col.val]) || 0);
+            });
+            let perArr = Object.entries(perMap).sort((a,b) => { let numA = parseInt(a[0].replace(/[^0-9]/g, '')) || 0; let numB = parseInt(b[0].replace(/[^0-9]/g, '')) || 0; return numA - numB; });
+            charts.labArea.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { trigger: 'axis', backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#00ff88', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                grid: { top: 30, bottom: 20, left: 50, right: 20 },
+                xAxis: { type: 'category', data: perArr.map(x=>x[0]), axisLabel: { color: '#7890b5', fontSize: 9 } },
+                yAxis: { type: 'value', axisLabel: { formatter: v => '$' + (v/1000000).toFixed(0) + 'M', color: '#7890b5', fontSize: 9 }, splitLine: { lineStyle: { color: '#142038' } } },
+                series: [{
+                    data: perArr.map(x=>x[1]), type: 'line', smooth: true, symbol: 'none',
+                    lineStyle: { color: '#00ff88', width: 2 },
+                    areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'rgba(0, 255, 136, 0.5)'}, {offset: 1, color: 'rgba(0, 255, 136, 0)'}]) }
+                }]
+            });
+
+            // 3. Sunburst Chart
+            // We group: Estado -> Novedad -> Ciudad
+            // To prevent massive datasets, we limit to top cities.
+            let sbMap = {};
+            filteredData.forEach(d => {
+                let est = (parseFloat(d[col.est])===1) ? 'PAGADO' : 'PENDIENTE';
+                let nov = d[col.tnov] || 'NINGUNA';
+                let ciu = d[col.ciu] || 'OTRA';
+                
+                if(!sbMap[est]) sbMap[est] = {};
+                if(!sbMap[est][nov]) sbMap[est][nov] = {};
+                if(!sbMap[est][nov][ciu]) sbMap[est][nov][ciu] = 0;
+                sbMap[est][nov][ciu] += 1; // Count of records
+            });
+            let sbData = Object.entries(sbMap).map(eEst => ({
+                name: eEst[0],
+                itemStyle: { color: eEst[0] === 'PAGADO' ? '#00ff88' : '#ff5e00' },
+                children: Object.entries(eEst[1]).map(eNov => {
+                    let novCount = Object.values(eNov[1]).reduce((a,b)=>a+b,0);
+                    let sortedCiu = Object.entries(eNov[1]).sort((a,b)=>b[1]-a[1]).slice(0, 5); // top 5 cities per nov
+                    return {
+                        name: eNov[0], value: novCount,
+                        itemStyle: { color: eNov[0] === 'NINGUNA' ? '#00ccff' : '#ffcc00' },
+                        children: sortedCiu.map(eCiu => ({ name: eCiu[0], value: eCiu[1], itemStyle: { color: '#142038', borderColor: '#ff0033' } }))
+                    };
+                })
+            }));
+            charts.labSunburst.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { show: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ffcc00', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                series: [{
+                    type: 'sunburst', data: sbData, radius: [0, '90%'], sort: null,
+                    itemStyle: { borderColor: '#030610', borderWidth: 1 },
+                    label: { rotate: 'radial', color: '#fff', fontSize: 8 }
+                }]
+            });
+
+            // 4. Heatmap Chart
+            let novs = new Set();
+            filteredData.forEach(d => { if(d[col.tnov]) novs.add(d[col.tnov]); });
+            let novArr = Array.from(novs);
+            if(novArr.length === 0) novArr = ['NINGUNA'];
+            
+            let hmMap = {};
+            cityArr.forEach(c => { hmMap[c.name] = {}; novArr.forEach(n => hmMap[c.name][n] = 0); });
+            filteredData.forEach(d => {
+                let ciu = d[col.ciu];
+                let nov = d[col.tnov] || 'NINGUNA';
+                if(hmMap[ciu] && hmMap[ciu][nov] !== undefined) hmMap[ciu][nov] += 1;
+            });
+            let hmData = [];
+            cityArr.forEach((c, y) => {
+                novArr.forEach((n, x) => { hmData.push([x, y, hmMap[c.name][n]]); });
+            });
+            charts.labHeatmap.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { position: 'top', backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff0033', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                grid: { top: 10, bottom: 60, left: 100, right: 10 },
+                xAxis: { type: 'category', data: novArr, axisLabel: { color: '#7890b5', fontSize: 9, rotate: 30 } },
+                yAxis: { type: 'category', data: cityArr.map(c=>c.name), axisLabel: { color: '#7890b5', fontSize: 9 } },
+                visualMap: { show: false, min: 0, max: Math.max(...hmData.map(d=>d[2]), 1), inRange: { color: ['#142038', '#ff0033'] } },
+                series: [{ type: 'heatmap', data: hmData, label: { show: true, color: '#fff', fontSize: 10 } }]
+            });
+            
+            // 5. Terminal Log
+            let term = document.getElementById('labTerminal');
+            let termHtml = '';
+            // Generate some fake logs based on data
+            let now = new Date();
+            for(let i=0; i<15; i++) {
+                let d = filteredData[Math.floor(Math.random() * filteredData.length)];
+                if(!d) break;
+                let t = new Date(now.getTime() - (Math.random()*100000));
+                let tStr = t.toLocaleTimeString('en-US', { hour12: false });
+                if(d[col.tnov] && d[col.tnov] !== 'NINGUNA') {
+                    termHtml = `<div class="text-[#ff5e00] mb-1">> [${tStr}] SYS.WARN: Novedad "${d[col.tnov]}" detectada en ${d[col.ciu]} (Doc: ${d[col.doc]||d[col.docPpt]}).</div>` + termHtml;
+                } else {
+                    termHtml = `<div class="text-[#00ff88]/70 mb-1">> [${tStr}] SYS.INFO: Transacción procesada en ${d[col.ciu]} por ${formatMoney(d[col.val])}.</div>` + termHtml;
+                }
+            }
+            term.innerHTML = termHtml;
+        }
+
+
+function updateDashboard() {
             // Total global (unfiltered) para calcular porcentajes
             let totalBenUnfiltered = new Set(allData.map(d => d[col.doc])).size || 1;
             let totalValUnfiltered = allData.reduce((sum, d) => sum + (parseFloat(d[col.val]) || 0), 0) || 1;
@@ -652,6 +2464,8 @@
 
             document.getElementById('kpiBeneficiarios').innerText = currentBen.toLocaleString();
             document.getElementById('kpiPagado').innerText = formatMoneyShort(currentVal);
+            document.getElementById('kpiBenTotal').innerText = "de " + totalBenUnfiltered.toLocaleString();
+            document.getElementById('kpiPagTotal').innerText = "de " + formatMoneyShort(totalValUnfiltered);
 
             // Actualizar circulos (stroke-dasharray="150.8")
             document.getElementById('circBen').style.strokeDashoffset = 150.8 - (pctBen * 150.8 / 100);
@@ -662,52 +2476,150 @@
             document.getElementById('circValText').innerText = pctVal.toFixed(1) + "%";
             document.getElementById('lineVal').style.width = pctVal + "%";
 
+    // Tab 2 KPIs Update
+    let t2_pctBen = (currentBen / totalBenUnfiltered) * 100;
+    let t2_pctVal = (currentVal / totalValUnfiltered) * 100;
+    
+    document.getElementById('t2_kpiBen').innerText = currentBen.toLocaleString();
+    document.getElementById('t2_kpiPag').innerText = formatMoneyShort(currentVal);
+    document.getElementById('t2_kpiBenTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
+    document.getElementById('t2_kpiPagTot').innerText = "de " + formatMoneyShort(totalValUnfiltered);
+
+    document.getElementById('t2_circBenTxt').innerText = t2_pctBen.toFixed(0) + '%';
+    document.getElementById('t2_circPagTxt').innerText = t2_pctVal.toFixed(0) + '%';
+    
+    document.getElementById('t2_circBen').style.strokeDashoffset = 125.6 - (125.6 * t2_pctBen) / 100;
+    document.getElementById('t2_circPag').style.strokeDashoffset = 125.6 - (125.6 * t2_pctVal) / 100;
+    document.getElementById('t2_lineBen').style.width = t2_pctBen + '%';
+    document.getElementById('t2_linePag').style.width = t2_pctVal + '%';
+
+    function getTopCat(data, colIndex) {
+        if(data.length === 0) return { name: '-', count: 0, pct: 0 };
+        let counts = {};
+        data.forEach(d => { let v = d[colIndex] || 'N/A'; counts[v] = (counts[v] || 0) + 1; });
+        let topName = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+        let pct = (counts[topName] / data.length) * 100;
+        return { name: topName, count: counts[topName], pct: pct };
+    }
+
+    // Mirror the filter values to the KPI titles
+    
+    let valTNov = document.getElementById('f_tnov').value;
+    let valEst = document.getElementById('f_estact').value;
+    
+    
+    document.getElementById('t2_titleTNov').innerText = valTNov.length > 15 ? valTNov.substring(0,15)+'...' : valTNov;
+    document.getElementById('t2_titleEst').innerText = valEst.length > 15 ? valEst.substring(0,15)+'...' : valEst;
+
+    // To prevent "208 de 37" logic errors, the user requested that these KPIs simply reflect 
+    // the current global filtered unique beneficiaries vs total un-filtered unique beneficiaries.
+    // E.g. When no filter is applied -> 1873 de 1873 (100%).
+    // When "SÍ" is selected -> 37 de 1873 (2%).
+    
+    let dispPct = t2_pctBen; // (currentBen / totalBenUnfiltered) * 100
+    
+
+
+    // Tipo Novedad KPI
+    document.getElementById('t2_kpiTNov').innerText = currentBen.toLocaleString();
+    document.getElementById('t2_kpiTNovTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
+    document.getElementById('t2_circTNovTxt').innerText = dispPct.toFixed(0) + '%';
+    document.getElementById('t2_circTNov').style.strokeDashoffset = 125.6 - (125.6 * dispPct) / 100;
+    document.getElementById('t2_lineTNov').style.width = dispPct + '%';
+
+    // Estado KPI
+    document.getElementById('t2_kpiEst').innerText = currentBen.toLocaleString();
+    document.getElementById('t2_kpiEstTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
+    document.getElementById('t2_circEstTxt').innerText = dispPct.toFixed(0) + '%';
+    document.getElementById('t2_circEst').style.strokeDashoffset = 125.6 - (125.6 * dispPct) / 100;
+    document.getElementById('t2_lineEst').style.width = dispPct + '%';
+
+    // Registros KPI (Row count)
+    let totalRegUnfiltered = allData.length;
+    let currentReg = filteredData.length;
+    let dispPctReg = totalRegUnfiltered > 0 ? (currentReg / totalRegUnfiltered) * 100 : 0;
+
+    document.getElementById('t2_kpiReg').innerText = currentReg.toLocaleString();
+    document.getElementById('t2_kpiRegTot').innerText = "de " + totalRegUnfiltered.toLocaleString();
+    document.getElementById('t2_circRegTxt').innerText = dispPctReg.toFixed(0) + '%';
+    document.getElementById('t2_circReg').style.strokeDashoffset = 125.6 - (125.6 * dispPctReg) / 100;
+    document.getElementById('t2_lineReg').style.width = dispPctReg + '%';
+
+
+
+
             let mapDataObj = {};
-            filteredData.forEach(d => { if(d[col.ciu]) mapDataObj[d[col.ciu]] = (mapDataObj[d[col.ciu]]||0) + (parseFloat(d[col.val])||0); });
+            filteredData.forEach(d => { 
+                let ciu = d[col.ciu];
+                if(ciu) {
+                    if(!mapDataObj[ciu]) mapDataObj[ciu] = { total: 0, pagado: 0, pendiente: 0, docs: new Set() };
+                    let valPagado = parseFloat(d[col.val]) || 0;
+                    let valPend = parseFloat(d[col.pend]) || 0;
+                    mapDataObj[ciu].pagado += valPagado;
+                    mapDataObj[ciu].pendiente += valPend;
+                    mapDataObj[ciu].total += (valPagado + valPend); mapDataObj[ciu].docs.add(d[col.doc] || d[col.ben] || 'NO_ID');
+                }
+            });
             
-            let maxVal = Math.max(...Object.values(mapDataObj), 1);
-            let minVal = Math.min(...Object.values(mapDataObj), 0);
+            let maxVal = Math.max(...Object.values(mapDataObj).map(x => x.total), 1);
+            let minVal = Math.min(...Object.values(mapDataObj).map(x => x.total), 0);
             
             let mapNodes = Object.entries(mapDataObj).map(e => {
-                let coords = cityCoords[e[0].toUpperCase()] || [-74 + (Math.random()-0.5)*2, 4 + (Math.random()-0.5)*2];
+                let cityName = e[0].toUpperCase();
+                let coords = cityCoords[cityName] || [-74 + (Math.random()-0.5)*2, 4 + (Math.random()-0.5)*2];
+                
+                let labelPos = 'right'; // Por defecto
+                if (cityName === 'FLORIDABLANCA') labelPos = 'bottom';
+                if (cityName === 'BUCARAMANGA') labelPos = 'top';
+                if (cityName === 'MEDELLIN' || cityName === 'MEDELLÍN') labelPos = 'bottom';
+                if (cityName === 'BELLO') labelPos = 'top';
+                if (cityName.includes('CUCUTA') || cityName.includes('CÚCUTA')) labelPos = 'top';
+                if (cityName === 'VILLA DEL ROSARIO') labelPos = 'bottom';
+                if (cityName === 'SOLEDAD') labelPos = 'bottom';
+                if (cityName === 'BARRANQUILLA') labelPos = 'top';
+                if (cityName === 'PEREIRA') labelPos = 'bottom';
+                if (cityName === 'ARAUCA') labelPos = 'left';
+                if (cityName.includes('CALI')) labelPos = 'right';
+                if (cityName === 'MANIZALES') labelPos = 'top';
+                
                 return { 
                     name: e[0], 
-                    value: [coords[0], coords[1], e[1]]
+                    value: [coords[0], coords[1], e[1].total],
+                    pagado: e[1].pagado,
+                    pendiente: e[1].pendiente,
+                    label: { position: labelPos, formatter: '{b}', show: true, fontSize: 8, color: '#fff' }
                 };
             });
             
             let edges = [];
-            let detailNodes = [];
-            
             if(mapNodes.length > 1) {
                 let center = mapNodes.find(n => n.name.includes("BOGOTA")) || mapNodes[0];
                 mapNodes.forEach(n => { if(n.name !== center.name) edges.push({ coords: [center.value, n.value] }); });
             }
 
-            if(expandedCity && mapDataObj[expandedCity]) {
-                let baseCoords = cityCoords[expandedCity.toUpperCase()] || [-74, 4];
-                let cityData = filteredData.filter(d => d[col.ciu] === expandedCity);
-                let periodosCity = {};
-                cityData.forEach(d => { if(d[col.per]) periodosCity[d[col.per]] = (periodosCity[d[col.per]]||0) + (parseFloat(d[col.val])||0); });
-                
-                let pKeys = Object.keys(periodosCity);
-                let radius = 0.5;
-                pKeys.forEach((k, i) => {
-                    let angle = (i / pKeys.length) * Math.PI * 2;
-                    let pLon = baseCoords[0] + Math.cos(angle)*radius;
-                    let pLat = baseCoords[1] + Math.sin(angle)*radius;
-                    detailNodes.push({
-                        name: k,
-                        value: [pLon, pLat, periodosCity[k]],
-                        itemStyle: { color: '#00ccff', shadowColor: '#00ccff' } 
-                    });
-                    edges.push({ coords: [baseCoords, [pLon, pLat]], lineStyle: { color: '#00ccff', opacity: 0.5 } });
-                });
-            }
-
             charts.map.setOption({
                 backgroundColor: 'transparent',
-                tooltip: { formatter: p => p.name ? (p.name + '<br/>' + formatMoney(p.value[2])) : '' },
+                tooltip: {
+                    show: true, trigger: 'item', confine: true,
+                backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1,
+                extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                textStyle: { color: '#ffffff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                formatter: p => {
+                    if (p.dataType !== 'node') return '';
+                    if (p.data._isRing || p.data._isCity || p.data._isResCenter) return '';
+                    
+                    let tot = p.data.dataValue[0] || 0;
+                    let pctExec = p.data.dataValue[1] || 0;
+                    let pag = p.data.dataValue[2] || 0;
+                    let pen = tot - pag;
+                    let pctPen = tot > 0 ? (pen/tot*100) : 0;
+                    
+                    return `<b style="color:${p.data.itemStyle.color}; font-size: 12px; border-bottom: 1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.data.trueName || p.name}</b>
+                            Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
+                            Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${pctExec.toFixed(1)}%)</span><br/>
+                            Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span>`;
+                }
+            },
                 visualMap: {
                     type: 'continuous',
                     seriesIndex: 1, 
@@ -717,29 +2629,19 @@
                     realtime: false,
                     inRange: { color: ['#ff3300', '#ffcc00', '#00ff88'] },
                     text: ['Mayor $', 'Menor $'],
-                    textStyle: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono' },
+                    textStyle: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' },
                     bottom: 10, right: 10, itemHeight: 80, itemWidth: 10,
                     formatter: (value) => formatMoneyShort(value)
                 },
                 geo: {
-                    map: 'colombia',
-                    roam: true,
-                    zoom: 2.1,
-                    center: [-74.0, 7.5],
-                    aspectScale: 1.0,
-                    layoutCenter: ['50%', '50%'], 
-                    layoutSize: '100%',
-                    itemStyle: {
-                        areaColor: 'rgba(20, 32, 56, 0.4)',
-                        borderColor: 'rgba(0, 255, 136, 0.25)', 
-                        borderWidth: 0.5,
-                        shadowColor: 'transparent',
-                        shadowBlur: 0
-                    },
-                    emphasis: {
-                        itemStyle: { areaColor: 'rgba(0, 255, 136, 0.1)' },
-                        label: { show: false }
-                    }
+                map: 'colombia',
+                roam: false,
+                scaleLimit: { min: 0.5, max: 10 },
+                aspectScale: 1,
+                zoom: 2.25,
+                center: [-73.5, 7.3],
+                itemStyle: { areaColor: '#071022', borderColor: '#00ccff', borderWidth: 0.5 },
+                emphasis: { itemStyle: { areaColor: '#0a1a3a', shadowBlur: 0, borderWidth: 0.5 }, label: { show: false } }
                 },
                 series: [
                     {
@@ -751,14 +2653,8 @@
                         type: 'effectScatter', coordinateSystem: 'geo',
                         symbolSize: val => Math.max(5, Math.min(18, val[2] / (maxVal/18))), 
                         data: mapNodes,
-                        label: { show: true, formatter: '{b}', position: 'right', color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono' },
+                        label: { show: true, formatter: '{b}', color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
                         rippleEffect: { period: 4, scale: 2.5, brushType: 'stroke' }
-                    },
-                    {
-                        type: 'scatter', coordinateSystem: 'geo',
-                        symbolSize: 6,
-                        data: detailNodes,
-                        label: { show: true, formatter: '{b}', position: 'top', color: '#00ccff', fontSize: 8, fontFamily: 'Share Tech Mono' },
                     }
                 ]
             });
@@ -769,7 +2665,7 @@
             let f_ciu = document.getElementById('f_ciudad').value;
             let f_res = document.getElementById('f_resolucion').value;
             let f_per = document.getElementById('f_periodo').value;
-            let f_presnov = document.getElementById('f_presnov').value;
+            
             let f_tnov = document.getElementById('f_tnov').value;
             let f_estact = document.getElementById('f_estact').value;
             let searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
@@ -777,7 +2673,7 @@
             let rankingData = allData.filter(d => {
                 let matchFilters = (f_res === "TODAS" || d[col.res] == f_res) && 
                                    (f_per === "TODAS" || d[col.per] == f_per) && 
-                                   (f_presnov === "TODAS" || d[col.nov] == f_presnov) &&
+                                   
                                    (f_tnov === "TODAS" || d[col.tnov] == f_tnov) &&
                                    (f_estact === "TODAS" || d[col.estAct] == f_estact);
                 let matchSearch = true;
@@ -796,19 +2692,20 @@
             let filteredCiu = f_ciu === "TODAS" ? null : f_ciu;
 
             charts.radial.setOption({
+xAxis: { type: 'value', show: false },
                 backgroundColor: 'transparent',
-                grid: { top: 10, bottom: 10, left: 110, right: 90 },
+                grid: { top: 10, bottom: 10, left: 145, right: 90 },
                 dataZoom: [
                     { 
                         type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false, moveOnMouseWheel: true,
                         startValue: Math.max(0, topCiu.length - 15), endValue: topCiu.length - 1
                     }
                 ],
-                xAxis: { type: 'value', show: false },
                 yAxis: { 
                     type: 'category', 
+                    triggerEvent: true,
                     data: topCiu.map(t=>t[0]), 
-                    axisLabel: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono', interval: 0, width: 100, overflow: 'truncate' }, 
+                    axisLabel: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0 }, 
                     axisLine: { show: false }, 
                     axisTick: { show: false } 
                 },
@@ -828,63 +2725,10 @@
                     label: { 
                         show: true, position: 'right', 
                         formatter: p => formatMoney(p.value),
-                        color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono'
+                        color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono'
                     }
                 }]
             });
-
-            const countTNovArr = Object.entries(filteredData.reduce((obj, d) => { 
-                let v = d[col.tnov] || 'N/A'; 
-                obj[v] = (obj[v]||0)+1; 
-                return obj; 
-            }, {})).sort((a,b) => a[1]-b[1]);
-            
-            let totalTNov = countTNovArr.reduce((s, x) => s + x[1], 0);
-            let maxTNov = countTNovArr.length > 0 ? countTNovArr[countTNovArr.length - 1][1] : 1;
-
-            charts.pie.setOption({
-                backgroundColor: 'transparent',
-                grid: { top: 15, bottom: 20, left: 160, right: 90 },
-                dataZoom: [
-                    { 
-                        type: 'inside', yAxisIndex: [0, 1], zoomOnMouseWheel: false, moveOnMouseWheel: true,
-                        startValue: Math.max(0, countTNovArr.length - 6), endValue: countTNovArr.length - 1
-                    },
-                    { 
-                        type: 'slider', yAxisIndex: [0, 1], width: 4, right: 2, 
-                        borderColor: 'transparent', fillerColor: 'rgba(255, 94, 0, 0.5)', 
-                        backgroundColor: 'rgba(20, 32, 56, 0.5)', handleSize: 0, showDetail: false,
-                        startValue: Math.max(0, countTNovArr.length - 6), endValue: countTNovArr.length - 1
-                    }
-                ],
-                xAxis: { type: 'value', show: false },
-                yAxis: [
-                    { 
-                        type: 'category', 
-                        data: countTNovArr.map(e => e[0]), 
-                        axisLabel: { 
-                            show: true, color: '#fff', fontSize: 10, width: 150, overflow: 'truncate', fontFamily: 'Share Tech Mono'
-                        },
-                        axisLine: { show: false }, axisTick: { show: false }
-                    },
-                    { 
-                        type: 'category', 
-                        data: countTNovArr.map(e => `${e[1]} (${(e[1]/(totalTNov||1)*100).toFixed(1)}%)`), 
-                        axisLabel: { 
-                            show: true, color: '#00ff88', fontSize: 11, fontFamily: 'Share Tech Mono', margin: 15, align: 'left'
-                        },
-                        axisLine: { show: false }, axisTick: { show: false }
-                    }
-                ],
-                series: [{
-                    type: 'bar',
-                    data: countTNovArr.map(e => e[1]),
-                    itemStyle: { color: '#ff5e00', borderRadius: [0, 3, 3, 0] },
-                    barMaxWidth: 15,
-                    label: { show: false }
-                }]
-            }, true);
-
             const formatEstado = (val) => {
                 let num = parseFloat(val);
                 if (!isNaN(num) && num <= 1 && num >= 0) {
@@ -908,14 +2752,24 @@
                     <td class="text-[#ff5e00]">${d[col.per] || ''}</td>
                     <td class="text-[#00ff88]">${formatMoney(d[col.val])}</td>
                     <td class="text-[#ff5e00] font-bold">${d[col.tnov] || 'OK'}</td>
-                    <td class="text-[#00ff88]/70" style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <span class="bg-[#00ff88]/20 border border-[#00ff88]/50 text-[#00ff88] px-2 py-0.5 rounded text-[9px] mr-1">VER MÁS</span> 
-                        ${d[col.obs] || '---'}
+                    <td class="text-center" style="max-width: 150px;">
+                        ${ (d[col.obs] && d[col.obs] !== 'NINGUNA' && d[col.obs] !== '---') ? '<span class="bg-[#ff5e00]/20 border border-[#ff5e00]/50 text-[#ff5e00] px-2 py-0.5 rounded text-[9px] hover:bg-[#ff5e00]/40 transition-colors">VER MÁS</span>' : '<span class="text-[#7890b5]">---</span>' }
                     </td>
                 </tr>
             `).join('');
             if(!currentTableData.length) document.getElementById('tableBody').innerHTML = "<tr><td colspan='12' class='text-center text-[#ff5e00] py-4 blink'>NO_DATA_FOUND</td></tr>";
-        }
+            
+            // Refrescar gráficos de ejecución en ambas vistas
+            try {
+                renderExecutionView();
+                if (typeof renderDrillDownMap === 'function') renderDrillDownMap();
+                else if (typeof renderTab2Map === 'function') renderTab2Map();
+                if (typeof renderLaboratorio === 'function') renderLaboratorio();
+                if (typeof renderExecCharts === 'function') renderExecCharts();
+            } catch(e) {
+                console.warn("Tab 2 charts not fully loaded yet:", e);
+            }
+        } // End updateDashboard
 
         init();
     </script>

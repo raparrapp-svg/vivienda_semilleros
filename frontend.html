@@ -1341,11 +1341,11 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
 
 
             try {
-                const mapRes = await fetch('colombia.json');
+                const mapRes = await fetch('/colombia.json');
                 const geoJson = await mapRes.json();
                 echarts.registerMap('colombia', geoJson);
 
-                const response = await fetch('data_github.json');
+                const response = await fetch('/api/data');
                 allData = await response.json();
                 
                 if(allData.length > 0) {
@@ -1388,7 +1388,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                 
                 // Fetch Date/Time from backend based on Excel file
                 try {
-                    let metaRes = Promise.resolve({ok: true, json: () => Promise.resolve({fileDate: '01 OCT 2026', fileTime: '12:24 COT'})});
+                    let metaRes = await fetch('/api/metadata');
                     let meta = await metaRes.json();
                     document.getElementById('headDate').innerText = meta.fileDate || '-- --- ----';
                     document.getElementById('headTime').innerText = meta.fileTime || '--:-- COT';

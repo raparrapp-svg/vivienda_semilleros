@@ -346,7 +346,7 @@
     <div id="view_ejecucion" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0">
 
         <!-- KPIs Tab 2 -->
-        <div class="w-full grid grid-cols-5 gap-3 shrink-0">
+        <div class="w-full grid grid-cols-6 gap-3 shrink-0">
             <!-- KPI 1 -->
             <div class="cyber-panel p-3 flex flex-col justify-between relative">
                 <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
@@ -453,6 +453,25 @@
                     <div id="t2_lineEst" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 0%;"></div>
                 </div>
             </div>
+
+<!-- KPI 6 (Avance) -->
+<div class="cyber-panel p-3 flex flex-col justify-between relative">
+    <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">AVANCE PAGOS</div>
+    <div class="flex items-end justify-between mt-1">
+        <div>
+            <div id="t2_kpiAvance" class="text-[18px] font-bold text-[#00ff88] hud-font">0%</div>
+            <div id="t2_kpiAvanceTot" class="text-[9px] text-[#ff5e00] hud-font -mt-1 font-bold">Pend: 0%</div>
+        </div>
+        <div class="relative w-12 h-12 flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <!-- Background circle (Pending - Orange) -->
+                <path class="text-[#ff5e00]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+                <!-- Foreground circle (Paid - Green) -->
+                <path id="t2_kpiAvanceRing" class="text-[#00ff88] transition-all duration-1000" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+            </svg>
+        </div>
+    </div>
+</div>
         </div>
 
         <div class="w-full grid grid-cols-12 gap-3 flex-1 min-h-0">
@@ -2256,35 +2275,46 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                 series: [{ type: 'heatmap', data: hmData, label: { show: true, color: '#fff', fontSize: 10 }, itemStyle: { borderColor: '#030610', borderWidth: 1 } }]
             });
 
-            // 3. Sunburst Chart (Ciudades -> Novedades)
+            // 3. Sunburst Chart (Estado -> Ciudad -> Novedades)
             let sbMap = {};
             filteredData.forEach(d => {
+                let est = (parseFloat(d[col.est]) === 1) ? 'PAGADO' : 'PENDIENTE';
                 let ciu = d[col.ciu] || 'OTRA';
                 let nov = d[col.tnov] || 'NINGUNA';
                 
-                if(!sbMap[ciu]) sbMap[ciu] = {};
-                if(!sbMap[ciu][nov]) sbMap[ciu][nov] = 0;
-                sbMap[ciu][nov] += 1;
+                if(!sbMap[est]) sbMap[est] = {};
+                if(!sbMap[est][ciu]) sbMap[est][ciu] = {};
+                if(!sbMap[est][ciu][nov]) sbMap[est][ciu][nov] = 0;
+                sbMap[est][ciu][nov] += 1;
             });
             
-            // Limit to top 8 cities by total count
-            let topCiu = Object.entries(sbMap)
-                .map(e => ({ name: e[0], count: Object.values(e[1]).reduce((a,b)=>a+b,0), novs: e[1] }))
-                .sort((a,b) => b.count - a.count).slice(0, 8);
+            let sbData = Object.entries(sbMap).map(eEst => {
+                let estName = eEst[0]; // PAGADO or PENDIENTE
                 
-            let sbData = topCiu.map((ciuData, index) => {
-                let colors = ['#00ff88', '#00ccff', '#ff5e00', '#ffcc00', '#bf00ff', '#ff0033', '#00ffcc', '#ff3399'];
-                let baseColor = colors[index % colors.length];
+                // Limit to top 5 cities per state so it's readable
+                let topCiu = Object.entries(eEst[1])
+                    .map(e => ({ name: e[0], count: Object.values(e[1]).reduce((a,b)=>a+b,0), novs: e[1] }))
+                    .sort((a,b) => b.count - a.count).slice(0, 5);
                 
                 return {
-                    name: ciuData.name.length > 12 ? ciuData.name.substring(0,12) + '...' : ciuData.name,
-                    itemStyle: { color: baseColor },
-                    children: Object.entries(ciuData.novs).sort((a,b)=>b[1]-a[1]).map(eNov => {
-                        let isNinguna = eNov[0] === 'NINGUNA';
-                        let shortNov = eNov[0].length > 15 ? eNov[0].substring(0, 15) + '...' : eNov[0];
+                    name: estName,
+                    itemStyle: { color: estName === 'PAGADO' ? '#00ff88' : '#ff5e00' },
+                    children: topCiu.map((ciuData, index) => {
+                        let colors = ['#00ccff', '#ffcc00', '#bf00ff', '#00ffcc', '#ff3399'];
+                        let baseColor = estName === 'PAGADO' ? '#00b35f' : colors[index % colors.length]; 
+                        // If paid, mostly green. If pending, use varied colors.
+                        
                         return {
-                            name: shortNov, value: eNov[1],
-                            itemStyle: { color: isNinguna ? '#142038' : '#ff0033', borderColor: baseColor, borderWidth: 1 }
+                            name: ciuData.name.length > 10 ? ciuData.name.substring(0,10) + '...' : ciuData.name,
+                            itemStyle: { color: baseColor },
+                            children: Object.entries(ciuData.novs).sort((a,b)=>b[1]-a[1]).map(eNov => {
+                                let isNinguna = eNov[0] === 'NINGUNA';
+                                let shortNov = eNov[0].length > 15 ? eNov[0].substring(0, 15) + '...' : eNov[0];
+                                return {
+                                    name: shortNov, value: eNov[1],
+                                    itemStyle: { color: isNinguna ? '#142038' : '#ff0033', borderColor: baseColor, borderWidth: 1 }
+                                };
+                            })
                         };
                     })
                 };
@@ -2541,6 +2571,24 @@ function updateDashboard() {
 
     document.getElementById('t2_kpiReg').innerText = currentReg.toLocaleString();
     document.getElementById('t2_kpiRegTot').innerText = "de " + totalRegUnfiltered.toLocaleString();
+
+                // KPI Avance
+                let pagados = 0;
+                let pendientes = 0;
+                filteredData.forEach(d => {
+                    let v = parseFloat(d[col.val]) || 0;
+                    let p = parseFloat(d[col.pend]) || 0;
+                    pagados += v;
+                    pendientes += p;
+                });
+                let totAvance = pagados + pendientes;
+                let pctPag = totAvance > 0 ? Math.round((pagados/totAvance)*100) : 0;
+                let pctPend = totAvance > 0 ? 100 - pctPag : 0;
+                if(document.getElementById('t2_kpiAvance')) {
+                    document.getElementById('t2_kpiAvance').innerText = pctPag + "%";
+                    document.getElementById('t2_kpiAvanceTot').innerText = "Pend: " + pctPend + "%";
+                    document.getElementById('t2_kpiAvanceRing').setAttribute('stroke-dasharray', pctPag + ", 100");
+                }
     document.getElementById('t2_circRegTxt').innerText = dispPctReg.toFixed(0) + '%';
     document.getElementById('t2_circReg').style.strokeDashoffset = 125.6 - (125.6 * dispPctReg) / 100;
     document.getElementById('t2_lineReg').style.width = dispPctReg + '%';

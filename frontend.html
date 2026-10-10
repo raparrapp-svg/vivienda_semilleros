@@ -13,7 +13,7 @@
             background-color: #030610;
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
-            margin: 0; padding: 5px 20px 20px 20px;
+            margin: 0; padding: 5px 20px 5px 20px;
             box-sizing: border-box;
             height: 100vh;
             display: flex;
@@ -50,12 +50,7 @@
         .cyber-panel-orange { box-shadow: inset 0 0 30px rgba(255,94,0,0.05); }
         .cyber-panel-orange::after { background: #ff5e00; box-shadow: 0 0 10px #ff5e00; }
 
-        .panel-header { 
-            font-size: 13px; font-weight: 700; color: #7890b5; 
-            text-transform: uppercase; letter-spacing: 3px; 
-            padding-bottom: 8px; border-bottom: 1px solid rgba(120, 144, 181, 0.2); 
-            margin-bottom: 12px; display: flex; justify-content: space-between;
-        }
+        .panel-header { font-size: 11px; font-weight: 700; color: #7890b5; text-transform: uppercase; letter-spacing: 3px; padding-bottom: 4px; border-bottom: 1px solid rgba(120, 144, 181, 0.2); margin-bottom: 6px; display: flex; justify-content: space-between; }
         .panel-header::before { content: '■ '; color: #00ff88; font-size: 10px; }
         .cyber-panel-orange .panel-header::before { color: #ff5e00; }
 
@@ -207,120 +202,178 @@
         
     </div>
     
-    <!-- Tabs Navegación -->
-    <div class="flex gap-4 mb-2 border-b border-[#142038] pb-1">
-        <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-xs font-bold transition-all">OPERACIÓN DIARIA</button>
-        <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all">ANÁLISIS DE EJECUCIÓN</button>
-<button onclick="switchTab('laboratorio')" id="tab_laboratorio" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all">LABORATORIO VISUAL</button>
-    </div>
-
+    <!-- Barra Superior: Tabs + Filtros -->
+    <div class="flex flex-wrap lg:flex-nowrap items-end justify-between w-full mb-3 border-b border-[#142038] pb-2 gap-4">
+        
+        <!-- Tabs Navegación -->
+        <div class="flex gap-4">
+            <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">OPERACIÓN DIARIA</button>
+            <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">ANÁLISIS DE EJECUCIÓN</button>
+            <button onclick="switchTab('inteligencia')" id="tab_inteligencia" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">INTELIGENCIA ESTRATÉGICA</button>
+        </div>
 
         <!-- Filtros Integrados -->
-        <div class="flex flex-wrap gap-2 items-center w-full mb-3 mt-1">
-            <div style="width: 110px;"><select id="f_resolucion" onchange="applyFilters()"><option value="TODAS">RESOLUCIÓN</option></select></div>
-            <div style="width: 120px;"><select id="f_ciudad" onchange="applyFilters()"><option value="TODAS">CIUDAD</option></select></div>
+        <div class="flex flex-wrap gap-2 items-center">
+            <div style="width: 100px;"><select id="f_resolucion" onchange="applyFilters()"><option value="TODAS">RESOLUCIÓN</option></select></div>
+            <div style="width: 110px;"><select id="f_ciudad" onchange="applyFilters()"><option value="TODAS">CIUDAD</option></select></div>
             <div style="width: 90px;"><select id="f_periodo" onchange="applyFilters()"><option value="TODAS">PERIODO</option></select></div>
+            <div style="width: 120px;"><select id="f_tnov" onchange="applyFilters()"><option value="TODAS">TIPO NOVEDAD</option></select></div>
+            <div style="width: 110px;"><select id="f_estact" onchange="applyFilters()"><option value="TODAS">ESTADO ACTUAL</option></select></div>
+            <div style="width: 110px;"><select id="f_estado_pago" onchange="applyFilters()"><option value="TODAS">ESTADO PAGO</option></select></div>
             
-            <div style="width: 130px;"><select id="f_tnov" onchange="applyFilters()"><option value="TODAS">TIPO NOVEDAD</option></select></div>
-            <div style="width: 120px;"><select id="f_estact" onchange="applyFilters()"><option value="TODAS">ESTADO ACTUAL</option></select></div>
-            <div class="ml-auto flex gap-2">
+            <div class="flex gap-2 ml-1">
                 <button onclick="resetFilters()" class="h-[26px] px-3 bg-[#142038] text-[#ff5e00] text-[10px] font-bold tracking-widest border border-[#ff5e00] hover:bg-[#ff5e00] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">BORRAR</button>
-                <button onclick="downloadDataset()" class="h-[26px] px-3 bg-[#00ff88]/10 text-[#00ff88] text-[10px] font-bold tracking-widest border border-[#00ff88] hover:bg-[#00ff88] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">💾 DATA</button>
+                <button onclick="exportData()" class="h-[26px] px-3 bg-[#142038] text-[#00ff88] text-[10px] font-bold tracking-widest border border-[#00ff88] hover:bg-[#00ff88] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">💾 DATA</button>
             </div>
         </div>
+    </div>
 
 
 
     <!-- VISTA 1: OPERACIÓN DIARIA -->
-    <div id="view_operacion" style="display: block;">
+    <div id="view_operacion" style="display: flex;" class="flex-col h-full min-h-0">
         
     <!-- Removed stray div -->
 
     <!-- Layout Principal -->
+
+<!-- SUPER FRONTIER 5-KPI STRIP -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-2 w-full">
+
+    <!-- KPI Beneficiarios -->
+    <div class="cyber-panel p-2 flex flex-col justify-between relative">
+        <div class="flex justify-between items-center w-full">
+            <div class="flex flex-col">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1">BENEFICIARIOS ÚNICOS</div>
+                <div class="flex items-baseline gap-1">
+                    <div id="kpiBeneficiarios" class="text-lg font-bold neon-text-green hud-font leading-none">0</div>
+                    <div id="kpiBenTotal" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                </div>
+            </div>
+            <div class="relative w-8 h-8 flex-shrink-0">
+                <svg class="w-8 h-8 transform -rotate-90">
+                    <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
+                    <circle id="circBen" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                </svg>
+                <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ff88] hud-font font-bold">100%</div>
+            </div>
+        </div>
+        <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
+            <div id="lineBen" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 100%;"></div>
+        </div>
+    </div>
+
+    <!-- KPI Avance Pagos (Tab 1) -->
+    <div class="cyber-panel p-2 flex flex-col justify-between relative">
+        <div class="flex flex-col w-full h-full justify-between">
+            <div class="flex justify-between items-start">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none">AVANCE PAGOS</div>
+                <div class="flex gap-2 text-[8px] uppercase tracking-wider text-gray-400">
+                    <div class="flex gap-1 items-center"><div class="w-1.5 h-1.5 bg-[#00ff88]"></div>Pagado</div>
+                    <div class="flex gap-1 items-center"><div class="w-1.5 h-1.5 bg-[#ff5e00]"></div>Pendiente</div>
+                </div>
+            </div>
+            <div class="flex justify-between items-end mt-1 mb-1 w-full">
+                <div class="flex items-baseline gap-1">
+                    <div id="kpiAvancePct" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0%</div>
+                    <div id="kpiAvancePagado" class="text-[12px] text-[#00ff88] hud-font font-bold">$0</div>
+                </div>
+                <div class="flex items-baseline gap-1">
+                    <div id="kpiAvancePendPct" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">0%</div>
+                    <div id="kpiAvancePendiente" class="text-[12px] text-[#ff5e00] hud-font font-bold">$0</div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full h-1 bg-[#ff5e00] mt-0.5 rounded overflow-hidden">
+            <div id="kpiAvanceBarT1" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- Impacto -->
+    <div class="cyber-panel p-2 flex flex-col justify-between relative">
+        <div class="flex justify-between items-start w-full">
+            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none">Impacto Novedades</div>
+            <div class="text-[9px] font-bold text-[#ffcc00] tracking-widest uppercase">EXCLUYE "NINGUNA"</div>
+        </div>
+        <div class="flex items-end gap-1 mt-1 mb-1">
+            <div id="kpiIntImpacto" class="text-lg font-bold text-[#ff0033] hud-font leading-none">$0</div>
+        </div>
+        <div class="w-full h-1 bg-[#ff0033]/20 mt-0.5 rounded overflow-hidden">
+            <div class="h-full bg-[#ff0033]" style="width: 100%;"></div>
+        </div>
+    </div>
+
+    <!-- Ciudad Critica -->
+    <div class="cyber-panel p-2 flex flex-col justify-between relative">
+        <div class="flex justify-between items-start w-full">
+            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none">Ciudad M&aacute;s Cr&iacute;tica</div>
+            <div class="text-[9px] font-bold text-[#ffcc00] tracking-widest uppercase">DEUDA ABSOLUTA</div>
+        </div>
+        <div class="flex justify-between items-end mt-1 mb-1 w-full gap-2">
+            <div id="kpiIntCiudad" class="text-lg font-bold text-[#ff5e00] hud-font leading-none truncate w-[50%]">---</div>
+            <div id="kpiIntCiudadVal" class="text-lg font-bold text-[#ffcc00] hud-font leading-none truncate text-right w-[50%]">---</div>
+        </div>
+        <div class="w-full h-1 bg-[#ff5e00]/20 mt-0.5 rounded overflow-hidden">
+            <div class="h-full bg-[#ff5e00]" style="width: 100%;"></div>
+        </div>
+    </div>
+
+    <!-- Resolucion Eficiente -->
+    <div class="cyber-panel p-2 flex flex-col justify-between relative">
+        <div class="flex justify-between items-start w-full">
+            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none">Resoluci&oacute;n Eficiente</div>
+            <div class="text-[9px] font-bold text-[#00ccff] tracking-widest uppercase">VALOR PAGADO</div>
+        </div>
+        <div class="flex justify-between items-end mt-1 mb-1 w-full gap-2">
+            <div id="kpiIntRes" class="text-xs font-bold text-[#00ff88] hud-font leading-none truncate w-[40%]">---</div>
+            <div class="flex items-baseline gap-1 truncate text-right w-[60%] justify-end">
+                <div id="kpiIntResPct" class="text-[10px] font-bold text-[#00ccff] hud-font">0%</div>
+                <div id="kpiIntResVal" class="text-lg font-bold text-[#00ff88] hud-font leading-none">---</div>
+            </div>
+        </div>
+        <div class="w-full h-1 bg-[#00ff88]/20 mt-0.5 rounded overflow-hidden">
+            <div class="h-full bg-[#00ff88]" style="width: 100%;"></div>
+        </div>
+    </div>
+
+</div>
     <div class="grid grid-cols-12 gap-3 mb-3">
         
         <!-- COLUMNA IZQUIERDA -->
-        <div class="col-span-4 flex flex-col gap-3">
-            <div class="grid grid-cols-2 gap-2">
-                
-                <!-- KPI Beneficiarios -->
-                <div class="cyber-panel p-3 flex flex-col justify-between relative">
-                    <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
-                    <div class="flex justify-between items-end">
-                        <div class="flex flex-col">
-                            <div id="kpiBeneficiarios" class="text-xl font-bold neon-text-green hud-font">0</div>
-                            <div id="kpiBenTotal" class="text-[11px] text-[#7890b5] hud-font -mt-1 font-bold">de 0</div>
-                        </div>
-                        <div class="relative w-14 h-14 flex-shrink-0">
-                            <svg class="w-14 h-14 transform -rotate-90">
-                                <circle cx="28" cy="28" r="24" fill="transparent" stroke="#142038" stroke-width="4" />
-                                <circle id="circBen" cx="28" cy="28" r="24" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
-                            </svg>
-                            <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ff88] hud-font font-bold">100%</div>
-                        </div>
-                    </div>
-                    <div class="w-full h-1.5 bg-[#142038] mt-3 rounded overflow-hidden">
-                        <div id="lineBen" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 100%;"></div>
+        <div class="col-span-4 flex flex-col gap-3 h-full">
+            <div class="cyber-panel p-2 flex-1 flex flex-col min-h-0">
+                <div class="panel-header flex justify-between items-end">
+                    <span class="text-[#00ccff]">AVANCE TOP CIUDADES</span>
+                    <div class="flex gap-2">
+                        <button id="btnSortVol" class="text-[9px] hud-font px-2 py-0.5 border border-[#00ccff] text-[#00ccff] bg-[#00ccff]/20 rounded transition-colors" onclick="setAvanceSort('vol')">VOLUMEN $$$</button>
+                        <button id="btnSortDeuda" class="text-[9px] hud-font px-2 py-0.5 border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors" onclick="setAvanceSort('deuda')">TASA DEUDA %</button>
                     </div>
                 </div>
-                
-                <!-- KPI Pagado -->
-                <div class="cyber-panel cyber-panel-orange p-3 flex flex-col justify-between relative">
-                    <div class="text-[11px] font-bold text-[#ff5e00] tracking-widest mb-1">TOTAL DESEMBOLSADO</div>
-                    <div class="flex justify-between items-end">
-                        <div class="flex flex-col">
-                            <div id="kpiPagado" class="text-[16px] font-bold neon-text-orange hud-font">$0</div>
-                            <div id="kpiPagTotal" class="text-[11px] text-[#7890b5] hud-font -mt-1 font-bold">de $0</div>
-                        </div>
-                        <div class="relative w-14 h-14 flex-shrink-0">
-                            <svg class="w-14 h-14 transform -rotate-90">
-                                <circle cx="28" cy="28" r="24" fill="transparent" stroke="#381805" stroke-width="4" />
-                                <circle id="circVal" cx="28" cy="28" r="24" fill="transparent" stroke="#ff5e00" stroke-width="4" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
-                            </svg>
-                            <div id="circValText" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#ff5e00] hud-font font-bold">100%</div>
-                        </div>
-                    </div>
-                    <div class="w-full h-1.5 bg-[#381805] mt-3 rounded overflow-hidden">
-                        <div id="lineVal" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-            </div>
-            
-            <div class="cyber-panel p-3" style="height: 295px;">
-                <div class="panel-header"><span class="text-[#00ccff]">AVANCE TOP CIUDADES</span><span class="text-[9px] hud-font text-gray-500">SYS.RANKING</span></div>
                 <div id="radialChart" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
         <!-- COLUMNA CENTRAL: MAPA DE RED GEOGRÁFICO -->
-        <div class="col-span-3 flex flex-col gap-3">
-            <div class="cyber-panel p-3 flex flex-col relative shrink-0" style="height: 425px;">
+        <div class="col-span-2 flex flex-col gap-3 h-full">
+            <div class="cyber-panel p-3 flex flex-col relative shrink-0 flex-1" style="flex: 1; min-height: 330px;">
                 <div id="mapChart" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
-        <!-- COLUMNA DERECHA -->
-        <div class="col-span-5 flex flex-col gap-3">
-            <div class="cyber-panel p-3" style="height: 220px;">
-                <div class="panel-header"><span class="text-[#00ccff]">TENDENCIA FLUJO M.</span><span class="text-[9px] hud-font text-gray-500">TIME.SERIES</span></div>
-                <div id="lineChart" style="width: 100%; height: 100%;"></div>
+        <!-- NOVEDADES: IMPACTO & FRECUENCIA (COMBINADO) -->
+        <div class="col-span-6 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
+            <div class="panel-header flex justify-between items-center">
+                <span class="text-[#ffcc00]">NOVEDADES — IMPACTO &amp; FRECUENCIA</span>
+                <span class="text-[9px] hud-font text-gray-500">$ BLOQUEADO · N° CASOS ÚNICOS</span>
             </div>
-            
-            <div class="cyber-panel p-3" style="height: 193px;">
-                <div class="panel-header flex justify-between">
-                    <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA</span>
-                    <span class="hud-font normal-case text-[12px] tracking-wider"><span class="text-[#00ff88] font-bold">Verde=Pagado</span> <span class="text-[#7890b5] mx-1">/</span> <span class="text-[#ff5e00] font-bold">Naranja=Pendiente</span></span>
-                </div>
-                <div id="chartBarExec" style="width: 100%; height: 100%;"></div>
-            </div>
+            <div id="chartNovedadCombo" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
 
 <!-- Fila Inferior: Sankey y Radial Novedad -->
-<div class="grid grid-cols-12 gap-3 mb-3">
+<div class="grid grid-cols-12 gap-3 flex-1 min-h-0">
     <!-- Flujo de Capital (Sankey Diagram) movido desde VISTA 2 -->
-    <div class="col-span-8 cyber-panel p-3 flex flex-col w-full" style="height: 400px;">
+    <div class="col-span-9 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
         <div class="panel-header flex justify-between items-center whitespace-nowrap overflow-hidden">
             <span>FLUJO DE CAPITAL</span>
             <select id="drill_hierarchy" onchange="renderExecutionView()" class="h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font ml-4">
@@ -331,13 +384,15 @@
         <div id="chartSankey" class="flex-grow w-full"></div>
     </div>
     
-    <!-- Tipo Novedad (Radial Chart) -->
-    <div class="col-span-4 cyber-panel p-3 flex flex-col w-full" style="height: 400px;">
-        <div class="panel-header flex justify-between items-center">
-            <span class="text-[#00ff88]">TIPO NOVEDAD</span>
-            <span class="text-[9px] hud-font text-gray-500">RADIAL CHARTS</span>
+    <!-- RANKING EJECUCIÓN FINANCIERA -->
+    <div class="col-span-3 flex flex-col gap-3 w-full h-full min-h-0">
+        <div class="cyber-panel p-3 flex flex-col flex-1 min-h-0">
+            <div class="panel-header flex justify-between">
+                <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA</span>
+                <div class="flex gap-3 text-[9px] hud-font uppercase tracking-wider text-gray-400 items-center"><div class="flex gap-1 items-center"><div class="w-2 h-2 bg-[#00ff88]"></div>Pagado</div><div class="flex gap-1 items-center"><div class="w-2 h-2 bg-[#ff5e00]"></div>Pendiente</div></div>
+            </div>
+            <div id="chartBarExec" style="width: 100%; height: 100%;"></div>
         </div>
-        <div id="chartRadialNovedad" style="width: 100%; height: 100%;"></div>
     </div>
 </div>
 </div> <!-- End view_operacion -->
@@ -346,7 +401,7 @@
     <div id="view_ejecucion" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0">
 
         <!-- KPIs Tab 2 -->
-        <div class="w-full grid grid-cols-6 gap-3 shrink-0">
+        <div class="w-full grid grid-cols-5 gap-3 shrink-0">
             <!-- KPI 1 -->
             <div class="cyber-panel p-3 flex flex-col justify-between relative">
                 <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
@@ -389,27 +444,24 @@
                 </div>
             </div>
 
-            <!-- KPI 2 -->
-            <div class="cyber-panel cyber-panel-orange p-3 flex flex-col justify-between relative">
-                <div class="text-[11px] font-bold text-[#ff5e00] tracking-widest mb-1">DESEMBOLSADO</div>
-                <div class="flex justify-between items-end">
-                    <div class="flex flex-col">
-                        <div id="t2_kpiPag" class="text-[14px] font-bold neon-text-orange hud-font">$0</div>
-                        <div id="t2_kpiPagTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">de $0</div>
-                    </div>
-                    <div class="relative w-12 h-12 flex-shrink-0">
-                        <svg class="w-12 h-12 transform -rotate-90">
-                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#381805" stroke-width="4" />
-                            <circle id="t2_circPag" cx="24" cy="24" r="20" fill="transparent" stroke="#ff5e00" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
-                        </svg>
-                        <div id="t2_circPagTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#ff5e00] hud-font font-bold">100%</div>
-                    </div>
-                </div>
-                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
-                    <div id="t2_linePag" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width: 100%;"></div>
-                </div>
-            </div>
-
+<!-- KPI 2 (Avance) -->
+<div class="cyber-panel p-3 flex flex-col justify-between relative">
+    <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">AVANCE PAGOS</div>
+    <div class="flex items-end justify-between mt-1">
+        <div>
+            <div id="t2_kpiAvance" class="text-[18px] font-bold text-[#00ff88] hud-font">0%</div>
+            <div id="t2_kpiAvanceTot" class="text-[12px] text-[#ff5e00] hud-font -mt-1 font-bold">Pend: 0%</div>
+        </div>
+        <div class="relative w-12 h-12 flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <!-- Background circle (Pending - Orange) -->
+                <path class="text-[#ff5e00]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+                <!-- Foreground circle (Paid - Green) -->
+                <path id="t2_kpiAvanceRing" class="text-[#00ff88] transition-all duration-1000" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+            </svg>
+        </div>
+    </div>
+</div>
 
 
             <!-- KPI 4 -->
@@ -453,25 +505,6 @@
                     <div id="t2_lineEst" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 0%;"></div>
                 </div>
             </div>
-
-<!-- KPI 6 (Avance) -->
-<div class="cyber-panel p-3 flex flex-col justify-between relative">
-    <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">AVANCE PAGOS</div>
-    <div class="flex items-end justify-between mt-1">
-        <div>
-            <div id="t2_kpiAvance" class="text-[16px] font-bold text-[#00ff88] hud-font">0%</div>
-            <div id="t2_kpiAvanceTot" class="text-[9px] text-[#ff5e00] hud-font -mt-1 font-bold">Pend: 0%</div>
-        </div>
-        <div class="relative w-12 h-12 flex items-center justify-center">
-            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <!-- Background circle (Pending - Orange) -->
-                <path class="text-[#ff5e00]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
-                <!-- Foreground circle (Paid - Green) -->
-                <path id="t2_kpiAvanceRing" class="text-[#00ff88] transition-all duration-1000" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
-            </svg>
-        </div>
-    </div>
-</div>
         </div>
 
         <div class="w-full grid grid-cols-12 gap-3 flex-1 min-h-0">
@@ -501,8 +534,8 @@
         </div>
 
         <!-- Columna Derecha: Tabla de Datos -->
-        <div class="col-span-12 xl:col-span-9 grid grid-cols-12 grid-rows-2 gap-3 min-h-0">
-            <div class="col-span-12 xl:col-span-8 row-span-1 cyber-panel p-3 w-full flex flex-col min-h-0 relative">
+        <div class="col-span-12 xl:col-span-9 flex flex-col min-h-0">
+            <div class="cyber-panel p-3 w-full flex flex-col flex-1 min-h-0 relative">
                 <div class="panel-header flex-col md:flex-row gap-2 items-start md:items-center mb-4">
                     <span>TERMINAL_BASE_DE_DATOS</span>
                     <div class="flex items-center gap-2">
@@ -533,89 +566,246 @@
                 </div>
             </div>
                     
-                    <!-- Top Right: Radar -->
-                    <div class="col-span-12 xl:col-span-4 row-span-1 cyber-panel p-3 flex flex-col min-h-0">
-                        <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
-                            <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
-                            <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Salud Ciudades</span>
-                        </div>
-                        <div id="execRadar" class="flex-1 w-full min-h-0"></div>
-                    </div>
-
-                    <!-- Bottom Left: Heatmap -->
-                    <div class="col-span-12 xl:col-span-8 row-span-1 cyber-panel p-3 flex flex-col min-h-0">
-                        <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
-                            <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
-                            <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Matriz Novedades</span>
-                        </div>
-                        <div id="execHeatmap" class="flex-1 w-full min-h-0"></div>
-                    </div>
-
-                    <!-- Bottom Right: Sunburst -->
-                    <div class="col-span-12 xl:col-span-4 row-span-1 cyber-panel p-3 flex flex-col min-h-0">
-                        <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
-                            <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_5px_#ffcc00]"></div>
-                            <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Desglose Profundo</span>
-                        </div>
-                        <div id="execSunburst" class="flex-1 w-full min-h-0"></div>
-                    </div>
         </div>
     </div>
 </div> <!-- End view_ejecucion -->
 
-    <!-- LABORATORIO VISUAL TAB -->
-    <div id="view_laboratorio" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+    <!-- INTELIGENCIA ESTRATÉGICA TAB -->
+    <div id="view_inteligencia" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+
+        <!-- KPIs Tab 3 -->
+        <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-3 shrink-0">
+            <!-- KPI: % con novedad -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">BENEFICIARIOS CON NOVEDAD</div>
+                <div class="flex justify-between items-end mt-1">
+                    <div class="flex flex-col">
+                        <div id="t3_kpiPctNov" class="text-lg font-bold text-[#ff0033] hud-font leading-none">0%</div>
+                        <div id="t3_kpiBenConNov" class="text-[9px] text-[#7890b5] hud-font font-bold mt-0.5">0 de 0</div>
+                    </div>
+                    <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_6px_#ff0033] self-center"></div>
+                </div>
+                <div class="w-full h-1 bg-[#ff0033]/20 mt-1.5 rounded overflow-hidden">
+                    <div id="t3_lineNov" class="h-full bg-[#ff0033] transition-all duration-1000" style="width:0%"></div>
+                </div>
+            </div>
+            <!-- KPI: Novedad más frecuente -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">NOVEDAD MÁS FRECUENTE</div>
+                <div class="flex flex-col mt-1">
+                    <div id="t3_kpiNovFrecNom" class="text-sm font-bold text-[#00ccff] hud-font leading-tight truncate">---</div>
+                    <div id="t3_kpiNovFrecCnt" class="text-[9px] text-[#7890b5] hud-font font-bold mt-0.5">0 casos</div>
+                </div>
+                <div class="w-full h-1 bg-[#00ccff]/20 mt-1.5 rounded overflow-hidden">
+                    <div class="h-full bg-[#00ccff]" style="width:100%"></div>
+                </div>
+            </div>
+            <!-- KPI: $ total bloqueado -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">$ TOTAL BLOQUEADO</div>
+                <div class="flex justify-between items-end mt-1">
+                    <div id="t3_kpiBloqueado" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">$0</div>
+                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_6px_#ff5e00] self-center"></div>
+                </div>
+                <div class="text-[8px] text-[#7890b5] hud-font mt-0.5">en bens. con novedad activa</div>
+                <div class="w-full h-1 bg-[#ff5e00]/20 mt-1 rounded overflow-hidden">
+                    <div class="h-full bg-[#ff5e00]" style="width:100%"></div>
+                </div>
+            </div>
+            <!-- KPI: Arrendador mayor riesgo -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">ARRENDADOR MAYOR RIESGO</div>
+                <div class="flex flex-col mt-1">
+                    <div id="t3_kpiArrNom" class="text-sm font-bold text-[#ffcc00] hud-font leading-tight truncate">---</div>
+                    <div id="t3_kpiArrCount" class="text-[9px] text-[#7890b5] hud-font font-bold mt-0.5">0 bens.</div>
+                </div>
+                <div class="w-full h-1 bg-[#ffcc00]/20 mt-1.5 rounded overflow-hidden">
+                    <div class="h-full bg-[#ffcc00]" style="width:100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fila 1: Sunburst + Pareto 80/20 -->
         <div class="grid grid-cols-12 gap-3 w-full">
-            <!-- Terminal Log -->
-            <div class="col-span-12 xl:col-span-4 cyber-panel p-3 flex flex-col h-[300px]">
-                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
-                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Sys.Log [Terminal En Vivo]</span>
-                </div>
-                <div id="labTerminal" class="flex-1 overflow-y-auto text-[10px] font-mono text-[#7890b5] leading-relaxed flex flex-col-reverse custom-menu">
-                    <!-- Logs will be injected here -->
-                </div>
-            </div>
-            
-            <!-- Radar Chart -->
-            <div class="col-span-12 xl:col-span-4 cyber-panel p-3 flex flex-col h-[300px]">
-                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
-                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Salud de Ciudades Top (Radar)</span>
-                </div>
-                <div id="labRadar" class="flex-1 w-full h-full"></div>
-            </div>
-            
-            <!-- Area Chart -->
-            <div class="col-span-12 xl:col-span-4 cyber-panel p-3 flex flex-col h-[300px]">
-                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
-                    <div class="w-1.5 h-1.5 bg-[#00ccff] shadow-[0_0_5px_#00ccff]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Tendencia Temporal (Area)</span>
-                </div>
-                <div id="labArea" class="flex-1 w-full h-full"></div>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-12 gap-3 w-full mt-2">
-            <!-- Sunburst Chart -->
-            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[400px]">
-                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
-                    <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_5px_#ffcc00]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Distribución Profunda (Sunburst)</span>
-                </div>
-                <div id="labSunburst" class="flex-1 w-full h-full"></div>
-            </div>
-            
-            <!-- Heatmap Chart -->
-            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[400px]">
-                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2">
+            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[440px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_5px_#ff0033]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">Matriz de Novedades (Heatmap)</span>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">ANATOMÍA DEL BLOQUEO</span>
+                    <span class="text-[9px] hud-font text-[#ff5e00] ml-1">NOV → CIUDAD → RES · TOP 6</span>
+                    <button onclick="resetSunburst()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#1f2940] text-gray-500 hover:text-[#00ccff] hover:border-[#00ccff] transition-colors">↺ REINICIAR</button>
                 </div>
-                <div id="labHeatmap" class="flex-1 w-full h-full"></div>
+                <div id="execSunburst" class="flex-1 w-full" style="min-height: 0;"></div>
+            </div>
+            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[440px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                    <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN DE DEUDA — 80/20</span>
+                    <button id="btnParetoTop" onclick="toggleParetoTop()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#1f2940] text-gray-500 hover:text-[#bf00ff] hover:border-[#bf00ff] transition-colors">TOP 20</button>
+                </div>
+                <div id="visionChartPareto" class="flex-1 w-full h-full"></div>
             </div>
         </div>
-    </div> <!-- End view_laboratorio -->
+
+        <!-- Fila 2: Salud Ciudades + Matriz Novedades (desde Tab 2) -->
+        <div class="grid grid-cols-12 gap-3 w-full">
+            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[380px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">SALUD CIUDADES</span>
+                    <span class="text-[9px] hud-font text-gray-500 ml-auto">ANÁLISIS COMPARATIVO MULTIDIMENSIONAL</span>
+                </div>
+                <div id="execRadar" class="flex-1 w-full min-h-0"></div>
+            </div>
+            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[380px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">MATRIZ NOVEDADES</span>
+                    <span class="text-[9px] hud-font text-gray-500 ml-auto">CIUDAD × TIPO NOVEDAD · INTENSIDAD</span>
+                </div>
+                <div id="execHeatmap" class="flex-1 w-full min-h-0"></div>
+            </div>
+        </div>
+
+        <!-- Fila 3: Concentración Arrendadores + Distribución de Pagos -->
+        <div class="grid grid-cols-12 gap-3 w-full">
+            <div class="col-span-12 xl:col-span-5 cyber-panel p-3 flex flex-col h-[400px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                    <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN ARRENDADORES</span>
+                    <span class="text-[9px] hud-font text-gray-500 ml-auto">BENS. SIN/CON NOVEDAD · TOP 15</span>
+                </div>
+                <div id="chartArrendadores" class="flex-1 w-full h-full"></div>
+            </div>
+            <div class="col-span-12 xl:col-span-7 cyber-panel p-3 flex flex-col h-[400px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">DISTRIBUCIÓN DE PAGOS RECIBIDOS</span>
+                    <span class="text-[9px] hud-font text-gray-500 ml-auto">¿CUÁNTOS BENEFICIARIOS COBRARON N PERIODOS?</span>
+                </div>
+                <div id="chartDistPagos" class="flex-1 w-full h-full"></div>
+            </div>
+        </div>
+
+        <!-- Fila 4: Flujo Acumulado de Pagos (nuevo) -->
+        <div class="grid grid-cols-12 gap-3 w-full">
+            <div class="col-span-12 cyber-panel p-3 flex flex-col h-[320px]">
+                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
+                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">FLUJO DE PAGOS — PAGO 1 → PAGO 12</span>
+                    <span class="text-[9px] hud-font text-gray-500 ml-1">$ PAGADO · BENEFICIARIOS ÚNICOS</span>
+                    <button id="btnFlujoToggle" data-modo="periodo" onclick="toggleFlujoModo()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#1f2940] text-gray-500 hover:text-[#00ff88] hover:border-[#00ff88] transition-colors">ACUMULADO</button>
+                </div>
+                <div id="chartFlujoPagos" class="flex-1 w-full" style="min-height:0"></div>
+            </div>
+        </div>
+
+    </div> <!-- End view_inteligencia -->
+
+    <!-- TAB 4: ESTADISTICA AVANZADA -->
+    <div id="view_estadistica" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+        <div class="flex gap-4 border-b border-[#142038] pb-2 mb-2 overflow-x-auto custom-menu whitespace-nowrap">
+            <button onclick="switchStat('incidencia')" id="stat_incidencia" class="px-3 py-1 bg-[#00ff88] text-[#030610] font-bold text-[10px] uppercase rounded shadow-[0_0_10px_#00ff88]">1. Defect Rate</button>
+            <button onclick="switchStat('riesgo')" id="stat_riesgo" class="px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] font-bold text-[10px] uppercase rounded transition-colors">2. Riesgo Financiero</button>
+            <button onclick="switchStat('efectividad')" id="stat_efectividad" class="px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] font-bold text-[10px] uppercase rounded transition-colors">3. Efectividad Territorial</button>
+            <button onclick="switchStat('estancamiento')" id="stat_estancamiento" class="px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] font-bold text-[10px] uppercase rounded transition-colors">4. Cuellos Botella</button>
+            <button onclick="switchStat('desercion')" id="stat_desercion" class="px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] font-bold text-[10px] uppercase rounded transition-colors">5. Funnel Pagos</button>
+        </div>
+
+        <!-- 1. Incidencia -->
+        <div id="stat_view_incidencia" class="flex-1 flex-col gap-3" style="display: flex;">
+            <div class="cyber-panel p-4 h-[120px] flex items-center justify-between">
+                <div>
+                    <div class="text-[12px] font-bold tracking-widest text-[#00ccff] uppercase mb-1">Tasa de Incidencia (Defect Rate)</div>
+                    <div class="text-[10px] text-[#7890b5] w-[400px]">Mide el porcentaje de beneficiarios bloqueados por novedades. Un aumento indica fallas sistémicas.</div>
+                </div>
+                <div class="text-right hidden">
+                    <div id="kpiStatIncidencia" class="text-[36px] font-bold text-[#ff0033] hud-font">0%</div>
+                    <div id="kpiStatIncidenciaCount" class="text-[12px] text-[#ffcc00]">0 de 0 con Novedad</div>
+                </div>
+            </div>
+            <div class="cyber-panel p-3 flex-1 min-h-[300px]">
+                <div id="chartStatIncidencia" class="w-full h-full"></div>
+            </div>
+        </div>
+
+        <!-- 2. Riesgo Financiero -->
+        <div id="stat_view_riesgo" class="flex-1 flex-col gap-3" style="display: none;">
+            <div class="cyber-panel p-4 h-[120px] flex items-center justify-between">
+                <div>
+                    <div class="text-[12px] font-bold tracking-widest text-[#00ccff] uppercase mb-1">Exposición de Riesgo Financiero</div>
+                    <div class="text-[10px] text-[#7890b5] w-[400px]">Suma exacta del dinero pendiente, mapeado a su causa raíz. Facilita decisiones de intervención jurídica o técnica inmediata.</div>
+                </div>
+                <div class="text-right hidden">
+                    <div id="kpiStatRiesgo" class="text-[36px] font-bold text-[#ff5e00] hud-font">$0</div>
+                    <div class="text-[12px] text-[#ffcc00]">Total Capital en Riesgo Operativo</div>
+                </div>
+            </div>
+            <div class="cyber-panel p-3 flex-1 min-h-[300px]">
+                <div id="chartStatRiesgo" class="w-full h-full"></div>
+            </div>
+        </div>
+
+        <!-- 3. Efectividad Territorial -->
+        <div id="stat_view_efectividad" class="flex-1 flex-col gap-3" style="display: none;">
+            <div class="cyber-panel p-4 h-[120px] flex items-center justify-between">
+                <div>
+                    <div class="text-[12px] font-bold tracking-widest text-[#00ccff] uppercase mb-1">Tasa de Efectividad Territorial</div>
+                    <div class="text-[10px] text-[#7890b5] w-[400px]">Ranking % de Pagado vs Presupuestado. Identifica inmediatamente qué regiones están subejecutando drásticamente.</div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="bg-[#142038] border border-[#00ff88] p-2 rounded text-center">
+                        <div class="text-[10px] text-[#00ff88]">MÁS EFICIENTE</div>
+                        <div id="kpiStatEfectMejor" class="text-[14px] font-bold text-[#fff] hud-font">---</div>
+                    </div>
+                    <div class="bg-[#142038] border border-[#ff0033] p-2 rounded text-center">
+                        <div class="text-[10px] text-[#ff0033]">MÁS CRÍTICA</div>
+                        <div id="kpiStatEfectPeor" class="text-[14px] font-bold text-[#fff] hud-font">---</div>
+                    </div>
+                </div>
+            </div>
+            <div class="cyber-panel p-3 flex-1 min-h-[300px]">
+                <div id="chartStatEfectividad" class="w-full h-full"></div>
+            </div>
+        </div>
+
+        <!-- 4. Cuellos Botella -->
+        <div id="stat_view_estancamiento" class="flex-1 flex-col gap-3" style="display: none;">
+            <div class="cyber-panel p-4 h-[120px] flex items-center justify-between">
+                <div>
+                    <div class="text-[12px] font-bold tracking-widest text-[#00ccff] uppercase mb-1">Días Promedio de Estancamiento</div>
+                    <div class="text-[10px] text-[#7890b5] w-[400px]">Tiempo transcurrido desde la asignación o novedad hasta la fecha de revisión. Mide agilidad operativa.</div>
+                </div>
+                <div class="text-right hidden">
+                    <div id="kpiStatEstancamiento" class="text-[36px] font-bold text-[#ffcc00] hud-font">0 Días</div>
+                    <div class="text-[12px] text-[#ffcc00]">Espera Promedio Nacional</div>
+                </div>
+            </div>
+            <div class="cyber-panel p-3 flex-1 min-h-[300px]">
+                <div id="chartStatEstancamiento" class="w-full h-full"></div>
+            </div>
+        </div>
+
+        <!-- 5. Funnel -->
+        <div id="stat_view_desercion" class="flex-1 flex-col gap-3" style="display: none;">
+            <div class="cyber-panel p-4 h-[120px] flex items-center justify-between">
+                <div>
+                    <div class="text-[12px] font-bold tracking-widest text-[#00ccff] uppercase mb-1">Tasa de Deserción (Funnel de Pagos)</div>
+                    <div class="text-[10px] text-[#7890b5] w-[400px]">Volumen de personas activas por periodo de pago. Identifica dónde se pierden beneficiarios y por ende subejecución.</div>
+                </div>
+                <div class="text-right hidden">
+                    <div id="kpiStatDesercion" class="text-[36px] font-bold text-[#00ccff] hud-font">0%</div>
+                    <div class="text-[12px] text-[#00ccff]">Retención Histórica (P1 al actual)</div>
+                </div>
+            </div>
+            <div class="cyber-panel p-3 flex-1 min-h-[300px]">
+                <div id="chartStatDesercion" class="w-full h-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: VISION EJECUTIVA -->
+    <div id="view_vision" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+
 
 
     <script>
@@ -625,28 +815,39 @@
         let currentTableData = []; 
         let currentTab = 'operacion';
 
+        
+        let avanceSortMode = 'vol';
+        window.setAvanceSort = function(mode) {
+            avanceSortMode = mode;
+            let bVol = document.getElementById('btnSortVol');
+            let bDeu = document.getElementById('btnSortDeuda');
+            if(mode === 'vol') {
+                bVol.className = "text-[9px] hud-font px-2 py-0.5 border border-[#00ccff] text-[#00ccff] bg-[#00ccff]/20 rounded transition-colors";
+                bDeu.className = "text-[9px] hud-font px-2 py-0.5 border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors";
+            } else {
+                bDeu.className = "text-[9px] hud-font px-2 py-0.5 border border-[#ff5e00] text-[#ff5e00] bg-[#ff5e00]/20 rounded transition-colors";
+                bVol.className = "text-[9px] hud-font px-2 py-0.5 border border-[#142038] text-gray-500 hover:text-[#00ccff] hover:border-[#00ccff] rounded transition-colors";
+            }
+            updateDashboard(); 
+        };
+
         function switchTab(tabId) {
             currentTab = tabId;
-            document.getElementById('view_operacion').style.display = tabId === 'operacion' ? 'block' : 'none';
-            document.getElementById('view_laboratorio').style.display = tabId === 'laboratorio' ? 'flex' : 'none';
+            document.getElementById('view_operacion').style.display = tabId === 'operacion' ? 'flex' : 'none';
             document.getElementById('view_ejecucion').style.display = tabId === 'ejecucion' ? 'flex' : 'none';
+            document.getElementById('view_inteligencia').style.display = tabId === 'inteligencia' ? 'flex' : 'none';
+            document.getElementById('view_estadistica').style.display = tabId === 'estadistica' ? 'flex' : 'none';
 
-            const btnOp = document.getElementById('tab_operacion');
-        const btnEj = document.getElementById('tab_ejecucion');
-        const btnLab = document.getElementById('tab_laboratorio');
-        
-        let inactiveClass = "text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all";
-        if(btnOp) btnOp.className = inactiveClass;
-        if(btnEj) btnEj.className = inactiveClass;
-        if(btnLab) btnLab.className = inactiveClass.replace('#00ccff', '#ff0033') + ' ml-4'; // Laboratorio hover in red
-        
-        if(tabId === 'operacion' && btnOp) {
-            btnOp.className = "text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-xs font-bold transition-all";
-        } else if(tabId === 'ejecucion' && btnEj) {
-            btnEj.className = "text-[#00ccff] border-b-2 border-[#00ccff] pb-1 tracking-widest text-xs font-bold transition-all";
-        } else if(tabId === 'laboratorio' && btnLab) {
-            btnLab.className = "text-[#ff0033] border-b-2 border-[#ff0033] pb-1 tracking-widest text-xs font-bold transition-all ml-4";
-        }
+            let tabs = ['operacion', 'ejecucion', 'inteligencia', 'estadistica'];
+            tabs.forEach(t => {
+                let btn = document.getElementById('tab_' + t);
+                if(btn) {
+                    btn.className = "text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all";
+                    if(t === tabId) {
+                        btn.className = "text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-xs font-bold transition-all";
+                    }
+                }
+            });
 
             // Resize charts for the active tab
             setTimeout(() => {
@@ -654,6 +855,24 @@
             }, 50);
         }
         
+        
+        function switchStat(statId) {
+            let stats = ['incidencia', 'riesgo', 'efectividad', 'estancamiento', 'desercion'];
+            stats.forEach(s => {
+                let v = document.getElementById('stat_view_' + s);
+                let b = document.getElementById('stat_' + s);
+                if(v) v.style.display = s === statId ? 'flex' : 'none';
+                if(b) {
+                    b.className = s === statId 
+                        ? "px-3 py-1 bg-[#00ff88] text-[#030610] font-bold text-[10px] uppercase rounded shadow-[0_0_10px_#00ff88]" 
+                        : "px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] font-bold text-[10px] uppercase rounded transition-colors";
+                }
+            });
+            setTimeout(() => {
+                Object.values(charts).forEach(c => c && c.resize());
+            }, 50);
+        }
+
         const formatMoney = (n) => "$" + parseInt(n||0).toLocaleString();
         const formatMoneyShort = (n) => {
             if(n >= 1000000) return '$' + (n/1000000).toFixed(1).replace('.0', '') + 'M';
@@ -662,6 +881,8 @@
         };
         
         const cityCoords = {
+            "SIN CIUDAD": [-74.08, 3.20],
+            "OTRA": [-74.08, 3.20],
             "BOGOTA": [-74.08, 4.60], "BOGOTÁ": [-74.08, 4.60], "BOGOTÁ, D.C.": [-74.08, 4.60],
             "MEDELLIN": [-75.56, 6.25], "MEDELLÍN": [-75.56, 6.25], "CALI": [-76.52, 3.45], "SANTIAGO DE CALI": [-76.52, 3.45],
             "BARRANQUILLA": [-74.79, 10.96], "SOLEDAD": [-74.76, 10.91],
@@ -835,7 +1056,7 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
                     charts.treemap.resize();
                     charts.treemap.setOption({
                         backgroundColor: 'transparent', tooltip: { show: true, trigger: 'item', confine: true, appendToBody: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;', textStyle: { color: '#ffffff', fontSize: 12, fontFamily: 'Share Tech Mono' } },
-                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
+                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: true, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
                     }, true);
                 }
             }, 50);
@@ -877,7 +1098,7 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
             },
             geo: {
                 map: 'colombia',
-                roam: false,
+                roam: true,
                 boundingCoords: [
                     [-76.8, 11.3], // Top-Left (Quibdo/Cali lon, Santa Marta lat)
                     [-70.5, 3.2]   // Bottom-Right (Arauca lon, Cali lat)
@@ -1039,7 +1260,7 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
                     charts.treemap.resize();
                     charts.treemap.setOption({
                         backgroundColor: 'transparent', tooltip: { show: true, trigger: 'item', confine: true, appendToBody: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;', textStyle: { color: '#ffffff', fontSize: 12, fontFamily: 'Share Tech Mono' } },
-                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
+                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: true, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
                     }, true);
                 }
             }, 50);
@@ -1084,7 +1305,8 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
             series: [
                 ...ringSeries,
                 {
-                    type: 'graph', coordinateSystem: 'cartesian2d', layout: 'none', roam: false, categories: [{ name: '≥75%' }, { name: '50-74%' }, { name: '25-49%' }, { name: '<25%' }, { name: 'system' }],
+                    type: 'graph', coordinateSystem: 'cartesian2d', layout: 'none',
+                    left: 10, right: 150, roam: true, categories: [{ name: '≥75%' }, { name: '50-74%' }, { name: '25-49%' }, { name: '<25%' }, { name: 'system' }],
                     data: nodes, links: links,
                     emphasis: { scale: true }
                 }
@@ -1220,7 +1442,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                     charts.treemap.resize();
                     charts.treemap.setOption({
                         backgroundColor: 'transparent', tooltip: { show: true, trigger: 'item', confine: true, appendToBody: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;', textStyle: { color: '#ffffff', fontSize: 12, fontFamily: 'Share Tech Mono' } },
-                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
+                        series: [{ type: 'treemap', data: treeData, width: '100%', height: '100%', left: 'center', top: 'center', roam: true, nodeClick: false, breadcrumb: { show: false }, label: { show: true, formatter: '{b}', fontSize: 10, color: '#fff', overflow: 'truncate' }, itemStyle: { borderColor: '#030610', borderWidth: 2 } }]
                     }, true);
                 }
             }, 50);
@@ -1265,7 +1487,8 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
             series: [
                 ...ringSeries2,
                 {
-                    type: 'graph', coordinateSystem: 'cartesian2d', layout: 'none', roam: false, categories: [{ name: '≥75%' }, { name: '50-74%' }, { name: '25-49%' }, { name: '<25%' }, { name: 'system' }],
+                    type: 'graph', coordinateSystem: 'cartesian2d', layout: 'none',
+                    left: 10, right: 150, roam: true, categories: [{ name: '≥75%' }, { name: '50-74%' }, { name: '25-49%' }, { name: '<25%' }, { name: 'system' }],
                     data: nodes, links: links,
                     emphasis: { scale: true }
                 }
@@ -1276,8 +1499,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
 
         async function init() {
             charts.radial = echarts.init(document.getElementById('radialChart'), 'dark');
-            if(document.getElementById('chartRadialNovedad')) charts.radialNovedad = echarts.init(document.getElementById('chartRadialNovedad'), 'dark');
-            charts.line = echarts.init(document.getElementById('lineChart'), 'dark');
+            if(document.getElementById('chartNovedadCombo')) charts.chartNovedadCombo = echarts.init(document.getElementById('chartNovedadCombo'), 'dark');
             charts.map = echarts.init(document.getElementById('mapChart'), 'dark');
             charts.sankey = echarts.init(document.getElementById('chartSankey'), 'dark');
             charts.barExec = echarts.init(document.getElementById('chartBarExec'), 'dark');
@@ -1286,6 +1508,16 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
         if(document.getElementById('execRadar')) charts.execRadar = echarts.init(document.getElementById('execRadar'));
         if(document.getElementById('execHeatmap')) charts.execHeatmap = echarts.init(document.getElementById('execHeatmap'));
         if(document.getElementById('execSunburst')) charts.execSunburst = echarts.init(document.getElementById('execSunburst'));
+        if(document.getElementById('intChartNovedades')) charts.intChartNovedades = echarts.init(document.getElementById('intChartNovedades'));
+        if(document.getElementById('chartStatIncidencia')) charts.chartStatIncidencia = echarts.init(document.getElementById('chartStatIncidencia'));
+        if(document.getElementById('chartStatRiesgo')) charts.chartStatRiesgo = echarts.init(document.getElementById('chartStatRiesgo'));
+        if(document.getElementById('chartStatEfectividad')) charts.chartStatEfectividad = echarts.init(document.getElementById('chartStatEfectividad'));
+        if(document.getElementById('chartStatDesercion')) charts.chartStatDesercion = echarts.init(document.getElementById('chartStatDesercion'));
+        if(document.getElementById('visionChartPareto')) charts.visionChartPareto = echarts.init(document.getElementById('visionChartPareto'));
+        if(document.getElementById('chartArrendadores')) charts.chartArrendadores = echarts.init(document.getElementById('chartArrendadores'));
+        if(document.getElementById('chartDistPagos')) charts.chartDistPagos = echarts.init(document.getElementById('chartDistPagos'));
+        if(document.getElementById('chartFlujoPagos')) charts.chartFlujoPagos = echarts.init(document.getElementById('chartFlujoPagos'), 'dark');
+
         if(document.getElementById('labRadar')) charts.labRadar = echarts.init(document.getElementById('labRadar'));
         if(document.getElementById('labSunburst')) charts.labSunburst = echarts.init(document.getElementById('labSunburst'));
         if(document.getElementById('labArea')) charts.labArea = echarts.init(document.getElementById('labArea'));
@@ -1361,6 +1593,9 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
 
         // Normalize strings for TIPO NOVEDAD
         allData.forEach(d => {
+            let ciu = (d[col.ciu] || '').toString().trim().toUpperCase();
+            d[col.ciu] = ciu === '' ? 'SIN CIUDAD' : ciu;
+
             let t = (d[col.tnov] || '').toString().trim().toUpperCase();
             if(t.includes('LOCALIZACI')) t = 'NO LOCALIZACIÓN'; // Fix encoding issue
             d[col.tnov] = t === '' ? 'NINGUNA' : t;
@@ -1612,6 +1847,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
 
             // Configurar Sankey
             charts.sankey.setOption({
+                backgroundColor: 'transparent',
                 tooltip: { 
                     trigger: 'item',
                     backgroundColor: 'rgba(3, 6, 16, 0.95)',
@@ -1641,6 +1877,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                 series: {
                     type: 'sankey',
                     layout: 'none',
+                    left: 10, right: 150,
                     nodeAlign: 'left', // Ayuda al orden
                     layoutIterations: 0, // Fuerza el orden exacto del arreglo
                     data: sankeyNodes,
@@ -1653,115 +1890,101 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
             
             // Configurar BarExec
             
-            // RENDER RADIAL NOVEDAD
-            if (charts.radialNovedad) {
-            let novCounts = {};
-            filteredData.forEach(d => {
-                let t = d[col.tnov];
-                if (t) { // Incluimos todas, incluso NINGUNA
-                    novCounts[t] = (novCounts[t] || 0) + 1;
-                }
-            });
-            
-            // Tomar TODAS las novedades (o un máximo razonable como 12)
-            let novArr = Object.entries(novCounts).sort((a,b) => b[1] - a[1]); // Mostrar todas las novedades
-            let totalFilteredForNov = novArr.reduce((sum, item) => sum + item[1], 0) || 1;
-            let maxNov = Math.max(...novArr.map(x => x[1]), 1);
-            
-            // Valor mínimo visual para que siempre se dibuje aunque sea 1 caso
-            let minVisual = maxNov * 0.05;
-
-            let chartData = novArr.map((d, i) => {
-                let colors = ['#00ff88', '#55ff66', '#aaff44', '#ffcc00', '#ff5e00', '#ff3300', '#ff0055', '#cc00ff'];
-                return {
-                    value: Math.max(d[1], minVisual), // Valor visual inflado si es muy pequeño
-                    realValue: d[1], // Valor real para tooltips
-                    name: d[0],
-                    itemStyle: { 
-                        color: colors[i % colors.length],
-                        shadowBlur: 10,
-                        shadowColor: colors[i % colors.length]
-                    }
+            // RENDER NOVEDAD COMBO ($ bloqueado + casos únicos)
+            if (charts.chartNovedadCombo) {
+                let novComboMap = {};
+                filteredData.forEach(d => {
+                    let nov = d[col.tnov];
+                    if (!nov || nov === 'NINGUNA') return;
+                    let p = parseFloat(d[col.pend]) || 0;
+                    let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
+                    if (!novComboMap[nov]) novComboMap[nov] = { impacto: 0, casos: new Set() };
+                    if (p > 0) novComboMap[nov].impacto += p;
+                    novComboMap[nov].casos.add(docKey);
+                });
+                const abrevNov = n => {
+                    let u = n.toUpperCase();
+                    if(u.includes('RESIDENCIA')) return 'CAMBIO RESIDENCIA';
+                    if(u.includes('LOCALIZACI')) return 'NO LOCALIZADO';
+                    if(u.includes('CAMBIO DE ARRENDADOR')) return 'NUEVO ARRENDADOR';
+                    if(u.includes('COBRO NO')) return 'FALTA CTA COBRO';
+                    if(u.includes('NO HAB')) return 'NO HABITA';
+                    if(u.includes('VISITA F')) return 'VISITA FALLIDA';
+                    if(u.includes('ACTUALI')) return 'ACTUALIZAR DATOS';
+                    if(u.includes('ABANDONO')) return 'ABANDONO';
+                    if(u.includes('ERROR EN')) return 'ERROR CTA';
+                    if(u.includes('RENUNCIA')) return 'RENUNCIA';
+                    if(u.includes('FALLECI')) return 'FALLECIMIENTO';
+                    if(u.includes('NO RESIDE')) return 'NO RESIDE';
+                    if(u.includes('MUERTE')) return 'MUERTE ARR.';
+                    if(u.includes('SEGUIMIENTO')) return 'SEGUIMIENTO';
+                    return n.length > 18 ? n.substring(0,16)+'…' : n;
                 };
-            });
-            // Echarts expects inner to outer, so reverse
-            chartData.reverse();
-
-            charts.radialNovedad.setOption({
-xAxis: { type: 'value', show: false },
-                backgroundColor: 'transparent',
-                polar: {
-                    radius: ['10%', '100%'],
-                    center: ['65%', '50%'] // Movido a la derecha para dar espacio a textos largos
-                },
-                angleAxis: {
-                    max: maxNov * 1.3, // Leave a gap
-                    startAngle: 90, 
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    axisLabel: { show: false },
-                    splitLine: { show: false }
-                },
-                radiusAxis: {
-                    type: 'category',
-                    data: chartData.map(d => d.name.substring(0, 30) + (d.name.length>30?'...':'')),
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    axisLabel: { show: true, color: '#fff', fontSize: 7.5, fontFamily: 'Share Tech Mono', interval: 0, margin: 5, align: 'right' },
-                    z: 10
-                },
-                tooltip: { 
-                    trigger: 'axis',
-                    axisPointer: { type: 'shadow' },
-                    show: true,
-                    backgroundColor: 'rgba(7, 16, 34, 0.9)',
-                    borderColor: '#00ccff',
-                    borderWidth: 1,
-                    textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
-                    formatter: function(params) {
-                        if (Array.isArray(params)) params = params[0];
-                        let pct = ((params.data.realValue / totalFilteredForNov) * 100).toFixed(1);
-                        return `<div style="padding: 3px;">
-                                    <span style="color:${params.color}; font-weight:bold;">${params.name}</span><br/>
-                                    Casos: <span style="color:#fff;">${params.data.realValue}</span><br/>
-                                    Porcentaje: <span style="color:#00ff88;">${pct}%</span>
-                                </div>`;
-                    }
-                },
-                series: [{
-                    type: 'bar',
-                    data: chartData,
-                    coordinateSystem: 'polar',
-                    roundCap: true,
-                    label: {
-                        show: true,
-                        position: 'end', // <--- Poner los porcentajes fuera (al final de la barra)
+                let comboSorted = Object.entries(novComboMap)
+                    .map(([n, v]) => ({ name: n, impacto: v.impacto, casos: v.casos.size }))
+                    .filter(x => x.impacto > 0 || x.casos > 0)
+                    .sort((a, b) => b.impacto - a.impacto)
+                    .slice(0, 10);
+                let comboReversed = [...comboSorted].reverse();
+                let maxImpacto = comboSorted[0]?.impacto || 1;
+                let totalImpactoCombo = comboSorted.reduce((s, x) => s + x.impacto, 0) || 1;
+                charts.chartNovedadCombo.setOption({
+                    backgroundColor: 'transparent',
+                    grid: { top: 5, bottom: 5, left: 10, right: 10, containLabel: true },
+                    tooltip: {
+                        trigger: 'item', appendToBody: true, confine: true,
+                        backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#ff5e00', borderWidth: 1,
+                        textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
                         formatter: function(params) {
-                            let pct = ((params.data.realValue / totalFilteredForNov) * 100).toFixed(0);
-                            return pct + '%';
+                            let item = comboReversed[params.dataIndex];
+                            if(!item) return '';
+                            return `<div style="padding:3px"><span style="color:#ff5e00;font-weight:bold">${item.name}</span><br/>
+                                $ Bloqueado: <span style="color:#ff0033">${formatMoney(item.impacto)}</span><br/>
+                                Casos únicos: <span style="color:#ffcc00">${item.casos}</span><br/>
+                                % del total: <span style="color:#00ff88">${((item.impacto/totalImpactoCombo)*100).toFixed(1)}%</span></div>`;
+                        }
+                    },
+                    xAxis: { type: 'value', show: false },
+                    yAxis: {
+                        type: 'category',
+                        data: comboReversed.map(x => abrevNov(x.name)),
+                        axisLabel: { color: '#b0c0d8', fontSize: 8, fontFamily: 'Share Tech Mono' },
+                        axisLine: { show: false }, axisTick: { show: false }
+                    },
+                    series: [{
+                        type: 'bar',
+                        data: comboReversed.map((x) => ({
+                            value: x.impacto,
+                            label: {
+                                show: true, position: 'right',
+                                formatter: () => formatMoneyShort(x.impacto) + '  ·  ' + x.casos + ' casos',
+                                color: '#d0daf0', fontSize: 9, fontFamily: 'Share Tech Mono'
+                            }
+                        })),
+                        itemStyle: {
+                            color: function(params) {
+                                let ratio = comboReversed[params.dataIndex].impacto / maxImpacto;
+                                if(ratio > 0.7) return '#ff0033';
+                                if(ratio > 0.4) return '#ff5e00';
+                                if(ratio > 0.2) return '#ffcc00';
+                                return '#00ccff';
+                            }
                         },
-                        color: '#fff',
-                        fontSize: 10,
-                        fontFamily: 'Share Tech Mono',
-                        fontWeight: 'bold'
-                    }
-                }]
-            });
-
-            charts.radialNovedad.off('click'); // remove old listeners if any
-            charts.radialNovedad.on('click', function(params) {
-                let name = params.name;
-                let sel = document.getElementById('f_tnov');
-                if (sel.setCustomValue) {
-                    sel.setCustomValue(name);
-                } else {
-                    sel.value = name;
-                }
-                applyFilters();
-            });
-
+                        barMaxWidth: 28
+                    }]
+                });
+                charts.chartNovedadCombo.off('click');
+                charts.chartNovedadCombo.on('click', function(params) {
+                    let item = comboReversed[params.dataIndex];
+                    if(!item) return;
+                    let sel = document.getElementById('f_tnov');
+                    if(sel.setCustomValue) sel.setCustomValue(item.name);
+                    else sel.value = item.name;
+                    applyFilters();
+                });
             }
             charts.barExec.setOption({
+                backgroundColor: 'transparent',
 xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabel: { formatter: (v) => formatMoneyShort(v), color: '#7890b5', fontSize: 10 } },
                 tooltip: { 
                     trigger: 'axis', 
@@ -1789,8 +2012,8 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
                         Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pendiente)} (${pctPendiente}%)</span>`;
                     }
                 },
-                legend: { textStyle: { color: '#7890b5' }, bottom: 0 },
-                grid: { left: '3%', right: '4%', bottom: '15%', top: '5%', containLabel: true },
+                legend: { show: false },
+                grid: { left: '3%', right: '4%', bottom: '0%', top: '5%', containLabel: true },
                 dataZoom: [
                         { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false, moveOnMouseWheel: true },
                         { 
@@ -1858,6 +2081,8 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
             
             initMultiSelect('f_tnov', 'TIPO NOVEDAD');
             initMultiSelect('f_estact', 'ESTADO ACTUAL');
+fill('f_estado_pago', ['PAGADO', 'PENDIENTE']);
+initMultiSelect('f_estado_pago', 'ESTADO PAGO');
         }
 
         
@@ -1965,15 +2190,15 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
             let f = {
                 res: getVal('f_resolucion'), ciu: getVal('f_ciudad'),
                 per: getVal('f_periodo'), 
-                tnov: getVal('f_tnov'), estact: getVal('f_estact')
+                tnov: getVal('f_tnov'), estact: getVal('f_estact'), estPago: getVal('f_estado_pago')
             };
             let searchTerm = document.getElementById('globalSearch').value.toLowerCase().trim();
             
+            window.filteredDataForAvance = [];
             filteredData = allData.filter(d => {
                 let matchFilters = (f.res === "TODAS" || (Array.isArray(f.res) ? f.res.includes(d[col.res]) : d[col.res] == f.res)) && 
                                    (f.ciu === "TODAS" || (Array.isArray(f.ciu) ? f.ciu.includes(d[col.ciu]) : d[col.ciu] == f.ciu)) &&
                                    (f.per === "TODAS" || (Array.isArray(f.per) ? f.per.includes(d[col.per]) : d[col.per] == f.per)) &&
-                                   
                                    (f.tnov === "TODAS" || (Array.isArray(f.tnov) ? f.tnov.includes(d[col.tnov]) : d[col.tnov] == f.tnov)) &&
                                    (f.estact === "TODAS" || (Array.isArray(f.estact) ? f.estact.includes(d[col.estAct]) : d[col.estAct] == f.estact));
                 
@@ -1984,7 +2209,14 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
                     let searchTerms = searchTerm.split(' ').filter(x => x.length > 0);
                     matchSearch = searchTerms.every(term => str.includes(term));
                 }
-                return matchFilters && matchSearch;
+
+                let baseMatch = matchFilters && matchSearch;
+                if(baseMatch) window.filteredDataForAvance.push(d);
+
+                let valEst = (parseFloat(d[col.est]) === 1) ? "PAGADO" : "PENDIENTE";
+                let matchEstPago = (f.estPago === "TODAS" || (Array.isArray(f.estPago) ? f.estPago.includes(valEst) : valEst === f.estPago));
+                
+                return baseMatch && matchEstPago;
             });
             if (f.ciu !== "TODAS" && (!Array.isArray(f.ciu) || f.ciu.length === 1)) {
                 expandedCity = Array.isArray(f.ciu) ? f.ciu[0] : f.ciu;
@@ -2034,20 +2266,21 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
             allPeriods.forEach(p => periodosObj[p] = 0);
             dataset.forEach(d => { if(d[col.per]) periodosObj[d[col.per]] += (parseFloat(d[col.val])||0); });
 
+            if(!charts.line) return;
             charts.line.setOption({
-                backgroundColor: 'transparent', grid: { top: 55, bottom: 20, left: 60, right: 20 },
+                backgroundColor: 'transparent', grid: { top: 65, bottom: 35, left: 60, right: 40 },
 yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', formatter: p => formatMoneyShort(p) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
                 xAxis: { 
                     type: 'category', 
                     data: allPeriods.map((s, i) => { let n = String(s).replace(/[^0-9]/g,''); return n ? n : String(i+1); }), 
-                    axisLabel: { show: true, color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0, margin: 10 } 
+                    axisLabel: { show: true, color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono', interval: 0, margin: 8 } 
                 },
                 series: [{ 
                     data: allPeriods.map(k => periodosObj[k]), type: 'pictorialBar', symbol: 'path://M0,10 L10,0 L20,10 z', barWidth: '40%',
                     itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: 'rgba(255,94,0,0.8)' }, { offset: 1, color: 'rgba(255,94,0,0.1)' }]), borderColor: '#ff5e00', borderWidth: 1.5, shadowColor: '#ff5e00', shadowBlur: 5 },
                     label: { 
                         show: true, position: 'top', rotate: 45, color: '#ff5e00', 
-                        fontFamily: 'Share Tech Mono', fontSize: 10, align: 'left', verticalAlign: 'middle',
+                        fontFamily: 'Share Tech Mono', fontSize: 8, align: 'left', verticalAlign: 'middle',
                         formatter: p => p.value > 0 ? formatMoney(p.value) : '' 
                     }
                 }]
@@ -2275,60 +2508,88 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                 series: [{ type: 'heatmap', data: hmData, label: { show: true, color: '#fff', fontSize: 10 }, itemStyle: { borderColor: '#030610', borderWidth: 1 } }]
             });
 
-            // 3. Sunburst Chart (Estado -> Ciudad -> Novedades)
+            // 3. Sunburst 3 niveles: Novedad (Top 6) → Ciudad (Top 6) → Resolución (Top 4)
             let sbMap = {};
             filteredData.forEach(d => {
-                let est = (parseFloat(d[col.est]) === 1) ? 'PAGADO' : 'PENDIENTE';
-                let ciu = d[col.ciu] || 'OTRA';
                 let nov = d[col.tnov] || 'NINGUNA';
-                
-                if(!sbMap[est]) sbMap[est] = {};
-                if(!sbMap[est][ciu]) sbMap[est][ciu] = {};
-                if(!sbMap[est][ciu][nov]) sbMap[est][ciu][nov] = 0;
-                sbMap[est][ciu][nov] += 1;
+                if (nov === 'NINGUNA') return;
+                let ciu = d[col.ciu] || 'SIN CIUDAD';
+                let res = (d[col.res] || 'SIN RES').replace(/RESOLUCI[OÓ]N\s*/i, '').trim();
+                let pen = parseFloat(d[col.pend]) || 0;
+                if (pen <= 0) return;
+                if (!sbMap[nov]) sbMap[nov] = {};
+                if (!sbMap[nov][ciu]) sbMap[nov][ciu] = {};
+                sbMap[nov][ciu][res] = (sbMap[nov][ciu][res] || 0) + pen;
             });
-            
-            let sbData = Object.entries(sbMap).map(eEst => {
-                let estName = eEst[0]; // PAGADO or PENDIENTE
-                
-                // Limit to top 5 cities per state so it's readable
-                let topCiu = Object.entries(eEst[1])
-                    .map(e => ({ name: e[0], count: Object.values(e[1]).reduce((a,b)=>a+b,0), novs: e[1] }))
-                    .sort((a,b) => b.count - a.count).slice(0, 5);
-                
-                return {
-                    name: estName,
-                    itemStyle: { color: estName === 'PAGADO' ? '#00ff88' : '#ff5e00' },
-                    children: topCiu.map((ciuData, index) => {
-                        let colors = ['#00ccff', '#ffcc00', '#bf00ff', '#00ffcc', '#ff3399'];
-                        let baseColor = estName === 'PAGADO' ? '#00b35f' : colors[index % colors.length]; 
-                        // If paid, mostly green. If pending, use varied colors.
-                        
-                        return {
-                            name: ciuData.name.length > 10 ? ciuData.name.substring(0,10) + '...' : ciuData.name,
-                            itemStyle: { color: baseColor },
-                            children: Object.entries(ciuData.novs).sort((a,b)=>b[1]-a[1]).map(eNov => {
-                                let isNinguna = eNov[0] === 'NINGUNA';
-                                let shortNov = eNov[0].length > 15 ? eNov[0].substring(0, 15) + '...' : eNov[0];
+
+            const sbColors = ['#ff0033','#ff5e00','#ffcc00','#bf00ff','#00ccff','#00ff88'];
+
+            let sbData = Object.entries(sbMap)
+                .map(([nov, cities]) => {
+                    let novTotal = Object.values(cities).reduce((s, rs) => s + Object.values(rs).reduce((a,b)=>a+b,0), 0);
+                    return { nov, cities, total: novTotal };
+                })
+                .filter(x => x.total > 0)
+                .sort((a,b) => b.total - a.total)
+                .slice(0, 6)
+                .map(({ nov, cities, total }, i) => {
+                    let color = sbColors[i];
+                    let novLabel = nov.length > 20 ? nov.substring(0, 18) + '..' : nov;
+                    return {
+                        name: novLabel,
+                        value: total,
+                        itemStyle: { color },
+                        children: Object.entries(cities)
+                            .map(([ciu, ress]) => {
+                                let ciuTotal = Object.values(ress).reduce((a,b)=>a+b,0);
                                 return {
-                                    name: shortNov, value: eNov[1],
-                                    itemStyle: { color: isNinguna ? '#142038' : '#ff0033', borderColor: baseColor, borderWidth: 1 }
+                                    name: ciu.length > 13 ? ciu.substring(0,11)+'..' : ciu,
+                                    value: ciuTotal,
+                                    itemStyle: { color, opacity: 0.75 },
+                                    children: Object.entries(ress)
+                                        .filter(([,v]) => v > 0)
+                                        .sort((a,b)=>b[1]-a[1])
+                                        .slice(0, 4)
+                                        .map(([r, val]) => ({
+                                            name: r.length > 10 ? r.substring(0,9)+'..' : r,
+                                            value: val,
+                                            itemStyle: { color, opacity: 0.4, borderColor: '#030610', borderWidth: 1 }
+                                        }))
                                 };
                             })
-                        };
-                    })
-                };
-            });
-            
+                            .filter(c => c.value > 0)
+                            .sort((a,b) => b.value - a.value)
+                            .slice(0, 6)
+                    };
+                });
+
             charts.execSunburst.setOption({
                 backgroundColor: 'transparent',
-                tooltip: { show: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#00ccff', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
+                tooltip: {
+                    show: true, trigger: 'item', appendToBody: true, confine: true,
+                    backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff0033', borderWidth: 1,
+                    extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                    textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    formatter: p => `<b style="color:${p.color}; border-bottom:1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.name}</b>Capital Bloqueado: <span style="color:#ff5e00;">${formatMoney(p.value)}</span>`
+                },
                 series: [{
-                    type: 'sunburst', data: sbData, radius: [0, '90%'], sort: null,
-                    itemStyle: { borderColor: '#030610', borderWidth: 2 },
-                    label: { rotate: 'radial', color: '#fff', fontSize: 9, minAngle: 12 }
+                    type: 'sunburst',
+                    data: sbData,
+                    radius: ['6%', '96%'],
+                    sort: null,
+                    nodeClick: 'rootToNode',
+                    itemStyle: { borderColor: '#030610', borderWidth: 1 },
+                    label: { rotate: 'radial', color: '#fff', fontSize: 9, minAngle: 10, overflow: 'truncate' },
+                    emphasis: { focus: 'ancestor', itemStyle: { shadowBlur: 10 } },
+                    levels: [
+                        {},
+                        { r0: '6%',  r: '36%', label: { fontSize: 10, fontWeight: 'bold', minAngle: 8,  align: 'right' } },
+                        { r0: '38%', r: '66%', label: { fontSize: 9,  minAngle: 10, align: 'right' } },
+                        { r0: '68%', r: '96%', label: { fontSize: 8,  minAngle: 8,  align: 'left'  } }
+                    ]
                 }]
             });
+
         }
 
 
@@ -2403,7 +2664,7 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
             filteredData.forEach(d => {
                 let est = (parseFloat(d[col.est])===1) ? 'PAGADO' : 'PENDIENTE';
                 let nov = d[col.tnov] || 'NINGUNA';
-                let ciu = d[col.ciu] || 'OTRA';
+                let ciu = d[col.ciu] || 'SIN CIUDAD';
                 
                 if(!sbMap[est]) sbMap[est] = {};
                 if(!sbMap[est][nov]) sbMap[est][nov] = {};
@@ -2493,35 +2754,24 @@ function updateDashboard() {
             let pctVal = (currentVal / totalValUnfiltered) * 100;
 
             document.getElementById('kpiBeneficiarios').innerText = currentBen.toLocaleString();
-            document.getElementById('kpiPagado').innerText = formatMoneyShort(currentVal);
             document.getElementById('kpiBenTotal').innerText = "de " + totalBenUnfiltered.toLocaleString();
-            document.getElementById('kpiPagTotal').innerText = "de " + formatMoneyShort(totalValUnfiltered);
 
             // Actualizar circulos (stroke-dasharray="150.8")
-            document.getElementById('circBen').style.strokeDashoffset = 150.8 - (pctBen * 150.8 / 100);
+            let cBen = document.getElementById('circBen'); if(cBen) cBen.style.strokeDashoffset = 150.8 - (pctBen * 150.8 / 100);
             document.getElementById('circBenText').innerText = pctBen.toFixed(1) + "%";
             document.getElementById('lineBen').style.width = pctBen + "%";
-
-            document.getElementById('circVal').style.strokeDashoffset = 150.8 - (pctVal * 150.8 / 100);
-            document.getElementById('circValText').innerText = pctVal.toFixed(1) + "%";
-            document.getElementById('lineVal').style.width = pctVal + "%";
 
     // Tab 2 KPIs Update
     let t2_pctBen = (currentBen / totalBenUnfiltered) * 100;
     let t2_pctVal = (currentVal / totalValUnfiltered) * 100;
     
     document.getElementById('t2_kpiBen').innerText = currentBen.toLocaleString();
-    document.getElementById('t2_kpiPag').innerText = formatMoneyShort(currentVal);
     document.getElementById('t2_kpiBenTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
-    document.getElementById('t2_kpiPagTot').innerText = "de " + formatMoneyShort(totalValUnfiltered);
 
     document.getElementById('t2_circBenTxt').innerText = t2_pctBen.toFixed(0) + '%';
-    document.getElementById('t2_circPagTxt').innerText = t2_pctVal.toFixed(0) + '%';
     
     document.getElementById('t2_circBen').style.strokeDashoffset = 125.6 - (125.6 * t2_pctBen) / 100;
-    document.getElementById('t2_circPag').style.strokeDashoffset = 125.6 - (125.6 * t2_pctVal) / 100;
     document.getElementById('t2_lineBen').style.width = t2_pctBen + '%';
-    document.getElementById('t2_linePag').style.width = t2_pctVal + '%';
 
     function getTopCat(data, colIndex) {
         if(data.length === 0) return { name: '-', count: 0, pct: 0 };
@@ -2571,24 +2821,6 @@ function updateDashboard() {
 
     document.getElementById('t2_kpiReg').innerText = currentReg.toLocaleString();
     document.getElementById('t2_kpiRegTot').innerText = "de " + totalRegUnfiltered.toLocaleString();
-
-                // KPI Avance
-                let pagados = 0;
-                let pendientes = 0;
-                filteredData.forEach(d => {
-                    let v = parseFloat(d[col.val]) || 0;
-                    let p = parseFloat(d[col.pend]) || 0;
-                    pagados += v;
-                    pendientes += p;
-                });
-                let totAvance = pagados + pendientes;
-                let pctPag = totAvance > 0 ? Math.round((pagados/totAvance)*100) : 0;
-                let pctPend = totAvance > 0 ? 100 - pctPag : 0;
-                if(document.getElementById('t2_kpiAvance')) {
-                    document.getElementById('t2_kpiAvance').innerHTML = pctPag + '% <span class="text-[10px] text-[#00ff88] ml-1">(' + formatMoneyShort(pagados) + ')</span>';
-                    document.getElementById('t2_kpiAvanceTot').innerText = "Pend: " + pctPend + "% (" + formatMoneyShort(pendientes) + ")";
-                    document.getElementById('t2_kpiAvanceRing').setAttribute('stroke-dasharray', pctPag + ", 100");
-                }
     document.getElementById('t2_circRegTxt').innerText = dispPctReg.toFixed(0) + '%';
     document.getElementById('t2_circReg').style.strokeDashoffset = 125.6 - (125.6 * dispPctReg) / 100;
     document.getElementById('t2_lineReg').style.width = dispPctReg + '%';
@@ -2609,10 +2841,13 @@ function updateDashboard() {
                 }
             });
             
-            let maxVal = Math.max(...Object.values(mapDataObj).map(x => x.total), 1);
-            let minVal = Math.min(...Object.values(mapDataObj).map(x => x.total), 0);
+            let realCities = Object.entries(mapDataObj).filter(e => e[0].toUpperCase() !== 'SIN CIUDAD');
+            let sinCiudadNodeData = Object.entries(mapDataObj).filter(e => e[0].toUpperCase() === 'SIN CIUDAD');
             
-            let mapNodes = Object.entries(mapDataObj).map(e => {
+            let maxVal = Math.max(...realCities.map(x => x[1].total), 1);
+            let minVal = Math.min(...realCities.map(x => x[1].total), 0);
+            
+            let mapperFn = e => {
                 let cityName = e[0].toUpperCase();
                 let coords = cityCoords[cityName] || [-74 + (Math.random()-0.5)*2, 4 + (Math.random()-0.5)*2];
                 
@@ -2637,7 +2872,10 @@ function updateDashboard() {
                     pendiente: e[1].pendiente,
                     label: { position: labelPos, formatter: '{b}', show: true, fontSize: 8, color: '#fff' }
                 };
-            });
+            };
+            
+            let mapNodes = realCities.map(mapperFn);
+            let sinCiudadNodes = sinCiudadNodeData.map(mapperFn);
             
             let edges = [];
             if(mapNodes.length > 1) {
@@ -2678,16 +2916,16 @@ function updateDashboard() {
                     inRange: { color: ['#ff3300', '#ffcc00', '#00ff88'] },
                     text: ['Mayor $', 'Menor $'],
                     textStyle: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' },
-                    bottom: 10, right: 10, itemHeight: 80, itemWidth: 10,
+                    top: 10, left: 10, itemHeight: 60, itemWidth: 8,
                     formatter: (value) => formatMoneyShort(value)
                 },
                 geo: {
                 map: 'colombia',
-                roam: false,
+                roam: true,
                 scaleLimit: { min: 0.5, max: 10 },
                 aspectScale: 1,
-                zoom: 2.25,
-                center: [-73.5, 7.3],
+                zoom: 2.0,
+                center: [-74.0, 7.5],
                 itemStyle: { areaColor: '#071022', borderColor: '#00ccff', borderWidth: 0.5 },
                 emphasis: { itemStyle: { areaColor: '#0a1a3a', shadowBlur: 0, borderWidth: 0.5 }, label: { show: false } }
                 },
@@ -2703,6 +2941,14 @@ function updateDashboard() {
                         data: mapNodes,
                         label: { show: true, formatter: '{b}', color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
                         rippleEffect: { period: 4, scale: 2.5, brushType: 'stroke' }
+                    },
+                    {
+                        type: 'effectScatter', coordinateSystem: 'geo',
+                        symbolSize: 18, 
+                        itemStyle: { color: '#00ff88', shadowBlur: 10, shadowColor: '#00ff88' },
+                        data: sinCiudadNodes,
+                        label: { show: true, formatter: '{b}', color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono', position: 'right' },
+                        rippleEffect: { period: 3, scale: 3, brushType: 'stroke' }
                     }
                 ]
             });
@@ -2733,16 +2979,39 @@ function updateDashboard() {
             });
             
             let rankingObj = {};
-            rankingData.forEach(d => { if(d[col.ciu]) rankingObj[d[col.ciu]] = (rankingObj[d[col.ciu]]||0) + (parseFloat(d[col.val])||0); });
+            rankingData.forEach(d => { 
+                if(d[col.ciu]) {
+                    if(!rankingObj[d[col.ciu]]) rankingObj[d[col.ciu]] = { vol: 0, pen: 0 };
+                    let pag = parseFloat(d[col.val]) || 0;
+                    let pen = parseFloat(d[col.pend]) || 0;
+                    rankingObj[d[col.ciu]].vol += (pag + pen); // Total volume
+                    rankingObj[d[col.ciu]].pen += pen;
+                } 
+            });
 
-            let topCiu = Object.entries(rankingObj).sort((a,b) => a[1]-b[1]);
+            let topCiuObjects = Object.entries(rankingObj).map(kv => {
+                let name = kv[0];
+                let vol = kv[1].vol;
+                let pen = kv[1].pen;
+                let rate = vol > 0 ? (pen/vol*100) : 0;
+                return { name, vol, rate };
+            });
+
+            if(typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') {
+                topCiuObjects.sort((a,b) => a.rate - b.rate); // ASC for ECharts
+            } else {
+                topCiuObjects.sort((a,b) => a.vol - b.vol);
+            }
+            
+            // Reconstruct array format for existing code compatibility
+            let topCiu = topCiuObjects.map(obj => [obj.name, obj.vol, obj.rate]);
             let topIndex = topCiu.length - 1;
             let filteredCiu = f_ciu === "TODAS" ? null : f_ciu;
 
             charts.radial.setOption({
 xAxis: { type: 'value', show: false },
                 backgroundColor: 'transparent',
-                grid: { top: 10, bottom: 10, left: 145, right: 90 },
+                grid: { top: 10, bottom: 10, left: 145, right: 120 },
                 dataZoom: [
                     { 
                         type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false, moveOnMouseWheel: true,
@@ -2760,7 +3029,7 @@ xAxis: { type: 'value', show: false },
                 series: [{
                     type: 'bar', 
                     data: topCiu.map((t, i) => ({ 
-                        value: t[1], 
+                        value: (typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') ? t[2] : t[1], 
                         itemStyle: { 
                             color: (filteredCiu && t[0] !== filteredCiu) ? 'rgba(0, 204, 255, 0.15)' : new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                                 { offset: 0, color: i === topIndex ? '#00ff88' : '#00ccff' }, 
@@ -2772,7 +3041,16 @@ xAxis: { type: 'value', show: false },
                     barMaxWidth: 15,
                     label: { 
                         show: true, position: 'right', 
-                        formatter: p => formatMoney(p.value),
+                        formatter: p => {
+                        let total = topCiu.reduce((sum, item) => sum + item[1], 0);
+                        let pct = total > 0 ? (p.value / total * 100).toFixed(1) : 0;
+                        if(typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') {
+                            let itemObj = topCiu.find(t => t[0] === p.name);
+                            let rate = itemObj ? itemObj[2] : 0;
+                            return formatMoney(p.value) + ' (Deuda: ' + rate.toFixed(1) + '%)';
+                        }
+                        return formatMoney(p.value) + ' (' + pct + '%)';
+                    },
                         color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono'
                     }
                 }]
@@ -2807,7 +3085,37 @@ xAxis: { type: 'value', show: false },
             `).join('');
             if(!currentTableData.length) document.getElementById('tableBody').innerHTML = "<tr><td colspan='12' class='text-center text-[#ff5e00] py-4 blink'>NO_DATA_FOUND</td></tr>";
             
-            // Refrescar gráficos de ejecución en ambas vistas
+            
+// ---------------- KPI AVANCE PAGOS CALCULATION ----------------
+let pagados = 0;
+let pendientes = 0;
+let dataSourceForAvance = (typeof window.filteredDataForAvance !== 'undefined') ? window.filteredDataForAvance : filteredData;
+dataSourceForAvance.forEach(d => {
+    pagados += parseFloat(d[col.val]) || 0;
+    pendientes += parseFloat(d[col.pend]) || 0;
+});
+let totAvance = pagados + pendientes;
+let pctPag = totAvance > 0 ? Math.round((pagados/totAvance)*100) : 0;
+let pctPend = totAvance > 0 ? 100 - pctPag : 0;
+
+if(document.getElementById('kpiAvancePct')) {
+    document.getElementById('kpiAvancePct').innerText = pctPag + "%";
+    document.getElementById('kpiAvancePagado').innerText = formatMoney(pagados);
+    document.getElementById('kpiAvancePendiente').innerText = "Pend: " + formatMoney(pendientes);
+    document.getElementById('kpiAvancePendPct').innerText = pctPend + "%";
+    
+    let strokeVal = 150.8 - (150.8 * pctPag) / 100;
+    let rT1 = document.getElementById('kpiAvanceRingT1'); if(rT1) rT1.style.strokeDashoffset = strokeVal;
+    document.getElementById('kpiAvanceBarT1').style.width = pctPag + "%";
+}
+
+if(document.getElementById('t2_kpiAvance')) {
+    document.getElementById('t2_kpiAvance').innerHTML = pctPag + '% <span class="text-[14px] text-[#00ff88] ml-1">(' + formatMoney(pagados) + ')</span>';
+    document.getElementById('t2_kpiAvanceTot').innerText = "Pend: " + pctPend + "% (" + formatMoney(pendientes) + ")";
+    document.getElementById('t2_kpiAvanceRing').setAttribute('stroke-dasharray', pctPag + ", 100");
+}
+
+// Refrescar gráficos de ejecución en ambas vistas
             try {
                 renderExecutionView();
                 if (typeof renderDrillDownMap === 'function') renderDrillDownMap();
@@ -2817,7 +3125,499 @@ xAxis: { type: 'value', show: false },
             } catch(e) {
                 console.warn("Tab 2 charts not fully loaded yet:", e);
             }
+        
+            // ==========================================
+            // INTELIGENCIA ESTRATEGICA CALCULATIONS
+            // ==========================================
+            let dinBloq = 0;
+            let ciuDeuda = {};
+            let resExito = {};
+            let novImpacto = {};
+
+            filteredData.forEach(d => {
+                let p = parseFloat(d[col.pend]) || 0;
+                let pag = parseFloat(d[col.val]) || 0;
+                let nov = d[col.tnov] || 'NINGUNA';
+                let ciu = d[col.ciu] || 'SIN CIUDAD';
+                let res = d[col.res] || 'SIN CIUDAD';
+
+                // Novedades
+                if(nov !== 'NINGUNA' && p > 0) {
+                    dinBloq += p;
+                    novImpacto[nov] = (novImpacto[nov] || 0) + p;
+                }
+
+                // Ciudades
+                if(!ciuDeuda[ciu]) ciuDeuda[ciu] = { p: 0, t: 0 };
+                ciuDeuda[ciu].p += p;
+                ciuDeuda[ciu].t += (p + pag);
+
+                // Resoluciones
+                if(!resExito[res]) resExito[res] = { pag: 0, t: 0 };
+                resExito[res].pag += pag;
+                resExito[res].t += (p + pag);
+            });
+
+            // Update KPIs
+            if(document.getElementById('kpiIntImpacto')) {
+                document.getElementById('kpiIntImpacto').innerText = formatMoney(dinBloq);
+                
+                // Top Ciudad
+                let topCiuArr = Object.keys(ciuDeuda).sort((a,b) => ciuDeuda[b].p - ciuDeuda[a].p);
+                if(topCiuArr.length > 0 && ciuDeuda[topCiuArr[0]].p > 0) {
+                    let tc = topCiuArr[0];
+                    document.getElementById('kpiIntCiudad').innerText = tc.length > 15 ? tc.substring(0,15) + '...' : tc;
+                    document.getElementById('kpiIntCiudadVal').innerText = formatMoney(ciuDeuda[tc].p);
+                } else {
+                    document.getElementById('kpiIntCiudad').innerText = "NINGUNA";
+                    document.getElementById('kpiIntCiudadVal').innerText = "$0";
+                }
+
+                // Top Resolución
+                let topResArr = Object.keys(resExito).sort((a,b) => {
+                    let rateA = resExito[a].t > 0 ? (resExito[a].pag / resExito[a].t) : 0;
+                    let rateB = resExito[b].t > 0 ? (resExito[b].pag / resExito[b].t) : 0;
+                    return rateB - rateA;
+                });
+                if(topResArr.length > 0 && resExito[topResArr[0]].t > 0) {
+                    let tr = topResArr[0];
+                    let rRate = (resExito[tr].pag / resExito[tr].t) * 100;
+                    document.getElementById('kpiIntRes').innerText = tr;
+                    document.getElementById('kpiIntResVal').innerText = formatMoney(resExito[tr].pag);
+                    let pctEl = document.getElementById('kpiIntResPct'); if(pctEl) pctEl.innerText = rRate.toFixed(1) + "%";
+                } else {
+                    document.getElementById('kpiIntRes').innerText = "NINGUNA";
+                    document.getElementById('kpiIntResVal').innerText = "0%";
+                }
+            }
+
+            // TAB 3 KPIs
+            (function() {
+                let benTotalSet = new Set();
+                let benConNovSet = new Set();
+                let novFrecMap = {};
+                let arrRiesgoMap = {};
+                let benPendNovMap = {};
+                filteredData.forEach(d => {
+                    let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
+                    let nov = d[col.tnov] || 'NINGUNA';
+                    let p = parseFloat(d[col.pend]) || 0;
+                    let arrKey = String(d[col.arrDoc] || d[col.arrNom] || 'SIN ARRENDADOR').trim();
+                    let arrNom = String(d[col.arrNom] || arrKey).trim();
+                    benTotalSet.add(docKey);
+                    if(nov !== 'NINGUNA') {
+                        benConNovSet.add(docKey);
+                        novFrecMap[nov] = (novFrecMap[nov] || 0) + 1;
+                        if(p > 0 && !benPendNovMap[docKey]) benPendNovMap[docKey] = p;
+                        if(!arrRiesgoMap[arrKey]) arrRiesgoMap[arrKey] = { nombre: arrNom, bens: new Set() };
+                        arrRiesgoMap[arrKey].bens.add(docKey);
+                    }
+                });
+                let pctNov = benTotalSet.size > 0 ? ((benConNovSet.size / benTotalSet.size) * 100).toFixed(1) : '0.0';
+                let totalBloqNov = Object.values(benPendNovMap).reduce((s, v) => s + v, 0);
+                let novFrecArr = Object.entries(novFrecMap).sort((a,b) => b[1]-a[1]);
+                let arrRiesArr = Object.values(arrRiesgoMap).sort((a,b) => b.bens.size - a.bens.size);
+                let el = id => document.getElementById(id);
+                if(el('t3_kpiPctNov')) el('t3_kpiPctNov').innerText = pctNov + '%';
+                if(el('t3_kpiBenConNov')) el('t3_kpiBenConNov').innerText = benConNovSet.size + ' de ' + benTotalSet.size;
+                if(el('t3_lineNov')) el('t3_lineNov').style.width = Math.min(parseFloat(pctNov), 100) + '%';
+                if(el('t3_kpiNovFrecNom')) {
+                    let n = novFrecArr.length > 0 ? novFrecArr[0][0] : '---';
+                    el('t3_kpiNovFrecNom').innerText = n.length > 16 ? n.substring(0,14)+'…' : n;
+                }
+                if(el('t3_kpiNovFrecCnt')) el('t3_kpiNovFrecCnt').innerText = (novFrecArr.length > 0 ? novFrecArr[0][1] : 0) + ' casos';
+                if(el('t3_kpiBloqueado')) el('t3_kpiBloqueado').innerText = formatMoney(totalBloqNov);
+                if(el('t3_kpiArrNom')) {
+                    let n = arrRiesArr.length > 0 ? arrRiesArr[0].nombre : '---';
+                    el('t3_kpiArrNom').innerText = n.length > 16 ? n.substring(0,14)+'…' : n;
+                }
+                if(el('t3_kpiArrCount')) el('t3_kpiArrCount').innerText = (arrRiesArr.length > 0 ? arrRiesArr[0].bens.size : 0) + ' bens.';
+            })();
+
+            if(charts.intChartRes) {
+                let rKeys = Object.keys(resExito).sort();
+                let rPag = rKeys.map(k => resExito[k].pag);
+                let rPend = rKeys.map(k => resExito[k].t - resExito[k].pag);
+
+                charts.intChartRes.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: 'rgba(3,6,16,0.9)', textStyle: {color: '#fff', fontSize: 10}, formatter: function(params) {
+                        let res = params[0].name + '<br/>';
+                        let tot = 0;
+                        params.forEach(p => { tot += p.value; res += p.marker + p.seriesName + ': $' + p.value.toLocaleString('es-CO') + '<br/>'; });
+                        let pct = params[0].value / tot * 100;
+                        res += '<br/>Tasa Éxito: ' + pct.toFixed(1) + '%';
+                        return res;
+                    } },
+                    legend: { data: ['PAGADO', 'PENDIENTE'], textStyle: { color: '#aaa', fontSize: 10 }, bottom: 0 },
+                grid: { left: '3%', right: '4%', bottom: '0%', top: '5%', containLabel: true },
+                    xAxis: { type: 'value', axisLabel: { show: false }, splitLine: { show: false } },
+                    yAxis: { type: 'category', data: rKeys, axisLabel: { color: '#aaa', fontSize: 9 } },
+                    series: [
+                        { name: 'PAGADO', type: 'bar', stack: 'total', itemStyle: { color: '#00ff88' }, data: rPag },
+                        { name: 'PENDIENTE', type: 'bar', stack: 'total', itemStyle: { color: '#ff5e00' }, data: rPend }
+                    ]
+                });
+            }
+
+            if(charts.intChartCiudades) {
+                let cKeys = Object.keys(ciuDeuda).map(k => {
+                    let rate = ciuDeuda[k].t > 0 ? (ciuDeuda[k].p / ciuDeuda[k].t) * 100 : 0;
+                    return { name: k, rate: rate, abs: ciuDeuda[k].p };
+                }).filter(x => x.rate > 0).sort((a,b) => b.rate - a.rate).slice(0,15); // Top 15 worst
+
+                charts.intChartCiudades.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: 'rgba(3,6,16,0.9)', textStyle: {color: '#fff', fontSize: 10}, formatter: function(p){ return p[0].name + '<br/>Tasa de Deuda: ' + p[0].value.toFixed(1) + '%'; } },
+                    grid: { left: '3%', right: '5%', bottom: '5%', top: '5%', containLabel: true },
+                    xAxis: { type: 'value', max: 100, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } }, axisLabel: { color: '#aaa', fontSize: 9, formatter: '{value}%' } },
+                    yAxis: { type: 'category', data: cKeys.map(x=>x.name).reverse(), axisLabel: { color: '#aaa', fontSize: 9 } },
+                    series: [{
+                        type: 'bar',
+                        data: cKeys.map(x=>x.rate).reverse(),
+                        itemStyle: {
+                            color: '#ff5e00'
+                        },
+                        label: { show: true, position: 'right', formatter: function(p){ return p.value.toFixed(1) + '%'; }, color: '#fff', fontSize: 9 }
+                    }]
+                });
+            }
+
+
+            // ==========================================
+            // TABS 4 & 5: ESTADISTICA Y VISION EJECUTIVA
+            // ==========================================
+            // Tab 4.1: Incidencia (Defect Rate)
+            let incidCrit = 0; let incidTotal = filteredData.length;
+            // Tab 4.2: Riesgo Financiero
+            let riskNov = {};
+            // Tab 4.3: Efectividad
+            let efectCiu = {};
+            // Tab 4.5: Desercion
+            let pPer = {};
+
+            filteredData.forEach(d => {
+                let p = parseFloat(d[col.pend]) || 0;
+                let pag = parseFloat(d[col.val]) || 0;
+                let nov = d[col.tnov] || 'NINGUNA';
+                let ciu = d[col.ciu] || 'SIN CIUDAD';
+                let per = d[col.per] || 'PAGO 1';
+                
+                // Defect Rate & Risk
+                if(nov !== 'NINGUNA') {
+                    incidCrit++;
+                    if(p > 0) riskNov[nov] = (riskNov[nov] || 0) + p;
+                }
+
+                // Efectividad
+                if(!efectCiu[ciu]) efectCiu[ciu] = {pag: 0, t: 0};
+                efectCiu[ciu].pag += pag;
+                efectCiu[ciu].t += (p + pag);
+
+                // Funnel (Desercion)
+                pPer[per] = (pPer[per] || 0) + 1;
+            });
+
+            // Update Tab 4 KPIs
+            if(document.getElementById('kpiStatIncidencia')) {
+                let rate = incidTotal > 0 ? (incidCrit / incidTotal * 100) : 0;
+                document.getElementById('kpiStatIncidencia').innerText = rate.toFixed(1) + "%";
+                document.getElementById('kpiStatIncidenciaCount').innerText = incidCrit + " de " + incidTotal + " casos";
+                
+                let totRisk = Object.values(riskNov).reduce((a,b)=>a+b, 0);
+                document.getElementById('kpiStatRiesgo').innerText = formatMoney(totRisk);
+
+                let topEfect = Object.keys(efectCiu).map(k => {
+                    return {ciu: k, rate: efectCiu[k].t > 0 ? efectCiu[k].pag/efectCiu[k].t*100 : 0, t: efectCiu[k].t};
+                }).filter(x => x.t > 0).sort((a,b) => b.rate - a.rate);
+                
+                if(topEfect.length > 0) {
+                    document.getElementById('kpiStatEfectMejor').innerText = topEfect[0].ciu + " (" + topEfect[0].rate.toFixed(0) + "%)";
+                    document.getElementById('kpiStatEfectPeor').innerText = topEfect[topEfect.length-1].ciu + " (" + topEfect[topEfect.length-1].rate.toFixed(0) + "%)";
+                }
+
+                let p1 = pPer['PAGO 1'] || 0;
+                let last = pPer[Object.keys(pPer).sort().pop()] || 0;
+                let desRate = p1 > 0 ? (last/p1 * 100) : 0;
+                document.getElementById('kpiStatDesercion').innerText = desRate.toFixed(1) + "%";
+            }
+
+            // Tab 4 Charts
+            if(charts.chartStatIncidencia) {
+                let rate = incidTotal > 0 ? (incidCrit / incidTotal * 100).toFixed(2) : 0;
+                charts.chartStatIncidencia.setOption({
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: rate + '%',
+                        subtext: incidCrit + ' de ' + incidTotal + ' casos',
+                        left: 'center',
+                        top: 'center',
+                        textStyle: { color: '#ff0033', fontSize: 40, fontFamily: 'Share Tech Mono' },
+                        subtextStyle: { color: '#ffcc00', fontSize: 14 }
+                    },
+                    series: [{
+                        type: 'pie', radius: ['60%', '80%'],
+                        data: [
+                            {value: incidCrit, name: 'Con Novedad', itemStyle: {color: '#ff0033'}},
+                            {value: incidTotal - incidCrit, name: 'Normal', itemStyle: {color: '#00ff88'}}
+                        ],
+                        label: { color: '#fff', formatter: '{b}\n{d}%' }
+                    }]
+                });
+            }
+            if(charts.chartStatRiesgo) {
+                let rData = Object.keys(riskNov).sort((a,b)=>riskNov[b]-riskNov[a]).slice(0, 10);
+                charts.chartStatRiesgo.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                    grid: {left: '5%', right: '5%', bottom: '5%', top: '10%', containLabel: true},
+                    xAxis: {type: 'category', data: rData.map(d => d.substring(0,10)), axisLabel: {color:'#aaa', rotate: 45}},
+                    yAxis: {type: 'value', axisLabel: {color:'#aaa'}},
+                    series: [{
+                        type: 'bar', data: rData.map(d => riskNov[d]),
+                        itemStyle: {color: '#ff5e00'},
+                        label: {show:true, position: 'top', formatter: function(p){return '$'+(p.value/1000000).toFixed(1)+'M';}, color:'#fff', fontSize:9}
+                    }]
+                });
+            }
+            if(charts.chartStatEfectividad) {
+                let eData = Object.keys(efectCiu).map(k => ({name:k, rate: efectCiu[k].t > 0 ? efectCiu[k].pag/efectCiu[k].t*100 : 0})).sort((a,b)=>b.rate-a.rate);
+                charts.chartStatEfectividad.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+                    grid: {left: '5%', right: '5%', bottom: '5%', top: '10%', containLabel: true},
+                    xAxis: {type: 'value', max: 100, axisLabel: {color:'#aaa', formatter: '{value}%'}},
+                    yAxis: {type: 'category', data: eData.map(d=>d.name).reverse(), axisLabel: {color:'#aaa'}},
+                    series: [{
+                        type: 'bar', data: eData.map(d=>d.rate).reverse(),
+                        itemStyle: {color: '#00ccff'},
+                        label: {show:true, position:'right', formatter: '{c}%', color:'#fff'}
+                    }]
+                });
+            }
+            if(charts.chartStatDesercion) {
+                let pKeys = Object.keys(pPer).sort();
+                charts.chartStatDesercion.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'item', formatter: "{b}: {c}" },
+                    series: [{
+                        type: 'funnel', left: '10%', top: 20, bottom: 20, width: '80%',
+                        min: 0, max: pKeys.length>0 ? pPer[pKeys[0]] : 100, minSize: '0%', maxSize: '100%',
+                        sort: 'descending', gap: 2,
+                        label: { show: true, position: 'inside' },
+                        itemStyle: { borderColor: '#fff', borderWidth: 1 },
+                        data: pKeys.map(k => ({value: pPer[k], name: k}))
+                    }]
+                });
+            }
+
+            // Tab 5 Charts (Vision)
+            if(charts.visionChartPareto) {
+                // Pareto: Sort cities by Debt absolute
+                let pCiu = Object.keys(efectCiu).map(k => ({n: k, d: efectCiu[k].t - efectCiu[k].pag})).sort((a,b)=>b.d - a.d);
+                let totD = pCiu.reduce((a,b)=>a+b.d, 0);
+                let acc = 0;
+                let cLine = []; let cBar = []; let cNames = [];
+                pCiu.slice(0, paretoTopN).forEach(c => {
+                    acc += c.d;
+                    cNames.push(c.n.substring(0,10));
+                    cBar.push(c.d);
+                    cLine.push(totD > 0 ? (acc/totD)*100 : 0);
+                });
+                
+                charts.visionChartPareto.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'axis' },
+                    grid: {left: '5%', right: '5%', bottom: '15%', top: '15%', containLabel: true},
+                    xAxis: {type: 'category', data: cNames, axisLabel: {color:'#aaa', rotate: 45, fontSize:9}},
+                    yAxis: [
+                        {type: 'value', name: 'Deuda ($)', axisLabel: {color:'#aaa', formatter: function(v){return (v/1000000).toFixed(0)+'M';}}},
+                        {type: 'value', name: '% Acumulado', max: 100, axisLabel: {color:'#aaa', formatter: '{value}%'}}
+                    ],
+                    series: [
+                        {name: 'Deuda', type: 'bar', itemStyle: {color: '#bf00ff'}, data: cBar},
+                        {name: '% Acum', type: 'line', yAxisIndex: 1, itemStyle: {color: '#00ff88'}, data: cLine}
+                    ]
+                });
+            }
+            // Tab 4: Concentración de Arrendadores (Top 15)
+            if(charts.chartArrendadores) {
+                let arrMap = {};
+                filteredData.forEach(d => {
+                    let arrKey = String(d[col.arrDoc] || d[col.arrNom] || 'SIN ARRENDADOR').trim();
+                    let arrNom = String(d[col.arrNom] || arrKey).trim();
+                    if(!arrMap[arrKey]) arrMap[arrKey] = { nombre: arrNom, bens: new Set(), bensNov: new Set() };
+                    let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
+                    arrMap[arrKey].bens.add(docKey);
+                    if(d[col.tnov] && d[col.tnov] !== 'NINGUNA') arrMap[arrKey].bensNov.add(docKey);
+                });
+                let arrData = Object.values(arrMap)
+                    .filter(a => a.bens.size > 0)
+                    .sort((a,b) => b.bens.size - a.bens.size)
+                    .slice(0, 15)
+                    .reverse();
+                charts.chartArrendadores.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'axis', axisPointer: { type: 'shadow' }, appendToBody: true,
+                        backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#bf00ff', borderWidth: 1,
+                        textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                        formatter: p => {
+                            let d = arrData[p[0].dataIndex];
+                            let novPct = d.bens.size > 0 ? (d.bensNov.size / d.bens.size * 100).toFixed(0) : 0;
+                            return `<b style="color:#bf00ff;">${d.nombre.substring(0,30)}</b><br/>
+                                    Beneficiarios: <span style="color:#fff;">${d.bens.size}</span><br/>
+                                    Con novedad: <span style="color:#ff5e00;">${d.bensNov.size} (${novPct}%)</span>`;
+                        }
+                    },
+                    grid: { left: '3%', right: '8%', top: '3%', bottom: '3%', containLabel: true },
+                    xAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9 }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                    yAxis: { type: 'category', data: arrData.map(a => { let n = a.nombre; return n.length > 20 ? n.substring(0,18)+'..' : n; }), axisLabel: { color: '#7890b5', fontSize: 8 } },
+                    series: [
+                        { name: 'Sin novedad', type: 'bar', stack: 'total',
+                          data: arrData.map(a => a.bens.size - a.bensNov.size),
+                          itemStyle: { color: '#bf00ff' }, barMaxWidth: 18 },
+                        { name: 'Con novedad', type: 'bar', stack: 'total',
+                          data: arrData.map(a => a.bensNov.size),
+                          itemStyle: { color: '#ff5e00' }, barMaxWidth: 18,
+                          label: { show: true, position: 'right', formatter: p => p.value > 0 ? p.value : '', color: '#fff', fontSize: 9 } }
+                    ]
+                });
+            }
+
+            // Tab 4: Distribución de pagos recibidos por beneficiario (períodos únicos, máx 12)
+            if(charts.chartDistPagos) {
+                let benPagosMap = {};
+                filteredData.forEach(d => {
+                    let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
+                    let pag = parseFloat(d[col.val]) || 0;
+                    if(!benPagosMap[docKey]) benPagosMap[docKey] = new Set();
+                    if(pag > 0) benPagosMap[docKey].add(d[col.per]);
+                });
+                let distObj = {};
+                Object.values(benPagosMap).forEach(s => { let n = s.size; distObj[n] = (distObj[n] || 0) + 1; });
+                let maxPagos = Math.max(...Object.keys(distObj).map(Number), 0);
+                let xLabels = [], yValues = [];
+                for(let i = 0; i <= maxPagos; i++) {
+                    xLabels.push(i === 0 ? '0 pagos' : i + (i === 1 ? ' pago' : ' pagos'));
+                    yValues.push(distObj[i] || 0);
+                }
+                let totalBens = Object.keys(benPagosMap).length || 1;
+                charts.chartDistPagos.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'axis', axisPointer: { type: 'shadow' }, appendToBody: true,
+                        backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#00ff88', borderWidth: 1,
+                        textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                        formatter: p => {
+                            let pct = (p[0].value / totalBens * 100).toFixed(1);
+                            return `<b style="color:#00ff88;">${p[0].name}</b><br/>Beneficiarios: <span style="color:#fff;">${p[0].value.toLocaleString()}</span><br/>Del total: <span style="color:#00ccff;">${pct}%</span>`;
+                        }
+                    },
+                    grid: { left: '5%', right: '5%', top: '12%', bottom: '12%', containLabel: true },
+                    xAxis: { type: 'category', data: xLabels, axisLabel: { color: '#7890b5', fontSize: 9, rotate: 30 } },
+                    yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9 }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                    series: [{
+                        type: 'bar',
+                        data: yValues.map((v, i) => ({
+                            value: v,
+                            itemStyle: { color: i === 0 ? '#ff003388' : new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#00ff88' }, { offset: 1, color: '#00443300' }
+                            ])}
+                        })),
+                        barMaxWidth: 40,
+                        label: { show: true, position: 'top', color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono', formatter: p => p.value > 0 ? p.value.toLocaleString() : '' }
+                    }]
+                });
+            }
+
+            // FLUJO DE PAGOS (Tab 3 Fila 4)
+            if(charts.chartFlujoPagos) {
+                let allPerOrd = [];
+                for(let i = 1; i <= 12; i++) allPerOrd.push('PAGO ' + i);
+                let flujoMap = {};
+                allPerOrd.forEach(p => flujoMap[p] = { pagado: 0, bens: new Set() });
+                filteredData.forEach(d => {
+                    let per = d[col.per];
+                    let val = parseFloat(d[col.val]) || 0;
+                    let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
+                    if(flujoMap[per] && val > 0) {
+                        flujoMap[per].pagado += val;
+                        flujoMap[per].bens.add(docKey);
+                    }
+                });
+                let perLabels = allPerOrd.filter(p => flujoMap[p].pagado > 0 || flujoMap[p].bens.size > 0);
+                if(perLabels.length === 0) perLabels = allPerOrd;
+                let modoAcum = (document.getElementById('btnFlujoToggle')?.dataset.modo === 'acum');
+                let pagVals = perLabels.map(p => flujoMap[p].pagado);
+                let benVals = perLabels.map(p => flujoMap[p].bens.size);
+                if(modoAcum) {
+                    for(let i = 1; i < pagVals.length; i++) pagVals[i] += pagVals[i-1];
+                    for(let i = 1; i < benVals.length; i++) benVals[i] = Math.max(benVals[i], benVals[i-1]);
+                }
+                let xLabels = perLabels.map(p => p.replace('PAGO ', 'P'));
+                charts.chartFlujoPagos.setOption({
+                    backgroundColor: 'transparent',
+                    legend: { data: ['$ Pagado', 'Beneficiarios'], textStyle: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono' }, top: 2, right: 10 },
+                    grid: { top: 28, bottom: 30, left: 15, right: 60, containLabel: true },
+                    tooltip: {
+                        trigger: 'axis', backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#00ff88', borderWidth: 1,
+                        textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                        formatter: function(params) {
+                            let idx = params[0].dataIndex;
+                            let per = perLabels[idx] || params[0].axisValue;
+                            let r = `<b style="color:#00ccff">${per}</b><br/>`;
+                            params.forEach(p => {
+                                let val = p.seriesName === '$ Pagado' ? formatMoney(p.value) : p.value.toLocaleString();
+                                r += p.marker + p.seriesName + ': <span style="color:#fff">' + val + '</span><br/>';
+                            });
+                            return r;
+                        }
+                    },
+                    xAxis: { type: 'category', data: xLabels, axisLabel: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' }, axisLine: { lineStyle: { color: '#142038' } }, axisTick: { show: false } },
+                    yAxis: [
+                        { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono', formatter: v => formatMoneyShort(v) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                        { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono' }, splitLine: { show: false } }
+                    ],
+                    series: [
+                        { name: '$ Pagado', type: modoAcum ? 'line' : 'bar', data: pagVals, yAxisIndex: 0,
+                          itemStyle: { color: '#00ff88' },
+                          areaStyle: modoAcum ? { color: 'rgba(0,255,136,0.08)' } : undefined,
+                          lineStyle: { width: 2 }, smooth: true, barMaxWidth: 36 },
+                        { name: 'Beneficiarios', type: 'line', data: benVals, yAxisIndex: 1,
+                          itemStyle: { color: '#00ccff' }, lineStyle: { width: 1.5, type: 'dashed' },
+                          smooth: true, symbol: 'circle', symbolSize: 4 }
+                    ]
+                });
+            }
+
         } // End updateDashboard
+
+        let paretoTopN = 10;
+
+        function resetSunburst() {
+            if(typeof renderExecCharts === 'function') renderExecCharts();
+        }
+
+        function toggleParetoTop() {
+            paretoTopN = paretoTopN === 10 ? 20 : 10;
+            let btn = document.getElementById('btnParetoTop');
+            if(btn) btn.innerText = paretoTopN === 10 ? 'TOP 20' : 'TOP 10';
+            updateDashboard();
+        }
+
+        function toggleFlujoModo() {
+            let btn = document.getElementById('btnFlujoToggle');
+            if(!btn) return;
+            if(btn.dataset.modo === 'acum') {
+                btn.dataset.modo = 'periodo';
+                btn.innerText = 'ACUMULADO';
+            } else {
+                btn.dataset.modo = 'acum';
+                btn.innerText = 'POR PERIODO';
+            }
+            updateDashboard();
+        }
 
         init();
     </script>

@@ -1,5 +1,33 @@
 
 
+## 2026-10-10: Leyendas Visibles en Todos los Paneles + Mapa Mejorado
+
+### AVANCE TOP CIUDADES — Leyenda realzada
+- Píldoras de color 10×10px con `box-shadow` glow neón por nivel de deuda pendiente.
+- Texto coloreado con el mismo color semántico del nivel (rojo/naranja/amarillo/verde), tamaño 9px (antes 8px color `#4a5f7a` casi invisible).
+- Backup: `frontend_backup_20261010_leyendas.html`
+
+### NOVEDADES — IMPACTO & FRECUENCIA — Nueva leyenda
+- Fila `IMPACTO: >70% | >40% | >20% | resto` añadida debajo del panel-header.
+- Colores exactamente los mismos que el `novGradient()` del chart: `#ff0033 / #ff5e00 / #ffcc00 / #00ccff`.
+
+### FLUJO DE CAPITAL (Sankey) — Nueva leyenda inline
+- Leyenda `EJECUCIÓN: 100% | ≥50% | <50% | TOTAL` integrada en el header junto al título.
+- Colores coinciden con la lógica del nodo en `renderExecutionView()`: `#00ff88 / #ffcc00 / #ff5e00 / #00ccff`.
+
+### Mapa — Leyenda y labels de ciudades
+- `visualMap` cambiado de vertical arriba-izquierda a **horizontal centrado** (`orient:'horizontal'`, `left:'center'`, `bottom:4`).
+- Texto eliminado `'Mayor $' / 'Menor $'`; reemplazado por valores enteros reales con `toLocaleString('es-CO')`.
+- Color de texto: `#c8ddf0` (antes `#7890b5` apagado).
+- Labels de ciudades: ahora muestran nombre + valor abreviado en dos líneas (`formatMoneyShort`), color `#e0ecff`.
+
+### Bug fix crítico — SyntaxError `let topCiuArr` duplicado
+- Al añadir las barras dinámicas de KPI, el bloque original `// Top Ciudad` con `let topCiuArr` quedó sin eliminar.
+- El bloque nuevo también declaraba `let topCiuArr` en el mismo scope → **SyntaxError** que cancelaba todo el script.
+- Fix: eliminado el bloque duplicado original (líneas ~3216-3225). El bloque nuevo gestiona tanto la ciudad como la barra dinámica `lineCiudad`.
+
+---
+
 ## 2026-10-10: Ajustes Menores — KPI Bars Dinámicas y Botones Tab 3
 
 ### KPI Strip — Barras dinámicas

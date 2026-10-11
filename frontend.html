@@ -252,7 +252,7 @@
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
         <div class="flex justify-between items-center w-full">
             <div class="flex flex-col">
-                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1">BENEFICIARIOS ÚNICOS</div>
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">BENEFICIARIOS ÚNICOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS ÚNICOS</b>Conteo de beneficiarios únicos por documento en la selección actual vs. el total sin filtrar. El anillo y la barra muestran qué fracción del universo total representa el filtro activo. Se cuenta por doc único para evitar duplicados del melt por periodo.</span></span></div>
                 <div class="flex items-baseline gap-1">
                     <div id="kpiBeneficiarios" class="text-lg font-bold neon-text-green hud-font leading-none">0</div>
                     <div id="kpiBenTotal" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
@@ -275,7 +275,7 @@
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
         <div class="flex flex-col w-full h-full justify-between">
             <div class="flex justify-between items-start">
-                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none">AVANCE PAGOS</div>
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">AVANCE PAGOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>AVANCE DE PAGOS</b>Proporción del capital total ejecutado. Verde = % y $ ya desembolsados. Naranja = % y $ aún pendientes. La barra inferior divide visualmente pagado vs pendiente sobre el presupuesto total de la selección activa.</span></span></div>
                 <div class="flex gap-2 text-[8px] uppercase tracking-wider text-gray-400">
                     <div class="flex gap-1 items-center"><div class="w-1.5 h-1.5 bg-[#00ff88]"></div>Pagado</div>
                     <div class="flex gap-1 items-center"><div class="w-1.5 h-1.5 bg-[#ff5e00]"></div>Pendiente</div>
@@ -300,7 +300,7 @@
     <!-- Impacto -->
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
         <div class="flex justify-between items-start w-full">
-            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none">Impacto Novedades</div>
+            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none flex items-center gap-1">Impacto Novedades <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>IMPACTO FINANCIERO DE NOVEDADES</b>Suma del valor pendiente de beneficiarios con novedad activa (excluye NINGUNA). La barra roja muestra qué proporción del pendiente total está comprometida por novedades. Cuenta solo el primer registro por beneficiario para evitar doble conteo.</span></span></div>
             <div class="text-[9px] font-bold text-[#ffcc00] tracking-widest uppercase">EXCLUYE "NINGUNA"</div>
         </div>
         <div class="flex items-end gap-1 mt-1 mb-1">
@@ -314,7 +314,7 @@
     <!-- Ciudad Critica -->
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
         <div class="flex justify-between items-start w-full">
-            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none">Ciudad M&aacute;s Cr&iacute;tica</div>
+            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none flex items-center gap-1">Ciudad M&aacute;s Cr&iacute;tica <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CIUDAD MÁS CRÍTICA</b>Ciudad con mayor deuda absoluta ($ pendiente de pago) en la selección actual. La barra naranja muestra su peso sobre el total pendiente. No es necesariamente la de peor tasa de ejecución — es la que más $ tiene sin pagar.</span></span></div>
             <div class="text-[9px] font-bold text-[#ffcc00] tracking-widest uppercase">DEUDA ABSOLUTA</div>
         </div>
         <div class="flex justify-between items-end mt-1 mb-1 w-full gap-2">
@@ -329,7 +329,7 @@
     <!-- Resolucion Eficiente -->
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
         <div class="flex justify-between items-start w-full">
-            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none">Resoluci&oacute;n Eficiente</div>
+            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none flex items-center gap-1">Resoluci&oacute;n Eficiente <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>RESOLUCIÓN MÁS EFICIENTE</b>Resolución con mayor % de ejecución (pagado/total). El % en cyan es su tasa de ejecución y el $ verde es el capital desembolsado. La barra verde refleja ese porcentaje. No es necesariamente la de mayor volumen — es la que más ha cumplido su meta.</span></span></div>
             <div class="text-[9px] font-bold text-[#00ccff] tracking-widest uppercase">VALOR PAGADO</div>
         </div>
         <div class="flex justify-between items-end mt-1 mb-1 w-full gap-2">
@@ -727,7 +727,10 @@
                     <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">FLUJO DE PAGOS — PAGO 1 → PAGO 12</span>
                     <span class="text-[9px] hud-font text-gray-500 ml-1">$ PAGADO · BENEFICIARIOS ÚNICOS</span>
-                    <button id="btnFlujoToggle" data-modo="periodo" onclick="toggleFlujoModo()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10 transition-colors">ACUMULADO</button>
+                    <div class="ml-auto flex items-center gap-1">
+                        <button id="btnFlujoToggle" data-modo="periodo" onclick="toggleFlujoModo()" class="text-[9px] hud-font px-2 py-0.5 border border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10 transition-colors">ACUMULADO</button>
+                        <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>FLUJO DE PAGOS — MODOS</b>POR PERIODO: barras independientes por cada pago (PAGO 1 al 12), útil para ver en qué periodos se concentró el desembolso.<br/><br/>ACUMULADO: área de suma progresiva mostrando la curva total de desembolso a lo largo del tiempo.</span></span>
+                    </div>
                 </div>
                 <div id="chartFlujoPagos" class="flex-1 w-full" style="min-height:0"></div>
             </div>

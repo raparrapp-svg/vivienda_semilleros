@@ -1043,7 +1043,12 @@ function renderTab2Map() {
                 value: [coords[0], coords[1], e[1].total],
                 pagado: e[1].pagado,
                 pendiente: e[1].pendiente,
-                label: { position: labelPos, formatter: '{b}', show: true, fontSize: 8, color: '#fff' }
+                label: {
+                    position: labelPos, show: true, fontSize: 7.5, color: '#e0ecff',
+                    fontFamily: 'Share Tech Mono',
+                    lineHeight: 11,
+                    formatter: p => p.name + '\n' + formatMoneyShort(p.value[2])
+                }
             };
         });
 
@@ -1106,12 +1111,15 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
                 seriesIndex: 1,
                 min: minVal,
                 max: maxVal,
-                calculable: true,
-                realtime: false,
+                calculable: false,
+                orient: 'horizontal',
+                left: 'center',
+                bottom: 4,
+                itemWidth: 90,
+                itemHeight: 7,
                 inRange: { color: ['#ff5e00', '#ffcc00', '#00ff88'] },
-                text: ['Mayor $', 'Menor $'],
-                textStyle: { color: '#7890b5', fontSize: 9 },
-                bottom: 10, right: 10, itemWidth: 8, itemHeight: 60
+                text: ['$' + Math.round(maxVal).toLocaleString('es-CO'), '$' + Math.round(minVal).toLocaleString('es-CO')],
+                textStyle: { color: '#c8ddf0', fontSize: 8, fontFamily: 'Share Tech Mono' },
             },
             geo: {
                 map: 'colombia',
@@ -3213,17 +3221,6 @@ if(document.getElementById('t2_kpiAvance')) {
             if(document.getElementById('kpiIntImpacto')) {
                 document.getElementById('kpiIntImpacto').innerText = formatMoney(dinBloq);
                 
-                // Top Ciudad
-                let topCiuArr = Object.keys(ciuDeuda).sort((a,b) => ciuDeuda[b].p - ciuDeuda[a].p);
-                if(topCiuArr.length > 0 && ciuDeuda[topCiuArr[0]].p > 0) {
-                    let tc = topCiuArr[0];
-                    document.getElementById('kpiIntCiudad').innerText = tc.length > 15 ? tc.substring(0,15) + '...' : tc;
-                    document.getElementById('kpiIntCiudadVal').innerText = formatMoney(ciuDeuda[tc].p);
-                } else {
-                    document.getElementById('kpiIntCiudad').innerText = "NINGUNA";
-                    document.getElementById('kpiIntCiudadVal').innerText = "$0";
-                }
-
                 // Barra dinámica: % del pendiente total bloqueado por novedades
                 let pctImpacto = pendientes > 0 ? Math.min(100, dinBloq / pendientes * 100) : 0;
                 let elImpacto = document.getElementById('lineImpacto'); if(elImpacto) elImpacto.style.width = pctImpacto.toFixed(1) + '%';

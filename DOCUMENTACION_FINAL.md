@@ -1,5 +1,26 @@
 
 
+## 2026-10-10: Ajustes Menores — KPI Bars Dinámicas y Botones Tab 3
+
+### KPI Strip — Barras dinámicas
+Los 3 KPIs que tenían barra estática (siempre al 100%) ahora se actualizan con cada filtro:
+- **Impacto Novedades** (`lineImpacto`): muestra `dinBloq / pendientes * 100` — qué proporción del pendiente total está bloqueada por novedades.
+- **Ciudad Más Crítica** (`lineCiudad`): muestra `ciuDeuda[tc].p / pendientes * 100` — el peso de esa ciudad sobre el total pendiente.
+- **Resolución Eficiente** (`lineRes`): muestra el `% pagado` de esa resolución (ya calculado como `rRate`).
+- Todas tienen `transition-all duration-1000` para animación suave al filtrar.
+
+### Botones Tab 3 — Estilo unificado visible
+Los tres botones de control de Tab 3 pasaron de `text-gray-500` (gris inactivo, solo hover coloreado) a tener color visible permanente con su color semántico:
+- **↺ REINICIAR** (Sunburst): `border-[#00ccff] text-[#00ccff]`
+- **TOP 20** (Pareto): `border-[#bf00ff] text-[#bf00ff]`
+- **ACUMULADO** (Flujo Pagos): `border-[#00ff88] text-[#00ff88]`
+- Todos con `hover:bg-color/10` para feedback de interacción.
+
+### Backup
+`frontend_backup_20261010_ajustes_menores.html`
+
+---
+
 ## 2026-10-10: Unificación Visual Tab 1 — Colores Semánticos, Estilos y Nuevos Controles
 
 ### AVANCE TOP CIUDADES

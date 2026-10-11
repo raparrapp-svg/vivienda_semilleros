@@ -299,7 +299,7 @@
             <div id="kpiIntImpacto" class="text-lg font-bold text-[#ff0033] hud-font leading-none">$0</div>
         </div>
         <div class="w-full h-1 bg-[#ff0033]/20 mt-0.5 rounded overflow-hidden">
-            <div class="h-full bg-[#ff0033]" style="width: 100%;"></div>
+            <div id="lineImpacto" class="h-full bg-[#ff0033] transition-all duration-1000" style="width: 100%;"></div>
         </div>
     </div>
 
@@ -314,7 +314,7 @@
             <div id="kpiIntCiudadVal" class="text-lg font-bold text-[#ffcc00] hud-font leading-none truncate text-right w-[50%]">---</div>
         </div>
         <div class="w-full h-1 bg-[#ff5e00]/20 mt-0.5 rounded overflow-hidden">
-            <div class="h-full bg-[#ff5e00]" style="width: 100%;"></div>
+            <div id="lineCiudad" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width: 100%;"></div>
         </div>
     </div>
 
@@ -332,7 +332,7 @@
             </div>
         </div>
         <div class="w-full h-1 bg-[#00ff88]/20 mt-0.5 rounded overflow-hidden">
-            <div class="h-full bg-[#00ff88]" style="width: 100%;"></div>
+            <div id="lineRes" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 100%;"></div>
         </div>
     </div>
 
@@ -642,7 +642,7 @@
                     <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_5px_#ff0033]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">ANATOMÍA DEL BLOQUEO</span>
                     <span class="text-[9px] hud-font text-[#ff5e00] ml-1">NOV → CIUDAD → RES · TOP 6</span>
-                    <button onclick="resetSunburst()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#1f2940] text-gray-500 hover:text-[#00ccff] hover:border-[#00ccff] transition-colors">↺ REINICIAR</button>
+                    <button onclick="resetSunburst()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#00ccff] text-[#00ccff] hover:bg-[#00ccff]/10 transition-colors">↺ REINICIAR</button>
                 </div>
                 <div id="execSunburst" class="flex-1 w-full" style="min-height: 0;"></div>
             </div>
@@ -650,7 +650,7 @@
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN DE DEUDA — 80/20</span>
-                    <button id="btnParetoTop" onclick="toggleParetoTop()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#1f2940] text-gray-500 hover:text-[#bf00ff] hover:border-[#bf00ff] transition-colors">TOP 20</button>
+                    <button id="btnParetoTop" onclick="toggleParetoTop()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#bf00ff] text-[#bf00ff] hover:bg-[#bf00ff]/10 transition-colors">TOP 20</button>
                 </div>
                 <div id="visionChartPareto" class="flex-1 w-full h-full"></div>
             </div>
@@ -703,7 +703,7 @@
                     <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">FLUJO DE PAGOS — PAGO 1 → PAGO 12</span>
                     <span class="text-[9px] hud-font text-gray-500 ml-1">$ PAGADO · BENEFICIARIOS ÚNICOS</span>
-                    <button id="btnFlujoToggle" data-modo="periodo" onclick="toggleFlujoModo()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#1f2940] text-gray-500 hover:text-[#00ff88] hover:border-[#00ff88] transition-colors">ACUMULADO</button>
+                    <button id="btnFlujoToggle" data-modo="periodo" onclick="toggleFlujoModo()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10 transition-colors">ACUMULADO</button>
                 </div>
                 <div id="chartFlujoPagos" class="flex-1 w-full" style="min-height:0"></div>
             </div>
@@ -3224,6 +3224,24 @@ if(document.getElementById('t2_kpiAvance')) {
                     document.getElementById('kpiIntCiudadVal').innerText = "$0";
                 }
 
+                // Barra dinámica: % del pendiente total bloqueado por novedades
+                let pctImpacto = pendientes > 0 ? Math.min(100, dinBloq / pendientes * 100) : 0;
+                let elImpacto = document.getElementById('lineImpacto'); if(elImpacto) elImpacto.style.width = pctImpacto.toFixed(1) + '%';
+
+                // Barra dinámica: % del pendiente total que corresponde a la ciudad más crítica
+                let topCiuArr = Object.keys(ciuDeuda).sort((a,b) => ciuDeuda[b].p - ciuDeuda[a].p);
+                if(topCiuArr.length > 0 && ciuDeuda[topCiuArr[0]].p > 0) {
+                    let tc = topCiuArr[0];
+                    document.getElementById('kpiIntCiudad').innerText = tc.length > 15 ? tc.substring(0,15) + '...' : tc;
+                    document.getElementById('kpiIntCiudadVal').innerText = formatMoney(ciuDeuda[tc].p);
+                    let pctCiu = pendientes > 0 ? Math.min(100, ciuDeuda[tc].p / pendientes * 100) : 0;
+                    let elCiu = document.getElementById('lineCiudad'); if(elCiu) elCiu.style.width = pctCiu.toFixed(1) + '%';
+                } else {
+                    document.getElementById('kpiIntCiudad').innerText = "NINGUNA";
+                    document.getElementById('kpiIntCiudadVal').innerText = "$0";
+                    let elCiu = document.getElementById('lineCiudad'); if(elCiu) elCiu.style.width = '0%';
+                }
+
                 // Top Resolución
                 let topResArr = Object.keys(resExito).sort((a,b) => {
                     let rateA = resExito[a].t > 0 ? (resExito[a].pag / resExito[a].t) : 0;
@@ -3236,9 +3254,11 @@ if(document.getElementById('t2_kpiAvance')) {
                     document.getElementById('kpiIntRes').innerText = tr;
                     document.getElementById('kpiIntResVal').innerText = formatMoney(resExito[tr].pag);
                     let pctEl = document.getElementById('kpiIntResPct'); if(pctEl) pctEl.innerText = rRate.toFixed(1) + "%";
+                    let elRes = document.getElementById('lineRes'); if(elRes) elRes.style.width = rRate.toFixed(1) + '%';
                 } else {
                     document.getElementById('kpiIntRes').innerText = "NINGUNA";
                     document.getElementById('kpiIntResVal').innerText = "0%";
+                    let elRes = document.getElementById('lineRes'); if(elRes) elRes.style.width = '0%';
                 }
             }
 

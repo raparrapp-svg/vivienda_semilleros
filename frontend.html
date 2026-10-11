@@ -337,10 +337,10 @@
     </div>
 
 </div>
-    <div class="grid grid-cols-12 gap-3 mb-3">
-        
+    <div class="flex gap-3 mb-3" style="min-height: 330px;">
+
         <!-- COLUMNA IZQUIERDA -->
-        <div class="col-span-4 flex flex-col gap-3 h-full">
+        <div class="flex flex-col min-w-0" style="flex: 4.5;">
             <div class="cyber-panel p-2 flex-1 flex flex-col min-h-0">
                 <div class="panel-header flex justify-between items-end">
                     <span class="text-[#00ccff]">AVANCE TOP CIUDADES</span>
@@ -349,19 +349,26 @@
                         <button id="btnSortDeuda" class="text-[9px] hud-font px-2 py-0.5 border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors" onclick="setAvanceSort('deuda')">TASA DEUDA %</button>
                     </div>
                 </div>
+                <div class="flex gap-3 mb-1 px-1 items-center" style="font-size:8px; font-family:'Share Tech Mono',monospace; color:#4a5f7a; letter-spacing:.05em;">
+                    <span>COLOR = % PEND:</span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#ff0033;border-radius:1px"></span>&gt;80%</span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#ff5e00;border-radius:1px"></span>&gt;60%</span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#ffcc00;border-radius:1px"></span>&gt;40%</span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#00ff88;border-radius:1px"></span>&lt;40%</span>
+                </div>
                 <div id="radialChart" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
         <!-- COLUMNA CENTRAL: MAPA DE RED GEOGRÁFICO -->
-        <div class="col-span-2 flex flex-col gap-3 h-full">
-            <div class="cyber-panel p-3 flex flex-col relative shrink-0 flex-1" style="flex: 1; min-height: 330px;">
+        <div class="flex flex-col min-w-0" style="flex: 3;">
+            <div class="cyber-panel p-3 flex flex-col relative flex-1" style="min-height: 330px;">
                 <div id="mapChart" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
 
         <!-- NOVEDADES: IMPACTO & FRECUENCIA (COMBINADO) -->
-        <div class="col-span-6 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
+        <div class="cyber-panel p-2 flex flex-col min-w-0 min-h-0" style="flex: 4.5;">
             <div class="panel-header flex justify-between items-center">
                 <span class="text-[#ffcc00]">NOVEDADES — IMPACTO &amp; FRECUENCIA</span>
                 <span class="text-[9px] hud-font text-gray-500">$ BLOQUEADO · N° CASOS ÚNICOS</span>
@@ -373,19 +380,22 @@
 <!-- Fila Inferior: Sankey y Radial Novedad -->
 <div class="grid grid-cols-12 gap-3 flex-1 min-h-0">
     <!-- Flujo de Capital (Sankey Diagram) movido desde VISTA 2 -->
-    <div class="col-span-9 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
+    <div class="col-span-8 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
         <div class="panel-header flex justify-between items-center whitespace-nowrap overflow-hidden">
             <span>FLUJO DE CAPITAL</span>
-            <select id="drill_hierarchy" onchange="renderExecutionView()" class="h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font ml-4">
+            <div class="flex items-center gap-2 ml-4">
+            <button id="btnSankeyTop" onclick="toggleSankeyTop()" class="px-2 py-0.5 text-[9px] hud-font border border-[#00ccff] text-[#00ccff] hover:bg-[#00ccff]/10 transition-colors">TOP 10</button>
+            <select id="drill_hierarchy" onchange="renderExecutionView()" class="h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font">
                 <option value="res_ciu">Administrativa (Res ➔ Ciu)</option>
                 <option value="ciu_res">Territorial (Ciu ➔ Res)</option>
             </select>
+            </div>
         </div>
         <div id="chartSankey" class="flex-grow w-full"></div>
     </div>
     
     <!-- RANKING EJECUCIÓN FINANCIERA -->
-    <div class="col-span-3 flex flex-col gap-3 w-full h-full min-h-0">
+    <div class="col-span-4 flex flex-col gap-3 w-full h-full min-h-0">
         <div class="cyber-panel p-3 flex flex-col flex-1 min-h-0">
             <div class="panel-header flex justify-between">
                 <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA</span>
@@ -811,6 +821,13 @@
     <script>
                 let allData = [], filteredData = [], charts = {};
         let activeSankeyNode = null;
+        let sankeyTopN = null;
+        function toggleSankeyTop() {
+            sankeyTopN = sankeyTopN === 10 ? null : 10;
+            let btn = document.getElementById('btnSankeyTop');
+            if(btn) { btn.textContent = sankeyTopN ? 'TODAS' : 'TOP 10'; btn.style.borderColor = sankeyTopN ? '#00ff88' : '#00ccff'; btn.style.color = sankeyTopN ? '#00ff88' : '#00ccff'; }
+            renderExecutionView();
+        }
         let expandedCity = null;
         let currentTableData = []; 
         let currentTab = 'operacion';
@@ -1778,17 +1795,23 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                 return a.realName.localeCompare(b.realName);
             });
             
+            const activeLvl1 = sankeyTopN ? tempLvl1.slice(0, sankeyTopN) : tempLvl1;
+            const activeLvl1Names = new Set(activeLvl1.map(n => n.name));
+            const activeLinks = tempLinks.filter(l => activeLvl1Names.has(l.source));
+            const activeLvl2Names = new Set(activeLinks.map(l => l.target));
+            const activeLvl2 = tempLvl2.filter(n => activeLvl2Names.has(n.name));
+
             const rootName = 'PRESUPUESTO TOTAL\n' + formatMoney(grandTotal);
             sankeyNodes.push({ name: rootName, itemStyle: { color: '#00ccff' }, value: grandTotal, pagado: grandPagado, pendiente: grandPendiente });
-            
-            tempLvl1.forEach(n => {
+
+            activeLvl1.forEach(n => {
                 sankeyNodes.push({ name: n.name, itemStyle: n.itemStyle, value: n.value, pagado: n.pagado, pendiente: n.pendiente });
                 sankeyLinks.push({ source: rootName, target: n.name, value: n.value, pagado: n.pagado, pendiente: n.pendiente });
             });
-            tempLvl2.forEach(n => {
+            activeLvl2.forEach(n => {
                 sankeyNodes.push({ name: n.name, itemStyle: n.itemStyle, value: n.value, pagado: n.pagado, pendiente: n.pendiente });
             });
-            tempLinks.forEach(l => sankeyLinks.push(l));
+            activeLinks.forEach(l => sankeyLinks.push(l));
 
             // Construir Barras Ranking
             if (mode === 'ciu_res') {
@@ -1924,13 +1947,32 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                     .map(([n, v]) => ({ name: n, impacto: v.impacto, casos: v.casos.size }))
                     .filter(x => x.impacto > 0 || x.casos > 0)
                     .sort((a, b) => b.impacto - a.impacto)
-                    .slice(0, 10);
+                    .slice(0, 20);
                 let comboReversed = [...comboSorted].reverse();
                 let maxImpacto = comboSorted[0]?.impacto || 1;
                 let totalImpactoCombo = comboSorted.reduce((s, x) => s + x.impacto, 0) || 1;
+                let novedadVisibles = Math.min(comboReversed.length, 12);
+                const novGradient = (ratio) => {
+                    let c;
+                    if(ratio > 0.7) c = ['#ff0033', 'rgba(255,0,51,0.08)'];
+                    else if(ratio > 0.4) c = ['#ff5e00', 'rgba(255,94,0,0.08)'];
+                    else if(ratio > 0.2) c = ['#ffcc00', 'rgba(255,204,0,0.08)'];
+                    else c = ['#00ccff', 'rgba(0,204,255,0.08)'];
+                    return new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                        { offset: 0, color: c[0] },
+                        { offset: 1, color: c[1] }
+                    ]);
+                };
                 charts.chartNovedadCombo.setOption({
                     backgroundColor: 'transparent',
-                    grid: { top: 5, bottom: 5, left: 10, right: 10, containLabel: true },
+                    grid: { top: 10, bottom: 10, left: 10, right: 160, containLabel: true },
+                    barCategoryGap: '12%',
+                    dataZoom: [{
+                        type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false,
+                        moveOnMouseWheel: true,
+                        startValue: comboReversed.length - novedadVisibles,
+                        endValue: comboReversed.length - 1
+                    }],
                     tooltip: {
                         trigger: 'item', appendToBody: true, confine: true,
                         backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#ff5e00', borderWidth: 1,
@@ -1938,8 +1980,10 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                         formatter: function(params) {
                             let item = comboReversed[params.dataIndex];
                             if(!item) return '';
-                            return `<div style="padding:3px"><span style="color:#ff5e00;font-weight:bold">${item.name}</span><br/>
-                                $ Bloqueado: <span style="color:#ff0033">${formatMoney(item.impacto)}</span><br/>
+                            let ratio = item.impacto / maxImpacto;
+                            let col = ratio > 0.7 ? '#ff0033' : ratio > 0.4 ? '#ff5e00' : ratio > 0.2 ? '#ffcc00' : '#00ccff';
+                            return `<div style="padding:3px"><span style="color:${col};font-weight:bold">${item.name}</span><br/>
+                                $ Bloqueado: <span style="color:${col}">${formatMoney(item.impacto)}</span><br/>
                                 Casos únicos: <span style="color:#ffcc00">${item.casos}</span><br/>
                                 % del total: <span style="color:#00ff88">${((item.impacto/totalImpactoCombo)*100).toFixed(1)}%</span></div>`;
                         }
@@ -1947,30 +1991,25 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                     xAxis: { type: 'value', show: false },
                     yAxis: {
                         type: 'category',
-                        data: comboReversed.map(x => abrevNov(x.name)),
-                        axisLabel: { color: '#b0c0d8', fontSize: 8, fontFamily: 'Share Tech Mono' },
+                        data: comboReversed.map(x => x.name.length > 26 ? x.name.substring(0, 24) + '…' : x.name),
+                        axisLabel: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0 },
                         axisLine: { show: false }, axisTick: { show: false }
                     },
                     series: [{
                         type: 'bar',
+                        barMaxWidth: 15,
                         data: comboReversed.map((x) => ({
                             value: x.impacto,
+                            itemStyle: {
+                                color: novGradient(x.impacto / maxImpacto),
+                                borderRadius: [0, 4, 4, 0]
+                            },
                             label: {
                                 show: true, position: 'right',
-                                formatter: () => formatMoneyShort(x.impacto) + '  ·  ' + x.casos + ' casos',
-                                color: '#d0daf0', fontSize: 9, fontFamily: 'Share Tech Mono'
+                                formatter: () => formatMoney(x.impacto) + '  ·  ' + x.casos + (x.casos === 1 ? ' caso' : ' casos'),
+                                color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono'
                             }
-                        })),
-                        itemStyle: {
-                            color: function(params) {
-                                let ratio = comboReversed[params.dataIndex].impacto / maxImpacto;
-                                if(ratio > 0.7) return '#ff0033';
-                                if(ratio > 0.4) return '#ff5e00';
-                                if(ratio > 0.2) return '#ffcc00';
-                                return '#00ccff';
-                            }
-                        },
-                        barMaxWidth: 28
+                        }))
                     }]
                 });
                 charts.chartNovedadCombo.off('click');
@@ -2013,7 +2052,7 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
                     }
                 },
                 legend: { show: false },
-                grid: { left: '3%', right: '4%', bottom: '0%', top: '5%', containLabel: true },
+                grid: { left: '3%', right: 48, bottom: '0%', top: '5%', containLabel: true },
                 dataZoom: [
                         { type: 'inside', yAxisIndex: 0, zoomOnMouseWheel: false, moveOnMouseWheel: true },
                         { 
@@ -2032,8 +2071,16 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
                 }],
                 yAxis: { type: 'category', data: barData.map(d => d.name), axisLabel: { color: '#7890b5', fontSize: 10 } },
                 series: [
-                    { name: 'Pagado', type: 'bar', stack: 'total', itemStyle: { color: '#00ff88' }, data: barData.map(d => d.pagado) },
-                    { name: 'Pendiente', type: 'bar', stack: 'total', itemStyle: { color: '#ff5e00' }, data: barData.map(d => d.pendiente) }
+                    { name: 'Pagado', type: 'bar', stack: 'total',
+                      itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#00ff88'},{offset:1,color:'rgba(0,255,136,0.15)'}]), borderRadius: [0,0,0,0] },
+                      data: barData.map(d => d.pagado) },
+                    { name: 'Pendiente', type: 'bar', stack: 'total',
+                      itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#ff5e00'},{offset:1,color:'rgba(255,94,0,0.15)'}]), borderRadius: [0,4,4,0] },
+                      data: barData.map(d => d.pendiente),
+                      label: { show: true, position: 'right', color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono',
+                        formatter: (params) => { let d = barData[params.dataIndex]; let tot = d.pagado + d.pendiente; return tot > 0 ? (d.pagado/tot*100).toFixed(0)+'%' : '0%'; }
+                      }
+                    }
                 ]
             }, true);
             
@@ -3031,10 +3078,14 @@ xAxis: { type: 'value', show: false },
                     data: topCiu.map((t, i) => ({ 
                         value: (typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') ? t[2] : t[1], 
                         itemStyle: { 
-                            color: (filteredCiu && t[0] !== filteredCiu) ? 'rgba(0, 204, 255, 0.15)' : new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                                { offset: 0, color: i === topIndex ? '#00ff88' : '#00ccff' }, 
-                                { offset: 1, color: 'rgba(0, 255, 136, 0.1)' }
-                            ]),
+                            color: (filteredCiu && t[0] !== filteredCiu) ? 'rgba(0,204,255,0.1)' : (() => {
+                                let rate = t[2];
+                                let c = rate > 80 ? ['#ff0033','rgba(255,0,51,0.08)'] :
+                                        rate > 60 ? ['#ff5e00','rgba(255,94,0,0.08)'] :
+                                        rate > 40 ? ['#ffcc00','rgba(255,204,0,0.08)'] :
+                                                    ['#00ff88','rgba(0,255,136,0.08)'];
+                                return new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:c[0]},{offset:1,color:c[1]}]);
+                            })(),
                             borderRadius: [0, 4, 4, 0]
                         } 
                     })),
@@ -3047,7 +3098,7 @@ xAxis: { type: 'value', show: false },
                         if(typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') {
                             let itemObj = topCiu.find(t => t[0] === p.name);
                             let rate = itemObj ? itemObj[2] : 0;
-                            return formatMoney(p.value) + ' (Deuda: ' + rate.toFixed(1) + '%)';
+                            return rate.toFixed(1) + '% de deuda  ·  ' + formatMoney(itemObj ? itemObj[1] : 0);
                         }
                         return formatMoney(p.value) + ' (' + pct + '%)';
                     },

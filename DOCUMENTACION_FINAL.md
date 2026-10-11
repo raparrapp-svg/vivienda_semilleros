@@ -1,5 +1,26 @@
 
 
+## 2026-10-10: Unificación Visual Tab 1 — Colores Semánticos, Estilos y Nuevos Controles
+
+### AVANCE TOP CIUDADES
+- **Color por tasa de deuda**: las barras ya no son todas cyan. Se colorean según `% pendiente/total` de cada ciudad: rojo `#ff0033` si >80%, naranja `#ff5e00` si >60%, amarillo `#ffcc00` si >40%, verde `#00ff88` si ≤40%. Aplica en ambos modos (VOLUMEN y TASA DEUDA). Ciudades filtradas/dimmed se muestran en cyan tenue `rgba(0,204,255,0.1)`.
+- **Leyenda de colores**: se añadió una fila de píldoras de colores debajo del header con la descripción `COLOR = % PEND: 🔴 >80% 🟠 >60% 🟡 >40% 🟢 <40%`, aclarando la semántica.
+
+### NOVEDADES — IMPACTO & FRECUENCIA
+- **Más compacto**: ítems visibles en dataZoom aumentados de 8 a 12, `barCategoryGap` reducido a `'12%'` (antes default 20%). Las barras quedan más juntas e igualadas visualmente con AVANCE.
+
+### RANKING EJECUCIÓN FINANCIERA
+- **Estilo cyberpunk**: `Pagado` usa `LinearGradient(1,0,0,0, #00ff88 → rgba(0,255,136,0.15))`. `Pendiente` usa `LinearGradient(1,0,0,0, #ff5e00 → rgba(255,94,0,0.15))` con `borderRadius:[0,4,4,0]` en la punta.
+- **% ejecutado visible**: label en la serie Pendiente (posición 'right') muestra el % pagado de cada barra (ej. `87%`). `grid.right` aumentado a 48px para dar espacio.
+
+### FLUJO DE CAPITAL (Sankey)
+- **Botón TOP 10 / TODAS**: añadido en el header del panel. Variable global `sankeyTopN` (null = todas). Al activar, filtra `tempLvl1` a los 10 nodos de mayor valor y propaga el filtro a los nodos nivel 2 y links. El botón cambia a verde cuando está activo.
+
+### Backup
+`frontend_backup_20261010_colores_tab1.html`
+
+---
+
 ## 2026-10-10: Restructura Final de los 3 Tabs — Distribución Estratégica de Gráficos
 
 ### Tab 1 — OPERACIÓN DIARIA

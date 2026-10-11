@@ -52,6 +52,14 @@
 
         .panel-header { font-size: 11px; font-weight: 700; color: #7890b5; text-transform: uppercase; letter-spacing: 3px; padding-bottom: 4px; border-bottom: 1px solid rgba(120, 144, 181, 0.2); margin-bottom: 6px; display: flex; justify-content: space-between; }
         .panel-header::before { content: '■ '; color: #00ff88; font-size: 10px; }
+
+        /* Panel info tooltip */
+        .ptip { position: relative; display: inline-flex; align-items: center; }
+        .ptip-icon { cursor: help; color: #3a5575; font-size: 11px; margin-left: 5px; line-height: 1; transition: color .2s, text-shadow .2s; user-select: none; font-style: normal; }
+        .ptip:hover .ptip-icon { color: #00ccff; text-shadow: 0 0 6px rgba(0,204,255,.6); }
+        .ptip-box { display: none; position: absolute; left: 0; top: calc(100% + 6px); min-width: 250px; max-width: 310px; background: rgba(3,6,16,.97); border: 1px solid rgba(0,204,255,.25); border-left: 2px solid #00ccff; padding: 9px 11px; font-size: 9px; color: #8fb8cc; font-family: 'Share Tech Mono', monospace; line-height: 1.7; z-index: 9999; white-space: normal; text-transform: none; letter-spacing: .02em; font-weight: 400; box-shadow: 0 6px 24px rgba(0,204,255,.12); pointer-events: none; }
+        .ptip-box b { color: #00ccff; font-size: 9.5px; display: block; margin-bottom: 4px; letter-spacing: .05em; }
+        .ptip:hover .ptip-box { display: block; }
         .cyber-panel-orange .panel-header::before { color: #ff5e00; }
 
         .neon-text-green { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.8); }
@@ -343,7 +351,7 @@
         <div class="flex flex-col min-w-0" style="flex: 4.5;">
             <div class="cyber-panel p-2 flex-1 flex flex-col min-h-0">
                 <div class="panel-header flex justify-between items-end">
-                    <span class="text-[#00ccff]">AVANCE TOP CIUDADES</span>
+                    <span class="text-[#00ccff]">AVANCE TOP CIUDADES <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Ranking de ciudades ordenadas por capital asignado (modo VOLUMEN $$$) o por tasa de deuda relativa (modo TASA DEUDA %). El color de cada barra indica el % del presupuesto aún pendiente de pago. Clic en una barra filtra todo el dashboard por esa ciudad. Scroll para ver más.</span></span></span>
                     <div class="flex gap-2">
                         <button id="btnSortVol" class="text-[9px] hud-font px-2 py-0.5 border border-[#00ccff] text-[#00ccff] bg-[#00ccff]/20 rounded transition-colors" onclick="setAvanceSort('vol')">VOLUMEN $$$</button>
                         <button id="btnSortDeuda" class="text-[9px] hud-font px-2 py-0.5 border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors" onclick="setAvanceSort('deuda')">TASA DEUDA %</button>
@@ -370,7 +378,7 @@
         <!-- NOVEDADES: IMPACTO & FRECUENCIA (COMBINADO) -->
         <div class="cyber-panel p-2 flex flex-col min-w-0 min-h-0" style="flex: 4.5;">
             <div class="panel-header flex justify-between items-center">
-                <span class="text-[#ffcc00]">NOVEDADES — IMPACTO &amp; FRECUENCIA</span>
+                <span class="text-[#ffcc00]">NOVEDADES — IMPACTO &amp; FRECUENCIA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Tipos de novedad activos ordenados por impacto financiero ($ bloqueado). El color refleja el peso de cada tipo sobre el máximo: rojo &gt;70%, naranja &gt;40%, amarillo &gt;20%, cyan el resto. La etiqueta muestra monto bloqueado y casos únicos. Clic en una barra filtra por ese tipo de novedad.</span></span></span>
                 <span class="text-[9px] hud-font text-gray-500">$ BLOQUEADO · N° CASOS ÚNICOS</span>
             </div>
             <div class="flex gap-3 mb-1 px-1 items-center" style="font-size:9px; font-family:'Share Tech Mono',monospace; letter-spacing:.04em;">
@@ -390,7 +398,7 @@
     <div class="col-span-8 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
         <div class="panel-header flex justify-between items-center whitespace-nowrap overflow-hidden">
             <div class="flex items-center gap-4">
-                <span>FLUJO DE CAPITAL</span>
+                <span>FLUJO DE CAPITAL <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Diagrama de flujo presupuestal desde el total hacia resoluciones y ciudades (o viceversa). Verde = 100% ejecutado · Amarillo = ≥50% · Naranja = &lt;50%. El nodo cyan es el total general. Clic en un nodo lo resalta. TOP 10 filtra las 10 resoluciones de mayor valor.</span></span></span>
                 <div class="flex gap-3 items-center" style="font-size:9px; font-family:'Share Tech Mono',monospace; letter-spacing:.04em;">
                     <span style="color:#7890b5;">EJECUCIÓN:</span>
                     <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#00ff88;border-radius:2px;box-shadow:0 0 4px #00ff8866"></span><span style="color:#00ff88">100%</span></span>
@@ -414,7 +422,7 @@
     <div class="col-span-4 flex flex-col gap-3 w-full h-full min-h-0">
         <div class="cyber-panel p-3 flex flex-col flex-1 min-h-0">
             <div class="panel-header flex justify-between">
-                <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA</span>
+                <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="left:auto;right:0;"><b>¿QUÉ MUESTRA?</b>Barras apiladas por resolución: verde = pagado · naranja = pendiente. El % a la derecha indica la tasa de ejecución de cada resolución. Scroll vertical para navegar. Clic en una barra del Sankey izquierdo resalta la resolución aquí.</span></span></span>
                 <div class="flex gap-3 text-[9px] hud-font uppercase tracking-wider text-gray-400 items-center"><div class="flex gap-1 items-center"><div class="w-2 h-2 bg-[#00ff88]"></div>Pagado</div><div class="flex gap-1 items-center"><div class="w-2 h-2 bg-[#ff5e00]"></div>Pendiente</div></div>
             </div>
             <div id="chartBarExec" style="width: 100%; height: 100%;"></div>
@@ -3080,6 +3088,25 @@ function updateDashboard() {
             let filteredCiu = f_ciu === "TODAS" ? null : f_ciu;
 
             charts.radial.setOption({
+                tooltip: {
+                    trigger: 'axis', axisPointer: { type: 'shadow' },
+                    backgroundColor: 'rgba(3,6,16,0.96)', borderColor: '#00ccff', borderWidth: 1,
+                    extraCssText: 'min-width:190px; padding:10px; line-height:1.8;',
+                    textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    formatter: (params) => {
+                        let p = params[0];
+                        let item = topCiu.find(t => t[0] === p.name);
+                        if(!item) return p.name;
+                        let vol = item[1], rate = item[2];
+                        let totalAll = topCiu.reduce((s,t)=>s+t[1],0);
+                        let share = totalAll>0 ? (vol/totalAll*100).toFixed(1) : 0;
+                        let rc = rate>80?'#ff0033':rate>60?'#ff5e00':rate>40?'#ffcc00':'#00ff88';
+                        return `<b style="color:#00ccff;border-bottom:1px solid #1f2940;display:block;padding-bottom:3px;margin-bottom:4px;">${p.name}</b>`
+                            + `Volumen: <span style="float:right;color:#00ff88">${formatMoney(vol)}</span><br/>`
+                            + `Participación: <span style="float:right;color:#7890b5">${share}%</span><br/>`
+                            + `Tasa deuda: <span style="float:right;color:${rc}">${rate.toFixed(1)}%</span>`;
+                    }
+                },
 xAxis: { type: 'value', show: false },
                 backgroundColor: 'transparent',
                 grid: { top: 10, bottom: 10, left: 145, right: 120 },

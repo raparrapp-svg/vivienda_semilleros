@@ -349,12 +349,12 @@
                         <button id="btnSortDeuda" class="text-[9px] hud-font px-2 py-0.5 border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors" onclick="setAvanceSort('deuda')">TASA DEUDA %</button>
                     </div>
                 </div>
-                <div class="flex gap-3 mb-1 px-1 items-center" style="font-size:8px; font-family:'Share Tech Mono',monospace; color:#4a5f7a; letter-spacing:.05em;">
-                    <span>COLOR = % PEND:</span>
-                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#ff0033;border-radius:1px"></span>&gt;80%</span>
-                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#ff5e00;border-radius:1px"></span>&gt;60%</span>
-                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#ffcc00;border-radius:1px"></span>&gt;40%</span>
-                    <span class="flex items-center gap-1"><span style="display:inline-block;width:8px;height:8px;background:#00ff88;border-radius:1px"></span>&lt;40%</span>
+                <div class="flex gap-3 mb-1 px-1 items-center" style="font-size:9px; font-family:'Share Tech Mono',monospace; color:#8fbbd8; letter-spacing:.04em;">
+                    <span style="color:#7890b5;">% PEND:</span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ff0033;border-radius:2px;box-shadow:0 0 4px #ff003388"></span><span style="color:#ff6680">&gt;80%</span></span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ff5e00;border-radius:2px;box-shadow:0 0 4px #ff5e0088"></span><span style="color:#ff8844">&gt;60%</span></span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ffcc00;border-radius:2px;box-shadow:0 0 4px #ffcc0066"></span><span style="color:#ffd740">&gt;40%</span></span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#00ff88;border-radius:2px;box-shadow:0 0 4px #00ff8866"></span><span style="color:#00ff88">&lt;40%</span></span>
                 </div>
                 <div id="radialChart" style="width: 100%; height: 100%;"></div>
             </div>
@@ -373,6 +373,13 @@
                 <span class="text-[#ffcc00]">NOVEDADES — IMPACTO &amp; FRECUENCIA</span>
                 <span class="text-[9px] hud-font text-gray-500">$ BLOQUEADO · N° CASOS ÚNICOS</span>
             </div>
+            <div class="flex gap-3 mb-1 px-1 items-center" style="font-size:9px; font-family:'Share Tech Mono',monospace; letter-spacing:.04em;">
+                <span style="color:#7890b5;">IMPACTO:</span>
+                <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ff0033;border-radius:2px;box-shadow:0 0 4px #ff003388"></span><span style="color:#ff6680">&gt;70%</span></span>
+                <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ff5e00;border-radius:2px;box-shadow:0 0 4px #ff5e0088"></span><span style="color:#ff8844">&gt;40%</span></span>
+                <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ffcc00;border-radius:2px;box-shadow:0 0 4px #ffcc0066"></span><span style="color:#ffd740">&gt;20%</span></span>
+                <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#00ccff;border-radius:2px;box-shadow:0 0 4px #00ccff55"></span><span style="color:#00ccff">resto</span></span>
+            </div>
             <div id="chartNovedadCombo" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
@@ -382,7 +389,16 @@
     <!-- Flujo de Capital (Sankey Diagram) movido desde VISTA 2 -->
     <div class="col-span-8 cyber-panel p-2 flex flex-col w-full h-full min-h-0">
         <div class="panel-header flex justify-between items-center whitespace-nowrap overflow-hidden">
-            <span>FLUJO DE CAPITAL</span>
+            <div class="flex items-center gap-4">
+                <span>FLUJO DE CAPITAL</span>
+                <div class="flex gap-3 items-center" style="font-size:9px; font-family:'Share Tech Mono',monospace; letter-spacing:.04em;">
+                    <span style="color:#7890b5;">EJECUCIÓN:</span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#00ff88;border-radius:2px;box-shadow:0 0 4px #00ff8866"></span><span style="color:#00ff88">100%</span></span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ffcc00;border-radius:2px;box-shadow:0 0 4px #ffcc0066"></span><span style="color:#ffd740">≥50%</span></span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#ff5e00;border-radius:2px;box-shadow:0 0 4px #ff5e0066"></span><span style="color:#ff8844">&lt;50%</span></span>
+                    <span class="flex items-center gap-1"><span style="display:inline-block;width:10px;height:10px;background:#00ccff;border-radius:2px;box-shadow:0 0 4px #00ccff55"></span><span style="color:#00ccff">TOTAL</span></span>
+                </div>
+            </div>
             <div class="flex items-center gap-2 ml-4">
             <button id="btnSankeyTop" onclick="toggleSankeyTop()" class="px-2 py-0.5 text-[9px] hud-font border border-[#00ccff] text-[#00ccff] hover:bg-[#00ccff]/10 transition-colors">TOP 10</button>
             <select id="drill_hierarchy" onchange="renderExecutionView()" class="h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font">

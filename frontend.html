@@ -57,7 +57,7 @@
         .ptip { position: relative; display: inline-flex; align-items: center; }
         .ptip-icon { cursor: help; color: #3a5575; font-size: 11px; margin-left: 5px; line-height: 1; transition: color .2s, text-shadow .2s; user-select: none; font-style: normal; }
         .ptip:hover .ptip-icon { color: #00ccff; text-shadow: 0 0 6px rgba(0,204,255,.6); }
-        .ptip-box { display: none; position: absolute; left: 0; top: calc(100% + 6px); min-width: 250px; max-width: 310px; background: rgba(3,6,16,.97); border: 1px solid rgba(0,204,255,.25); border-left: 2px solid #00ccff; padding: 9px 11px; font-size: 9px; color: #8fb8cc; font-family: 'Share Tech Mono', monospace; line-height: 1.7; z-index: 9999; white-space: normal; text-transform: none; letter-spacing: .02em; font-weight: 400; box-shadow: 0 6px 24px rgba(0,204,255,.12); pointer-events: none; }
+        .ptip-box { display: none; position: fixed; left: 0; top: 0; min-width: 250px; max-width: 310px; background: rgba(3,6,16,.97); border: 1px solid rgba(0,204,255,.25); border-left: 2px solid #00ccff; padding: 9px 11px; font-size: 9px; color: #8fb8cc; font-family: 'Share Tech Mono', monospace; line-height: 1.7; z-index: 9999; white-space: normal; text-transform: none; letter-spacing: .02em; font-weight: 400; box-shadow: 0 6px 24px rgba(0,204,255,.2); pointer-events: none; }
         .ptip-box b { color: #00ccff; font-size: 9.5px; display: block; margin-bottom: 4px; letter-spacing: .05em; }
         .ptip:hover .ptip-box { display: block; }
         .cyber-panel-orange .panel-header::before { color: #ff5e00; }
@@ -3731,6 +3731,20 @@ if(document.getElementById('t2_kpiAvance')) {
         }
 
         init();
+
+        // Posicionar tooltips ⓘ con position:fixed para evitar clipping por overflow:hidden
+        document.querySelectorAll('.ptip').forEach(wrap => {
+            const box = wrap.querySelector('.ptip-box');
+            if (!box) return;
+            wrap.addEventListener('mouseenter', () => {
+                const r = wrap.getBoundingClientRect();
+                const boxW = 310;
+                const left = Math.min(r.left, window.innerWidth - boxW - 8);
+                const top = r.bottom + 6;
+                box.style.left = left + 'px';
+                box.style.top = top + 'px';
+            });
+        });
     </script>
 </body>
 </html>

@@ -1,5 +1,116 @@
 
 
+## 2026-10-13: Export a Excel XML (.xls) — Solución definitiva separadores y acumulación
+
+### Problema resuelto — BOGOTÁ, D.C. se partía en dos columnas al abrir el CSV
+- **Causa raíz**: el nombre de ciudad `BOGOTÁ, D.C.` contiene `,` y `;`. Ningún separador CSV era seguro porque alguno de los dos caracteres aparecía en los datos, causando que Excel partiera la celda aunque los valores estuvieran entre comillas.
+- **Solución definitiva**: se reemplazó el formato CSV por **Excel XML Spreadsheet** (formato SpreadsheetML `.xls`). Los valores van dentro de etiquetas XML `<Data ss:Type="String">`, sin separadores. Ningún carácter en los datos puede causar splits.
+- **Ambos botones cambiados**: DATA exporta `Semilleros_TODOS_<fecha>.xls`, FILTRADOS exporta `Semilleros_FILTRADOS_<fecha>.xls`.
+
+### Bug fix — Columnas vacías en export (col.estAct y otras asignadas tarde)
+- **Causa raíz**: `col.estAct`, `col.pend`, `col.valMen`, `col.arrDoc`, `col.arrNom`, `col.fecIni`, `col.id`, `col.docPpt` se asignaban **después** del loop `allData.forEach` de normalización. Dentro del loop, `col.estAct` era `undefined`, así que `d[undefined]` = `d['']` nunca se normalizaba.
+- **Solución**: todas esas asignaciones se movieron **antes** del `forEach`.
+
+### Nueva funcionalidad — Acumulación inteligente en export FILTRADOS (1 fila por beneficiario)
+El export FILTRADOS deduplica a una fila por beneficiario. Se mejoró cómo se consolidan las columnas que pueden variar entre cuotas:
+
+| Columna | Comportamiento anterior | Comportamiento nuevo |
+|---|---|---|
+| OBSERVACIONES | Primera no vacía | Todas únicas acumuladas con ` \| ` |
+| TIPO NOVEDAD | Última fila | Todos los tipos únicos con ` \| ` |
+| FECHA NOVEDAD | Primera fila | **Último** valor no vacío |
+| ESTADO ACTUAL | Primera fila | **Último** valor no vacío |
+| LEGALIZADO | Primer no vacío | **Último** valor no vacío |
+
+### Backup
+`frontend_backup_20261013_export_xls.html`
+
+---
+
+## 2026-10-11: Filtros CIUDAD y TIPO NOVEDAD — Opción "TODAS (excl. X)"
+
+### Nueva funcionalidad — Acción rápida en dropdowns multi-select
+- **Contexto**: los filtros CIUDAD y TIPO NOVEDAD son multi-select personalizados. El estado por defecto (ningún checkbox marcado) equivale a "TODAS" e incluye `SIN CIUDAD` y `NINGUNA`.
+- **Problema**: no había forma rápida de seleccionar todo el universo **excepto** los registros sin ciudad asignada o sin novedad activa.
+- **Solución**: se modificó `initMultiSelect(selectId, defaultText, opts)` para aceptar `opts.excludeVal`. Si se provee, inserta una fila de acción rápida al tope del dropdown con estilo amarillo `#ffcc00`:
+  - Texto: `◉ TODAS (excl. <excludeVal>)`
+  - Al hacer clic: marca todos los checkboxes del menú **excepto** el de `excludeVal`, actualiza el botón a `N SELECCIONES` y llama `applyFilters()`.
+- **CIUDAD** inicializado con `{ excludeVal: 'SIN CIUDAD' }` → `◉ TODAS (excl. SIN CIUDAD)`
+- **TIPO NOVEDAD** inicializado con `{ excludeVal: 'NINGUNA' }` → `◉ TODAS (excl. NINGUNA)`
+- Los demás filtros (RESOLUCIÓN, PERIODO, ESTADO ACTUAL, ESTADO PAGO) no reciben `excludeVal` y no cambian.
+- **Compatibilidad**: el resultado de `getCustomValues()` devuelve un array con todos los valores seleccionados (todos menos el excluido), que ya era manejado correctamente por `applyFilters()` a través de `Array.isArray(f.ciu) ? f.ciu.includes(...)`.
+
+### Backup
+`frontend_backup_20261011_filtros_excl.html`
+
+---
+
+## 2026-10-11: Tab 2 Mapa — SIN CIUDAD siempre visible + Leyenda esquina superior izquierda
+
+### Bug fix — Punto SIN CIUDAD no aparecía en el mapa Tab 2
+- **Causa raíz**: la serie `effectScatter` de SIN CIUDAD usaba `data: sinCiuDataT2.map(...)`. Si no hay registros con ciudad vacía en el dataset filtrado, `sinCiuDataT2 = []` y la serie no renderiza nada.
+- **Solución**: separar la lógica de datos de la lógica de render. Se crea `sinCiuEntry` con los valores reales si existen, o `{ total:0, pagado:0, pendiente:0 }` como fallback. `sinCiuSeriesData` es siempre un array de 1 elemento en `[-73.5, 4.3]`.
+- **Resultado**: el punto púrpura `#bf00ff` con ripple y label "SIN\nCIUDAD" siempre aparece en el mapa Tab 2, tenga o no datos.
+
+### Fix — Leyenda (visualMap) del mapa Tab 2 estaba en el centro del mapa
+- **Causa**: `orient: 'horizontal', left: 'center', bottom: 4` centraba la leyenda horizontalmente y la anclaba al fondo del contenedor ECharts — que es el centro visual del panel cuando el mapa ocupa solo parte de la altura.
+- **Solución**: cambiado a `orient: 'vertical', left: 8, top: 8` — esquina superior izquierda, igual al posicionamiento de la leyenda del Tab 1. `itemWidth: 7, itemHeight: 60`.
+
+### Backup
+`frontend_backup_20261011_tab2_mapa_sincuidad.html`
+
+---
+
+## 2026-10-11: Rediseño Completo Tab 2 — Unificación Visual con Tab 1
+
+### KPI Strip — Formato unificado Tab 1
+- Los 5 KPIs del Tab 2 fueron reescritos completamente con el mismo markup de Tab 1: `p-2`, `text-[9px]` título, `text-lg` valor principal, círculo SVG `w-8 h-8` con `r=14 stroke-width=3 dasharray=87.96`, texto interior `text-[7px]`, barra `h-1 mt-1.5`.
+- El círculo de progreso fue corregido: `dashoffset = 87.96 - (87.96 * pct) / 100` (antes usaba 125.6 de un `r=20` más grande).
+- **KPI 2 renombrado**: "PAGOS/REGISTROS" (púrpura) → **"REGISTROS TOTALES"** (cyan `#00ccff`). El valor muestra total de registros tras unpivot.
+- **KPI 3 (AVANCE PAGOS)**: reformateado como dual-stat (% pagado + $ pagado / % pendiente + $ pendiente). IDs actualizados: `t2_kpiAvancePct`, `t2_kpiAvancePagado`, `t2_kpiAvancePendPct`, `t2_kpiAvancePendiente`, `t2_kpiAvanceBar`. Guard JS cambiado de `t2_kpiAvance` → `t2_kpiAvancePct`.
+- Todos los 5 KPIs tienen tooltip ⓘ (sistema `#globalTip`).
+
+### Mapa Tab 2 — SIN CIUDAD visible
+- **Bug corregido**: `renderTab2Map()` excluía explícitamente `SIN CIUDAD` con `ciu !== 'SIN CIUDAD'`. Removida la exclusión.
+- Separación en dos arrays: `realCitiesT2` (todas menos SIN CIUDAD) + `sinCiuDataT2` (solo SIN CIUDAD).
+- Añadida **3ª serie `effectScatter`** de color púrpura `#bf00ff` con ripple, posición fija `[-73.5, 4.3]` (dentro del bounding `[[-76.8, 11.3], [-70.5, 3.2]]`). Label "SIN\nCIUDAD" en `position: 'right'`.
+- La coordenada original de SIN CIUDAD `[-74.08, 3.20]` estaba en el borde del bounding; el punto fijo `[-73.5, 4.3]` garantiza visibilidad.
+
+### Panel headers Tab 2 — Renombrados + tooltips ⓘ
+- **EJECUCIÓN REGIONAL TERRITORIAL**: ⓘ añadido al título.
+- **PROPORCIÓN DE EJECUCIÓN** (treemap): ⓘ añadido, subtítulo movido a `text-gray-500` separado.
+- **TERMINAL_BASE_DE_DATOS** → **"BASE DE DATOS · SEMILLEROS"** en cyan `#00ccff` + ⓘ.
+- El innerHTML del título del mapa en `renderTab2Map()` fue actualizado para incluir el ⓘ.
+
+### Backup
+`frontend_backup_20261011_tab2_redesign.html`
+
+---
+
+## 2026-10-10: Tooltips ⓘ Funcionales + Sankey → RANKING Click-to-Focus
+
+### Bug fix — Tooltips ⓘ recortados por `clip-path` de `.cyber-panel`
+- **Causa raíz**: `.cyber-panel` tiene `clip-path: polygon(...)` que recorta TODOS sus descendientes, incluyendo `position: fixed`. No hay escape CSS posible.
+- **Solución**: Crear un singleton `<div id="globalTip">` directamente en JS con `document.createElement` + `document.body.appendChild`. Al estar en `<body>` a nivel raíz, escapa cualquier `clip-path` ancestro.
+- **Flujo**: `mouseenter` en `.ptip` → copia `innerHTML` de `.ptip-box` (siempre `display:none !important`, solo almacén) → lo pega en `#globalTip` → lo posiciona con `getBoundingClientRect()` → `display:block`. `mouseleave` → `display:none`.
+- **Intentos fallidos previos**: `position: fixed` + posicionador JS (sigue recortado por clip-path). `setTimeout(0)` para defer DOM (el div `#globalTip` estático en HTML aún no existe cuando corre el setTimeout en algunos browsers). La solución correcta fue crear el div en JS.
+
+### Funcionalidad — Sankey click resalta resolución en RANKING
+- Al hacer click en un nodo del Sankey, `activeSankeyNode` se setea (ya existía este mecanismo).
+- **Nuevo**: `renderExecutionView()` ahora calcula `highlightBarName`: limpia sufijos `(Ciu)` / `(Res)` del nodo clickeado y busca match en `barData`.
+- Si hay match: las barras no relacionadas en `chartBarExec` se dimean a `rgba(..., 0.06)` (casi invisibles). La barra resaltada mantiene su gradiente original.
+- `dispatchAction` hace scroll automático del dataZoom del RANKING para centrar la resolución resaltada (`startValue: hIdx-3`, `endValue: hIdx+6`).
+- Click en el mismo nodo o en un edge deselecciona y el RANKING vuelve al estado normal.
+- Funciona en ambos modos: `res_ciu` (nodo lvl1 = resolución directa) y `ciu_res` (nodo lvl2 con sufijo `(Res)` → se limpia para match).
+
+### Código muerto removido
+- Atributo `style="left:auto;right:0;"` en `.ptip-box` del RANKING — sin efecto con el nuevo sistema globalTip.
+
+### Backup
+`frontend_backup_20261010_tooltips_sankey_ranking.html`
+
+---
+
 ## 2026-10-10: Leyendas Visibles en Todos los Paneles + Mapa Mejorado
 
 ### AVANCE TOP CIUDADES — Leyenda realzada

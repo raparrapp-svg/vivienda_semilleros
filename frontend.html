@@ -57,9 +57,9 @@
         .ptip { position: relative; display: inline-flex; align-items: center; }
         .ptip-icon { cursor: help; color: #3a5575; font-size: 11px; margin-left: 5px; line-height: 1; transition: color .2s, text-shadow .2s; user-select: none; font-style: normal; }
         .ptip:hover .ptip-icon { color: #00ccff; text-shadow: 0 0 6px rgba(0,204,255,.6); }
-        .ptip-box { display: none; position: fixed; left: 0; top: 0; min-width: 250px; max-width: 310px; background: rgba(3,6,16,.97); border: 1px solid rgba(0,204,255,.25); border-left: 2px solid #00ccff; padding: 9px 11px; font-size: 9px; color: #8fb8cc; font-family: 'Share Tech Mono', monospace; line-height: 1.7; z-index: 9999; white-space: normal; text-transform: none; letter-spacing: .02em; font-weight: 400; box-shadow: 0 6px 24px rgba(0,204,255,.2); pointer-events: none; }
-        .ptip-box b { color: #00ccff; font-size: 9.5px; display: block; margin-bottom: 4px; letter-spacing: .05em; }
-        .ptip:hover .ptip-box { display: block; }
+        .ptip-box { display: none !important; } /* solo almacén de contenido; pintado por #globalTip */
+        #globalTip { display: none; position: fixed; left: 0; top: 0; min-width: 250px; max-width: 310px; background: rgba(3,6,16,.97); border: 1px solid rgba(0,204,255,.25); border-left: 2px solid #00ccff; padding: 9px 11px; font-size: 9px; color: #8fb8cc; font-family: 'Share Tech Mono', monospace; line-height: 1.7; z-index: 99999; white-space: normal; text-transform: none; letter-spacing: .02em; font-weight: 400; box-shadow: 0 6px 24px rgba(0,204,255,.2); pointer-events: none; }
+        #globalTip b { color: #00ccff; font-size: 9.5px; display: block; margin-bottom: 4px; letter-spacing: .05em; }
         .cyber-panel-orange .panel-header::before { color: #ff5e00; }
 
         .neon-text-green { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.8); }
@@ -218,6 +218,11 @@
             <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">OPERACIÓN DIARIA</button>
             <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">ANÁLISIS DE EJECUCIÓN</button>
             <button onclick="switchTab('inteligencia')" id="tab_inteligencia" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">INTELIGENCIA ESTRATÉGICA</button>
+        </div>
+
+        <!-- Breadcrumb Tab2: indicador de nivel de drill-down -->
+        <div id="tab2Breadcrumb" class="flex-1 items-center justify-center" style="display:none;">
+            <div id="tab2BreadcrumbContent" class="hud-font text-[10px] tracking-widest flex items-center gap-2"></div>
         </div>
 
         <!-- Filtros Integrados -->
@@ -421,8 +426,12 @@
     <!-- RANKING EJECUCIÓN FINANCIERA -->
     <div class="col-span-4 flex flex-col gap-3 w-full h-full min-h-0">
         <div class="cyber-panel p-3 flex flex-col flex-1 min-h-0">
-            <div class="panel-header flex justify-between">
-                <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="left:auto;right:0;"><b>¿QUÉ MUESTRA?</b>Barras apiladas por resolución: verde = pagado · naranja = pendiente. El % a la derecha indica la tasa de ejecución de cada resolución. Scroll vertical para navegar. Clic en una barra del Sankey izquierdo resalta la resolución aquí.</span></span></span>
+            <div class="panel-header flex justify-between items-center">
+                <span class="text-[#00ccff]">RANKING EJECUCIÓN FINANCIERA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Barras apiladas: verde = pagado · naranja = pendiente. Alterna entre vista por RESOLUCIÓN o por CIUDAD. Clic en nodo del Sankey resalta la barra correspondiente.</span></span></span>
+                <div class="flex gap-1 items-center">
+                    <button id="btnRankingRes" onclick="setRankingMode('res')" class="px-2 py-0.5 text-[9px] hud-font border border-[#00ff88] text-[#00ff88] bg-[#00ff88]/20 rounded transition-colors">RESOLUCIÓN</button>
+                    <button id="btnRankingCiu" onclick="setRankingMode('ciu')" class="px-2 py-0.5 text-[9px] hud-font border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors">CIUDAD</button>
+                </div>
                 <div class="flex gap-3 text-[9px] hud-font uppercase tracking-wider text-gray-400 items-center"><div class="flex gap-1 items-center"><div class="w-2 h-2 bg-[#00ff88]"></div>Pagado</div><div class="flex gap-1 items-center"><div class="w-2 h-2 bg-[#ff5e00]"></div>Pendiente</div></div>
             </div>
             <div id="chartBarExec" style="width: 100%; height: 100%;"></div>
@@ -434,132 +443,151 @@
     <!-- VISTA 2: ANÁLISIS DE EJECUCIÓN -->
     <div id="view_ejecucion" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0">
 
-        <!-- KPIs Tab 2 -->
+        <!-- KPIs Tab 2 — mismo formato que Tab 1 -->
         <div class="w-full grid grid-cols-5 gap-3 shrink-0">
-            <!-- KPI 1 -->
-            <div class="cyber-panel p-3 flex flex-col justify-between relative">
-                <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">BENEFICIARIOS ÚNICOS</div>
-                <div class="flex justify-between items-end">
+
+            <!-- KPI 1: Beneficiarios -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
                     <div class="flex flex-col">
-                        <div id="t2_kpiBen" class="text-lg font-bold neon-text-green hud-font">0</div>
-                        <div id="t2_kpiBenTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">de 0</div>
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">BENEFICIARIOS ÚNICOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS ÚNICOS</b>Conteo de beneficiarios únicos por documento en la selección activa vs. el total sin filtrar. El anillo y la barra muestran qué fracción del universo total representa el filtro activo.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t2_kpiBen" class="text-lg font-bold neon-text-green hud-font leading-none">0</div>
+                            <div id="t2_kpiBenTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
                     </div>
-                    <div class="relative w-12 h-12 flex-shrink-0">
-                        <svg class="w-12 h-12 transform -rotate-90">
-                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#142038" stroke-width="4" />
-                            <circle id="t2_circBen" cx="24" cy="24" r="20" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                    <div class="relative w-8 h-8 flex-shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90">
+                            <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
+                            <circle id="t2_circBen" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circBenTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ff88] hud-font font-bold">100%</div>
+                        <div id="t2_circBenTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ff88] hud-font font-bold">100%</div>
                     </div>
                 </div>
-                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
                     <div id="t2_lineBen" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 100%;"></div>
                 </div>
             </div>
-            
-                        <!-- KPI Transacciones -->
-            <div class="cyber-panel cyber-panel-purple p-3 flex flex-col justify-between relative">
-                <div class="text-[11px] font-bold text-[#b026ff] tracking-widest mb-1">PAGOS / REGISTROS</div>
-                <div class="flex justify-between items-end">
+
+            <!-- KPI 2: Registros Totales (cyan — informativo) -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
                     <div class="flex flex-col">
-                        <div id="t2_kpiReg" class="text-[18px] font-bold text-[#b026ff] hud-font">0</div>
-                        <div id="t2_kpiRegTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">de 0</div>
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">REGISTROS TOTALES <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>REGISTROS TOTALES</b>Total de filas tras el unpivot por periodo (beneficiarios × periodos de pago). Un beneficiario con 12 periodos genera 12 registros. Mide volumen transaccional, no beneficiarios únicos.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t2_kpiReg" class="text-lg font-bold text-[#00ccff] hud-font leading-none">0</div>
+                            <div id="t2_kpiRegTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
                     </div>
-                    <div class="relative w-12 h-12 flex-shrink-0">
-                        <svg class="w-12 h-12 transform -rotate-90">
-                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#2a0a4a" stroke-width="4" />
-                            <circle id="t2_circReg" cx="24" cy="24" r="20" fill="transparent" stroke="#b026ff" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                    <div class="relative w-8 h-8 flex-shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90">
+                            <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
+                            <circle id="t2_circReg" cx="16" cy="16" r="14" fill="transparent" stroke="#00ccff" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circRegTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#b026ff] hud-font font-bold">0%</div>
+                        <div id="t2_circRegTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ccff] hud-font font-bold">0%</div>
                     </div>
                 </div>
-                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
-                    <div id="t2_lineReg" class="h-full bg-[#b026ff] transition-all duration-1000" style="width: 0%;"></div>
+                <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
+                    <div id="t2_lineReg" class="h-full bg-[#00ccff] transition-all duration-1000" style="width: 0%;"></div>
                 </div>
             </div>
 
-<!-- KPI 2 (Avance) -->
-<div class="cyber-panel p-3 flex flex-col justify-between relative">
-    <div class="text-[11px] font-bold text-[#7890b5] tracking-widest mb-1">AVANCE PAGOS</div>
-    <div class="flex items-end justify-between mt-1">
-        <div>
-            <div id="t2_kpiAvance" class="text-[18px] font-bold text-[#00ff88] hud-font">0%</div>
-            <div id="t2_kpiAvanceTot" class="text-[12px] text-[#ff5e00] hud-font -mt-1 font-bold">Pend: 0%</div>
-        </div>
-        <div class="relative w-12 h-12 flex items-center justify-center">
-            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <!-- Background circle (Pending - Orange) -->
-                <path class="text-[#ff5e00]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
-                <!-- Foreground circle (Paid - Green) -->
-                <path id="t2_kpiAvanceRing" class="text-[#00ff88] transition-all duration-1000" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
-            </svg>
-        </div>
-    </div>
-</div>
-
-
-            <!-- KPI 4 -->
-            <div class="cyber-panel cyber-panel-blue p-3 flex flex-col justify-between relative">
-                <div class="text-[11px] font-bold text-[#00ccff] tracking-widest mb-1">TIPO NOV: <span id="t2_titleTNov">TODAS</span></div>
-                <div class="flex justify-between items-end">
-                    <div class="flex flex-col">
-                        <div id="t2_kpiTNov" class="text-[18px] font-bold text-[#00ccff] hud-font leading-tight">0</div>
-                        <div id="t2_kpiTNovTot" class="text-[9px] text-[#7890b5] hud-font mt-1 font-bold">Freq: 0</div>
+            <!-- KPI 3: Avance Pagos — formato idéntico Tab 1 -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex flex-col w-full h-full justify-between">
+                    <div class="flex justify-between items-start">
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">AVANCE PAGOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>AVANCE DE PAGOS</b>Proporción del capital ejecutado en la selección activa. Verde = % y $ ya desembolsados. Naranja = % y $ aún pendientes. La barra inferior divide pagado vs pendiente.</span></span></div>
+                        <div class="flex gap-2 text-[8px] uppercase tracking-wider text-gray-400">
+                            <div class="flex gap-1 items-center"><div class="w-1.5 h-1.5 bg-[#00ff88]"></div>Pag</div>
+                            <div class="flex gap-1 items-center"><div class="w-1.5 h-1.5 bg-[#ff5e00]"></div>Pend</div>
+                        </div>
                     </div>
-                    <div class="relative w-12 h-12 flex-shrink-0">
-                        <svg class="w-12 h-12 transform -rotate-90">
-                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#003366" stroke-width="4" />
-                            <circle id="t2_circTNov" cx="24" cy="24" r="20" fill="transparent" stroke="#00ccff" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
-                        </svg>
-                        <div id="t2_circTNovTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ccff] hud-font font-bold">0%</div>
+                    <div class="flex justify-between items-end mt-1 mb-1 w-full">
+                        <div class="flex items-baseline gap-1">
+                            <div id="t2_kpiAvancePct" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0%</div>
+                            <div id="t2_kpiAvancePagado" class="text-[10px] text-[#00ff88] hud-font font-bold">$0</div>
+                        </div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t2_kpiAvancePendPct" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">0%</div>
+                            <div id="t2_kpiAvancePendiente" class="text-[10px] text-[#ff5e00] hud-font font-bold">$0</div>
+                        </div>
                     </div>
                 </div>
-                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                <div class="w-full h-1 bg-[#ff5e00] mt-0.5 rounded overflow-hidden">
+                    <div id="t2_kpiAvanceBar" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- KPI 4: Tipo Novedad (cyan) -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
+                    <div class="flex flex-col">
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">TIPO NOV: <span id="t2_titleTNov" class="text-[#00ccff]">TODAS</span> <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>TIPO DE NOVEDAD ACTIVO</b>Beneficiarios únicos con el filtro de tipo de novedad activo. Cuando dice TODAS muestra el universo completo. El anillo refleja el % sobre el total sin filtrar.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t2_kpiTNov" class="text-lg font-bold text-[#00ccff] hud-font leading-none">0</div>
+                            <div id="t2_kpiTNovTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
+                    </div>
+                    <div class="relative w-8 h-8 flex-shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90">
+                            <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
+                            <circle id="t2_circTNov" cx="16" cy="16" r="14" fill="transparent" stroke="#00ccff" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                        </svg>
+                        <div id="t2_circTNovTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ccff] hud-font font-bold">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
                     <div id="t2_lineTNov" class="h-full bg-[#00ccff] transition-all duration-1000" style="width: 0%;"></div>
                 </div>
             </div>
 
-            <!-- KPI 5 -->
-            <div class="cyber-panel p-3 flex flex-col justify-between relative">
-                <div class="text-[11px] font-bold text-[#00ff88] tracking-widest mb-1">ESTADO: <span id="t2_titleEst">TODAS</span></div>
-                <div class="flex justify-between items-end">
+            <!-- KPI 5: Estado Pago (green) -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
                     <div class="flex flex-col">
-                        <div id="t2_kpiEst" class="text-[18px] font-bold text-[#00ff88] hud-font">0</div>
-                        <div id="t2_kpiEstTot" class="text-[9px] text-[#7890b5] hud-font -mt-1 font-bold">Freq: 0</div>
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">ESTADO: <span id="t2_titleEst" class="text-[#00ff88]">TODAS</span> <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>ESTADO DE PAGO ACTIVO</b>Beneficiarios filtrados por estado de pago (PAGADO / PENDIENTE / TODAS). Combinar con filtros de ciudad o novedad para aislar casos específicos. El anillo muestra el % sobre el total.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t2_kpiEst" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0</div>
+                            <div id="t2_kpiEstTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
                     </div>
-                    <div class="relative w-12 h-12 flex-shrink-0">
-                        <svg class="w-12 h-12 transform -rotate-90">
-                            <circle cx="24" cy="24" r="20" fill="transparent" stroke="#142038" stroke-width="4" />
-                            <circle id="t2_circEst" cx="24" cy="24" r="20" fill="transparent" stroke="#00ff88" stroke-width="4" stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
+                    <div class="relative w-8 h-8 flex-shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90">
+                            <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
+                            <circle id="t2_circEst" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circEstTxt" class="absolute inset-0 flex items-center justify-center text-[11px] text-[#00ff88] hud-font font-bold">0%</div>
+                        <div id="t2_circEstTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ff88] hud-font font-bold">0%</div>
                     </div>
                 </div>
-                <div class="w-full h-1.5 bg-[#142038] mt-2 rounded overflow-hidden">
+                <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
                     <div id="t2_lineEst" class="h-full bg-[#00ff88] transition-all duration-1000" style="width: 0%;"></div>
                 </div>
             </div>
+
         </div>
 
         <div class="w-full grid grid-cols-12 gap-3 flex-1 min-h-0">
             <!-- Columna Izquierda: Mapa y Novedad -->
         <div class="col-span-12 xl:col-span-3 flex flex-col gap-3 min-h-0">
             <!-- Mapa Regional -->
-            <div class="cyber-panel p-3 flex flex-col relative shrink-0" style="height: 425px;">
+            <div class="cyber-panel p-3 flex flex-col relative" style="flex: 1; min-height: 0;">
                         <div class="flex items-center w-full justify-between gap-1 mb-2">
                             <div class="panel-header flex items-center shrink overflow-hidden">
-                                <span id="tab2MapTitle" class="truncate"><span class="text-[#00ccff]">EJECUCIÓN REGIONAL TERRITORIAL</span></span>
+                                <span id="tab2MapTitle" class="truncate"><span class="text-[#00ccff]">EJECUCIÓN REGIONAL TERRITORIAL <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Mapa de Colombia con burbujas por ciudad proporcionales al valor total asignado. El color va de rojo (menor ejecución) a verde (mayor ejecución). Clic en una burbuja filtra todo el dashboard por esa ciudad. Clic en VOLVER sube un nivel.</span></span></span></span>
                             </div>
                             <button id="btnTab2Back" onclick="tab2GoBack()" class="hidden shrink-0 bg-[#0a1128] border border-[#00ccff] text-[#00ccff] hover:bg-[#00ccff] hover:text-[#030610] px-3 py-1 text-[10px] font-bold rounded cursor-pointer transition-all uppercase tracking-widest z-20 whitespace-nowrap">
                                 &larr; VOLVER
                             </button>
                         </div>
-                <div id="chartExecMap" style="width: 100%; height: 380px;"></div>
+                <div class="relative w-full flex-1" style="min-height: 0;">
+                    <div id="chartExecMap" class="absolute inset-0 w-full h-full"></div>
+                </div>
             </div>
                 <!-- Treemap Panel -->
                 <div id="panelTreemap" class="cyber-panel p-3 flex flex-col flex-1 min-h-0" style="display: flex;">
                     <div class="panel-header mb-2 flex justify-between items-center">
-                        <span class="text-[#00ff88] text-[10px]">PROPORCIÓN DE EJECUCIÓN (TAMAÑO = VALOR TOTAL)</span>
+                        <span class="text-[#00ff88]">PROPORCIÓN DE EJECUCIÓN <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Treemap donde el tamaño de cada celda representa el valor total asignado por ciudad. El color refleja la tasa de ejecución: verde = alta ejecución, rojo = baja. Permite detectar ciudades con presupuesto alto pero baja ejecución.</span></span></span>
+                        <span class="text-[9px] hud-font text-gray-500">TAMAÑO = VALOR TOTAL</span>
                     </div>
                     <div class="relative w-full flex-1" style="min-height: 0;">
                         <div id="chartTreemap" class="absolute inset-0 w-full h-full"></div>
@@ -571,12 +599,17 @@
         <div class="col-span-12 xl:col-span-9 flex flex-col min-h-0">
             <div class="cyber-panel p-3 w-full flex flex-col flex-1 min-h-0 relative">
                 <div class="panel-header flex-col md:flex-row gap-2 items-start md:items-center mb-4">
-                    <span>TERMINAL_BASE_DE_DATOS</span>
-                    <div class="flex items-center gap-2">
+                    <span class="text-[#00ccff]">BASE DE DATOS · SEMILLEROS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Registro completo de beneficiarios con todos sus periodos de pago. Cada fila es un pago de un periodo específico. Usa la búsqueda global para filtrar por cédula, nombre o arrendador. Haz clic en los encabezados para ordenar columnas.</span></span></span>
+                    <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-[#00ff88] text-[10px] hud-font">BÚSQUEDA GLOBAL:</span>
                         <input type="text" id="globalSearch" onkeyup="applyFilters()" placeholder="Cédula, Beneficiario o Arrendador..."
                             class="bg-[#142038] border border-[#00ff88] text-white px-2 py-1 text-xs w-64 outline-none hud-font placeholder-gray-600 transition-all focus:shadow-[0_0_10px_rgba(0,255,136,0.5)]">
                         <span id="tableCounter" class="hidden"></span>
+                        <button onclick="exportFiltered()" title="Descargar registros filtrados actualmente"
+                            class="h-[26px] px-3 bg-[#142038] text-[#00ccff] text-[10px] font-bold tracking-widest border border-[#00ccff] hover:bg-[#00ccff] hover:text-black transition-all whitespace-nowrap"
+                            style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">
+                            💾 FILTRADOS
+                        </button>
                     </div>
                 </div>
                 <div class="overflow-x-auto overflow-y-auto flex-grow" style="height: 100%;">
@@ -856,8 +889,24 @@
             renderExecutionView();
         }
         let expandedCity = null;
-        let currentTableData = []; 
+        let currentTableData = [];
         let currentTab = 'operacion';
+        let rankingMode = 'res'; // 'res' | 'ciu'
+
+        function setRankingMode(mode) {
+            rankingMode = mode;
+            let bRes = document.getElementById('btnRankingRes');
+            let bCiu = document.getElementById('btnRankingCiu');
+            if (bRes && bCiu) {
+                bRes.className = mode === 'res'
+                    ? 'px-2 py-0.5 text-[9px] hud-font border border-[#00ff88] text-[#00ff88] bg-[#00ff88]/20 rounded transition-colors'
+                    : 'px-2 py-0.5 text-[9px] hud-font border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors';
+                bCiu.className = mode === 'ciu'
+                    ? 'px-2 py-0.5 text-[9px] hud-font border border-[#ff5e00] text-[#ff5e00] bg-[#ff5e00]/20 rounded transition-colors'
+                    : 'px-2 py-0.5 text-[9px] hud-font border border-[#142038] text-gray-500 hover:text-[#ff5e00] hover:border-[#ff5e00] rounded transition-colors';
+            }
+            renderExecutionView();
+        }
 
         
         let avanceSortMode = 'vol';
@@ -893,10 +942,10 @@
                 }
             });
 
-            // Resize charts for the active tab
-            setTimeout(() => {
-                Object.values(charts).forEach(c => c && c.resize());
-            }, 50);
+            // Resize charts for the active tab — two passes: 50ms (fast) + 200ms (after flex layout resolves)
+            setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 50);
+            setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 200);
+            updateBreadcrumb();
         }
         
         
@@ -925,7 +974,7 @@
         };
         
         const cityCoords = {
-            "SIN CIUDAD": [-74.08, 3.20],
+            "SIN CIUDAD": [-73.5, 4.3],
             "OTRA": [-74.08, 3.20],
             "BOGOTA": [-74.08, 4.60], "BOGOTÁ": [-74.08, 4.60], "BOGOTÁ, D.C.": [-74.08, 4.60],
             "MEDELLIN": [-75.56, 6.25], "MEDELLÍN": [-75.56, 6.25], "CALI": [-76.52, 3.45], "SANTIAGO DE CALI": [-76.52, 3.45],
@@ -966,6 +1015,22 @@ function tab2GoBack() {
     }
 }
 
+function updateBreadcrumb() {
+    let bc = document.getElementById('tab2Breadcrumb');
+    let bcContent = document.getElementById('tab2BreadcrumbContent');
+    if (!bc || !bcContent) return;
+    if (currentTab !== 'ejecucion' || tab2Level === 0) {
+        bc.style.display = 'none';
+        return;
+    }
+    bc.style.display = 'flex';
+    if (tab2Level === 1) {
+        bcContent.innerHTML = `<span style="color:#7890b5">◈ CIUDAD</span><span style="color:#00ccff;margin:0 6px">›</span><span style="color:#00ff88;text-shadow:0 0 8px rgba(0,255,136,0.6)">${tab2SelectedCity}</span>`;
+    } else if (tab2Level === 2) {
+        bcContent.innerHTML = `<span style="color:#00ff88;text-shadow:0 0 8px rgba(0,255,136,0.6)">${tab2SelectedCity}</span><span style="color:#00ccff;margin:0 6px">›</span><span style="color:#7890b5">RES</span><span style="color:#ff5e00;margin-left:4px;text-shadow:0 0 8px rgba(255,94,0,0.6)">${tab2SelectedRes}</span>`;
+    }
+}
+
 function getQuartileColor(pct) {
     if (pct >= 75) return '#00ff88'; // Verde
     if (pct >= 50) return '#ffcc00'; // Amarillo
@@ -996,9 +1061,12 @@ function syncFilterToMapClick(filterId, value) {
     const menu = container.querySelector('.custom-menu');
     if(!btnSpan || !menu) return;
     let checkboxes = menu.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(cb => { cb.checked = value ? (cb.value === value) : false; });
+    checkboxes.forEach(cb => {
+        cb.checked = value ? (cb.value === value || cb.value.replace(/RESOLUCI[OÓ]N\s+/i, '') === value) : false;
+    });
+    let checked = Array.from(checkboxes).filter(cb => cb.checked);
     if(value) {
-        btnSpan.innerText = value;
+        btnSpan.innerText = checked.length === 1 ? checked[0].value : value;
     } else {
         if(filterId === 'f_ciudad') btnSpan.innerText = 'CIUDAD';
         else if(filterId === 'f_resolucion') btnSpan.innerText = 'RESOLUCIÓN';
@@ -1007,6 +1075,7 @@ function syncFilterToMapClick(filterId, value) {
 }
 function renderTab2Map() {
     if (!charts.execMap) return;
+    updateBreadcrumb();
 
     if (!charts.execMap.__hasClickListenerTab2) {
         charts.execMap.on('click', function(params) {
@@ -1018,9 +1087,41 @@ function renderTab2Map() {
                 tab2Level = 2;
                 tab2SelectedRes = params.name;
                 syncFilterToMapClick('f_resolucion', params.name);
+            } else if (tab2Level === 2 && params.data && params.data._isBen) {
+                // Nivel 3: click beneficiario → filtrar tabla por cédula
+                let searchVal = params.data.trueDoc || params.data.trueName || '';
+                if (searchVal) {
+                    document.getElementById('globalSearch').value = searchVal;
+                    setTimeout(() => applyFilters(), 0);
+                }
             }
         });
         charts.execMap.__hasClickListenerTab2 = true;
+    }
+
+    if (!charts.treemap.__hasClickListenerTreemap) {
+        charts.treemap.on('click', function(params) {
+            if (!params.data) return;
+            let name = params.data.name || '';
+            if (tab2Level === 0) {
+                // Click ciudad en treemap → nivel 1
+                tab2Level = 1;
+                tab2SelectedCity = name;
+                syncFilterToMapClick('f_ciudad', name);
+            } else if (tab2Level === 1) {
+                // Click resolución — nombre es "RES XXXX"
+                let resName = name.replace(/^RES\s+/i, '');
+                tab2Level = 2;
+                tab2SelectedRes = resName;
+                syncFilterToMapClick('f_resolucion', resName);
+            } else if (tab2Level === 2) {
+                // Click beneficiario → filtrar tabla por cédula
+                let searchVal = params.data.trueDoc || name;
+                document.getElementById('globalSearch').value = searchVal;
+                setTimeout(() => applyFilters(), 0);
+            }
+        });
+        charts.treemap.__hasClickListenerTreemap = true;
     }
 
     const btnBack = document.getElementById('btnTab2Back');
@@ -1030,12 +1131,12 @@ function renderTab2Map() {
     if (tab2Level === 0) {
         btnBack.classList.add('hidden');
         
-        title.innerHTML = '<span class="text-[#00ccff]">EJECUCIÓN REGIONAL TERRITORIAL</span>';
-        
+        title.innerHTML = '<span class="text-[#00ccff]">EJECUCIÓN REGIONAL TERRITORIAL <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>¿QUÉ MUESTRA?</b>Mapa de Colombia con burbujas por ciudad proporcionales al valor total asignado. El color va de naranja (menor ejecución) a verde (mayor ejecución). Clic en una burbuja filtra por esa ciudad. Clic en VOLVER sube un nivel.</span></span></span>';
+
         let mapDataObj = {};
         filteredData.forEach(d => {
             let ciu = d[col.ciu];
-            if(ciu && ciu !== 'SIN CIUDAD' && ciu !== '') {
+            if(ciu && ciu !== '') {
                 if(!mapDataObj[ciu]) mapDataObj[ciu] = { pagado: 0, pendiente: 0, total: 0, docs: new Set() };
                 let valPagado = parseFloat(d[col.val]) || 0;
                 let valPend = parseFloat(d[col.pend]) || 0;
@@ -1045,10 +1146,23 @@ function renderTab2Map() {
             }
         });
 
-        let maxVal = Math.max(...Object.values(mapDataObj).map(x => x.total), 1);
-        let minVal = Math.min(...Object.values(mapDataObj).map(x => x.total), 0);
+        let realCitiesT2 = Object.entries(mapDataObj).filter(e => e[0].toUpperCase() !== 'SIN CIUDAD');
+        let sinCiuDataT2 = Object.entries(mapDataObj).filter(e => e[0].toUpperCase() === 'SIN CIUDAD');
+        let sinCiuEntry = sinCiuDataT2.length > 0
+            ? { total: sinCiuDataT2[0][1].total, pagado: sinCiuDataT2[0][1].pagado, pendiente: sinCiuDataT2[0][1].pendiente }
+            : { total: 0, pagado: 0, pendiente: 0 };
+        let sinCiuSeriesData = [{
+            name: 'SIN CIUDAD',
+            value: [-73.5, 4.3, sinCiuEntry.total],
+            pagado: sinCiuEntry.pagado,
+            pendiente: sinCiuEntry.pendiente,
+            label: { show: true, formatter: 'SIN\nCIUDAD', color: '#bf00ff', fontSize: 7, fontFamily: 'Share Tech Mono', position: 'right' }
+        }];
 
-        let mapNodes = Object.entries(mapDataObj).map(e => {
+        let maxVal = Math.max(...realCitiesT2.map(x => x[1].total), 1);
+        let minVal = Math.min(...realCitiesT2.map(x => x[1].total), 0);
+
+        let mapNodes = realCitiesT2.map(e => {
             let cityName = e[0].toUpperCase();
             let coords = cityCoords[cityName] || [-74 + (Math.random()-0.5)*2, 4 + (Math.random()-0.5)*2];
             let labelPos = 'right';
@@ -1139,22 +1253,23 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
                 min: minVal,
                 max: maxVal,
                 calculable: false,
-                orient: 'horizontal',
-                left: 'center',
-                bottom: 4,
-                itemWidth: 90,
-                itemHeight: 7,
+                orient: 'vertical',
+                left: 8,
+                top: 8,
+                itemWidth: 7,
+                itemHeight: 60,
                 inRange: { color: ['#ff5e00', '#ffcc00', '#00ff88'] },
                 text: ['$' + Math.round(maxVal).toLocaleString('es-CO'), '$' + Math.round(minVal).toLocaleString('es-CO')],
-                textStyle: { color: '#c8ddf0', fontSize: 8, fontFamily: 'Share Tech Mono' },
+                textStyle: { color: '#c8ddf0', fontSize: 7, fontFamily: 'Share Tech Mono' },
             },
             geo: {
                 map: 'colombia',
                 roam: true,
                 boundingCoords: [
-                    [-76.8, 11.3], // Top-Left (Quibdo/Cali lon, Santa Marta lat)
-                    [-70.5, 3.2]   // Bottom-Right (Arauca lon, Cali lat)
+                    [-77.0, 11.5], // Top-Left — Santa Marta cerca del borde superior
+                    [-70.0, 3.2]   // Bottom-Right — cerca de Santiago de Cali
                 ],
+                zoom: 1.2,
                 aspectScale: 1,
                 itemStyle: { areaColor: '#071022', borderColor: '#00ccff', borderWidth: 0.5 },
                 emphasis: { itemStyle: { areaColor: '#071022', shadowBlur: 0, borderWidth: 0.5 }, label: { show: false } }
@@ -1175,11 +1290,19 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
                     rippleEffect: { brushType: 'stroke', scale: 3 },
                     symbolSize: val => Math.max(4, (val[2] / maxVal) * 15),
                     data: mapNodes
+                },
+                {
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    zlevel: 3,
+                    symbolSize: 14,
+                    itemStyle: { color: '#bf00ff', shadowBlur: 10, shadowColor: '#bf00ff' },
+                    rippleEffect: { period: 3, scale: 3, brushType: 'stroke' },
+                    label: { show: true, color: '#bf00ff', fontSize: 7, fontFamily: 'Share Tech Mono', position: 'right', formatter: 'SIN\nCIUDAD' },
+                    data: sinCiuSeriesData
                 }
             ]
         }, true);
-        
-        
 
     } else if (tab2Level === 1) {
         btnBack.classList.remove('hidden');
@@ -1463,7 +1586,7 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
             else if (b.execPct >= 50) catIndex = 1;
             else if (b.execPct >= 25) catIndex = 2;
             nodes.push({ name: bName + "_" + i, category: catIndex,
-                trueName: bName,
+                trueName: bName, trueDoc: b.raw[col.doc] || '',
                 value: [nx, ny],
                 symbolSize: size, itemStyle: { color: color, opacity: 0.8 },
                 z: 2, dataValue: [b.tot, b.execPct, b.pag], _isBen: true
@@ -1487,7 +1610,7 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
 Total: <span style="float:right; margin-left:15px;">${formatMoney(tot)}</span><br/>
 Pagado: <span style="float:right; margin-left:15px; color:#00ff88;">${formatMoney(pag)} (${execPct.toFixed(1)}%)</span><br/>
 Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatMoney(pen)} (${pctPen.toFixed(1)}%)</span>`;
-            return { name: shortName, value: tot, itemStyle: { color: color }, tooltip: { formatter: htm } };
+            return { name: shortName, value: tot, itemStyle: { color: color }, tooltip: { formatter: htm }, trueDoc: b.raw[col.doc] || '' };
         });
             setTimeout(() => {
                 if(charts.treemap) {
@@ -1555,7 +1678,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
             charts.map = echarts.init(document.getElementById('mapChart'), 'dark');
             charts.sankey = echarts.init(document.getElementById('chartSankey'), 'dark');
             charts.barExec = echarts.init(document.getElementById('chartBarExec'), 'dark');
-            charts.execMap = echarts.init(document.getElementById('chartExecMap'), 'dark', { height: 380 });
+            charts.execMap = echarts.init(document.getElementById('chartExecMap'), 'dark');
         charts.treemap = echarts.init(document.getElementById('chartTreemap'));
         if(document.getElementById('execRadar')) charts.execRadar = echarts.init(document.getElementById('execRadar'));
         if(document.getElementById('execHeatmap')) charts.execHeatmap = echarts.init(document.getElementById('execHeatmap'));
@@ -1635,13 +1758,22 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                 if(allData.length > 0) {
                     let r = allData[0];
                     col.doc = findKey(r, 'NUMERO DE DOCUMENTO'); col.ciu = findKey(r, 'CIUDAD');
-                    col.res = findKey(r, 'RESOLUCION'); col.est = findKey(r, 'ESTADO GENERAL');
+                    col.res = Object.keys(r).find(k => k.toUpperCase() === 'RESOLUCION') || findKey(r, 'RESOLUCION');
+                    col.est = findKey(r, 'ESTADO GENERAL');
                     col.leg = findKey(r, 'LEGALIZADO');
                     col.per = findKey(r, 'PERIODO_PAGO'); col.val = findKey(r, 'VALOR_PAGADO');
                     col.obs = findKey(r, 'OBSERVACIONES'); col.ben = findKey(r, 'NOMBRE BENEFICIARIO');
                     col.nov = findKey(r, 'PRESENTA NOVEDAD');
                     col.fnov = findKey(r, 'FECHA DE LA NOVEDAD');
                     col.tnov = findKey(r, 'TIPO DE NOVEDAD');
+                    col.estAct = findKey(r, 'ESTADO ACTUAL');
+                    col.pend = findKey(r, 'PENDIENTE POR PAGAR');
+                    col.valMen = findKey(r, 'VALOR SUBSIDIO AL CANON ARRIENDO MENSUAL');
+                    col.arrDoc = findKey(r, '# DOCUMENTO DEL ARRENDADOR');
+                    col.arrNom = findKey(r, 'NOMBRE ARRENDADOR');
+                    col.fecIni = findKey(r, 'FECHA INICIO');
+                    col.id = findKey(r, 'ID');
+                    col.docPpt = findKey(r, 'NUMERO DE DOCUMENTO PPT') || col.doc;
 
         // Normalize strings for TIPO NOVEDAD
         allData.forEach(d => {
@@ -1660,14 +1792,6 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
         
         });
 
-                    col.estAct = findKey(r, 'ESTADO ACTUAL');
-                    col.pend = findKey(r, 'PENDIENTE POR PAGAR');
-                    col.valMen = findKey(r, 'VALOR SUBSIDIO AL CANON ARRIENDO MENSUAL');
-                    col.arrDoc = findKey(r, '# DOCUMENTO DEL ARRENDADOR');
-                    col.arrNom = findKey(r, 'NOMBRE ARRENDADOR');
-                    col.fecIni = findKey(r, 'FECHA INICIO');
-                    col.id = findKey(r, 'ID');
-                    col.docPpt = findKey(r, 'NUMERO DE DOCUMENTO PPT') || col.doc;
                 }
                 filteredData = [...allData];
                 populateDropdowns();
@@ -1802,9 +1926,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                     itemStyle: { color: colorLvl1 }
                 });
                 
-                if(mode === 'res_ciu') {
-                    barData.push({ name: lvl1, pagado: lvl1Pagado, pendiente: lvl1Pendiente, total: lvl1Total, pct: lvl1Pct });
-                }
+                // barData se construye después del loop usando citiesMap/resMap
             });
             
             // Assign colors and values to Lvl2 nodes
@@ -1848,29 +1970,14 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
             });
             activeLinks.forEach(l => sankeyLinks.push(l));
 
-            // Construir Barras Ranking
-            if (mode === 'ciu_res') {
-                const resMap = {};
-                personMap.forEach(d => {
-                    if(!resMap[d.res]) resMap[d.res] = {pagado:0, pendiente:0};
-                    resMap[d.res].pagado += d.pagado;
-                    resMap[d.res].pendiente += d.pendiente;
-                });
-                Object.keys(resMap).forEach(res => {
-                    const tot = resMap[res].pagado + resMap[res].pendiente;
-                    if(tot > 0) {
-                        barData.push({
-                            name: res,
-                            pagado: resMap[res].pagado,
-                            pendiente: resMap[res].pendiente,
-                            total: tot,
-                            pct: (resMap[res].pagado / tot * 100).toFixed(1)
-                        });
-                    }
-                });
-            }
-            
-            barData.sort((a,b) => a.total - b.total); // Para Echarts Bar, ascendente pinta de abajo hacia arriba
+            // Construir barData según rankingMode (independiente del modo del Sankey)
+            const rankingSource = rankingMode === 'ciu' ? citiesMap : resMap;
+            Object.entries(rankingSource).forEach(([name, v]) => {
+                const tot = v.pagado + v.pendiente;
+                if (tot > 0) barData.push({ name, pagado: v.pagado, pendiente: v.pendiente, total: tot, pct: (v.pagado / tot * 100).toFixed(1) });
+            });
+
+            barData.sort((a,b) => a.total - b.total); // ascendente → ECharts pinta de abajo hacia arriba
 
 
             // --- INICIO LÓGICA DE CLICK-TO-FOCUS ---
@@ -1902,6 +2009,13 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                 });
             }
             // --- FIN LÓGICA DE CLICK-TO-FOCUS ---
+
+            // Determinar qué barra del RANKING resaltar
+            let highlightBarName = null;
+            if (activeSankeyNode) {
+                let cleanNode = activeSankeyNode.replace(/ \(Ciu\)$| \(Res\)$/, '').replace(/\n.*/, '');
+                if (barData.some(d => d.name === cleanNode)) highlightBarName = cleanNode;
+            }
 
             // Configurar Sankey
             charts.sankey.setOption({
@@ -2108,16 +2222,33 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
                 series: [
                     { name: 'Pagado', type: 'bar', stack: 'total',
                       itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#00ff88'},{offset:1,color:'rgba(0,255,136,0.15)'}]), borderRadius: [0,0,0,0] },
-                      data: barData.map(d => d.pagado) },
+                      data: barData.map(d => {
+                          if (!highlightBarName || d.name === highlightBarName) return d.pagado;
+                          return { value: d.pagado, itemStyle: { color: 'rgba(0,255,136,0.06)' } };
+                      }) },
                     { name: 'Pendiente', type: 'bar', stack: 'total',
                       itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#ff5e00'},{offset:1,color:'rgba(255,94,0,0.15)'}]), borderRadius: [0,4,4,0] },
-                      data: barData.map(d => d.pendiente),
+                      data: barData.map(d => {
+                          if (!highlightBarName || d.name === highlightBarName) return d.pendiente;
+                          return { value: d.pendiente, itemStyle: { color: 'rgba(255,94,0,0.06)' } };
+                      }),
                       label: { show: true, position: 'right', color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono',
                         formatter: (params) => { let d = barData[params.dataIndex]; let tot = d.pagado + d.pendiente; return tot > 0 ? (d.pagado/tot*100).toFixed(0)+'%' : '0%'; }
                       }
                     }
                 ]
             }, true);
+            // Scroll RANKING hasta la resolución resaltada
+            if (highlightBarName) {
+                let hIdx = barData.findIndex(d => d.name === highlightBarName);
+                if (hIdx >= 0) {
+                    charts.barExec.dispatchAction({
+                        type: 'dataZoom', dataZoomIndex: 0,
+                        startValue: Math.max(0, hIdx - 3),
+                        endValue: Math.min(barData.length - 1, hIdx + 6)
+                    });
+                }
+            }
             
         }
 
@@ -2158,10 +2289,10 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
             fill('f_estact', getUnique(col.estAct));
             
             initMultiSelect('f_resolucion', 'RESOLUCIÓN');
-            initMultiSelect('f_ciudad', 'CIUDAD');
+            initMultiSelect('f_ciudad', 'CIUDAD', { excludeVal: 'SIN CIUDAD' });
             initMultiSelect('f_periodo', 'PERIODO');
-            
-            initMultiSelect('f_tnov', 'TIPO NOVEDAD');
+
+            initMultiSelect('f_tnov', 'TIPO NOVEDAD', { excludeVal: 'NINGUNA' });
             initMultiSelect('f_estact', 'ESTADO ACTUAL');
 fill('f_estado_pago', ['PAGADO', 'PENDIENTE']);
 initMultiSelect('f_estado_pago', 'ESTADO PAGO');
@@ -2173,22 +2304,41 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
             return sel.getCustomValues ? sel.getCustomValues() : sel.value;
         }
 
-        function initMultiSelect(selectId, defaultText) {
+        function initMultiSelect(selectId, defaultText, opts) {
+            opts = opts || {};
             const select = document.getElementById(selectId);
             if(select.getCustomValues) return; // already init
-            
+
             select.style.display = 'none';
 
             const container = document.createElement('div');
             container.className = 'relative w-full';
-            
+
             const btn = document.createElement('div');
             btn.className = 'h-[26px] px-2 bg-[#142038] text-[#00ff88] text-[10px] border border-[#1f2940] outline-none hud-font cursor-pointer flex items-center justify-between whitespace-nowrap overflow-hidden';
             btn.innerHTML = `<span class="truncate">${defaultText}</span> <svg class="w-3 h-3 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`;
-            
+            select.__filterBtn = btn;
+
             const menu = document.createElement('div');
             menu.className = 'absolute top-full left-0 mt-1 w-56 bg-[#030610] border border-[#00ff88] z-50 hidden flex-col max-h-48 overflow-y-auto hud-font shadow-[0_0_15px_rgba(0,255,136,0.3)] custom-menu scrollbar-thin';
-            
+
+            // Fila de acción rápida "TODAS (excl. X)" si se provee excludeVal
+            if (opts.excludeVal) {
+                const quickRow = document.createElement('div');
+                quickRow.className = 'px-2 py-1 text-[10px] text-[#ffcc00] hover:bg-[#142038] cursor-pointer border-b border-[#ffcc00]/30 font-bold tracking-wide';
+                quickRow.textContent = '◉ TODAS (excl. ' + opts.excludeVal + ')';
+                quickRow.onclick = (e) => {
+                    e.stopPropagation();
+                    menu.querySelectorAll('input[type=checkbox]').forEach(cb => {
+                        cb.checked = (cb.value !== opts.excludeVal);
+                    });
+                    let checked = Array.from(menu.querySelectorAll('input:checked'));
+                    btn.querySelector('span').innerText = checked.length + ' SELECCIONES';
+                    applyFilters();
+                };
+                menu.appendChild(quickRow);
+            }
+
             Array.from(select.options).forEach((opt, idx) => {
                 if (idx === 0) return; // Skip TODAS
                 const label = document.createElement('label');
@@ -2252,6 +2402,25 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
             };
         }
 
+        function updateFilterButtonColors() {
+            ['f_resolucion', 'f_ciudad', 'f_periodo', 'f_tnov', 'f_estact', 'f_estado_pago'].forEach(id => {
+                let sel = document.getElementById(id);
+                if (!sel || !sel.__filterBtn) return;
+                let val = sel.getCustomValues ? sel.getCustomValues() : sel.value;
+                let isActive = val !== "TODAS";
+                let btn = sel.__filterBtn;
+                if (isActive) {
+                    btn.style.color = '#ff5e00';
+                    btn.style.borderColor = 'rgba(255,94,0,0.5)';
+                    btn.style.textShadow = '0 0 8px rgba(255,94,0,0.4)';
+                } else {
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                    btn.style.textShadow = '';
+                }
+            });
+        }
+
         function resetFilters() {
             ['f_resolucion', 'f_ciudad', 'f_periodo', 'f_tnov', 'f_estact'].forEach(id => {
                 let sel = document.getElementById(id);
@@ -2311,6 +2480,7 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
     }
             }
             updateDashboard();
+            updateFilterButtonColors();
         }
 
         let sortCol = null;
@@ -2456,32 +2626,126 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
             }
         });
 
-        function downloadDataset() {
-            if(!allData || allData.length === 0) return;
-            let headers = Object.keys(allData[0]);
-            let csvContent = "\uFEFF" + headers.join(";") + "\n";
-            
-            allData.forEach(row => {
-                let rowValues = headers.map(h => {
+        function buildCsv(data, filename) {
+            if(!data || data.length === 0) return;
+            let allHeaders = Object.keys(data[0]).filter(h => h && h.trim() !== '');
+            let txtCols = new Set([col.id, col.doc, col.docPpt, col.arrDoc]);
+            function xe(v) { return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+            let xml = '<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?>' +
+                '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">' +
+                '<Styles><Style ss:ID="t"><NumberFormat ss:Format="@"/></Style></Styles>' +
+                '<Worksheet ss:Name="Data"><Table>';
+            xml += '<Row>' + allHeaders.map(h => '<Cell ss:StyleID="t"><Data ss:Type="String">' + xe(h) + '</Data></Cell>').join('') + '</Row>';
+            data.forEach(row => {
+                xml += '<Row>' + allHeaders.map(h => {
                     let val = row[h];
-                    if(val === null || val === undefined) return '""';
-                    return '"' + String(val).replace(/"/g, '""') + '"';
-                });
-                csvContent += rowValues.join(";") + "\n";
+                    if (val === null || val === undefined || val === '') return '<Cell><Data ss:Type="String"></Data></Cell>';
+                    let s = String(val).replace(/\r?\n/g,' ');
+                    if (txtCols.has(h)) return '<Cell ss:StyleID="t"><Data ss:Type="String">' + xe(s) + '</Data></Cell>';
+                    if (typeof val === 'number') return '<Cell><Data ss:Type="Number">' + xe(s) + '</Data></Cell>';
+                    return '<Cell><Data ss:Type="String">' + xe(s) + '</Data></Cell>';
+                }).join('') + '</Row>';
             });
-            
-            let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            xml += '</Table></Worksheet></Workbook>';
+            let blob = new Blob([xml], { type: 'application/vnd.ms-excel' });
             let link = document.createElement("a");
-            if (link.download !== undefined) {
-                let url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", "Minvivienda_Dataset.csv");
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
+            link.href = URL.createObjectURL(blob);
+            link.download = filename.replace(/\.csv$/i, '.xls');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
+
+        function exportData() {
+            buildCsv(allData, "Semilleros_TODOS_" + new Date().toISOString().slice(0,10) + ".csv");
+        }
+
+        function exportFiltered() {
+            if(!filteredData || filteredData.length === 0) return;
+
+            let allKeys = Object.keys(filteredData[0]).filter(k => k && k.trim() !== '' && k !== 'undefined');
+            // Todas las variantes de LEGALIZADO (typos incluidos en la fuente)
+            let legKeys = allKeys.filter(k => /LEGAL/i.test(k));
+            // Columna de total pagado acumulado (distinta de VALOR_PAGADO por cuota)
+            let totalPagadoKey = allKeys.find(k => /TOTAL PAGADO/i.test(k)) || col.val;
+
+            // Deduplicar: una fila por (documento + resolución)
+            let seen = new Map();
+            filteredData.forEach(d => {
+                let mapKey = String(d[col.doc] || '').trim() + '|||' + String(d[col.res] || '').trim();
+                if (!seen.has(mapKey)) {
+                    let legVal = legKeys.map(k => d[k]).filter(v => v && String(v).trim() !== '')[0] || '';
+                    let obsSet = new Set();
+                    let tnovSet = new Set();
+                    let o = d[col.obs];   if (o && String(o).trim())     obsSet.add(String(o).trim());
+                    let t = d[col.tnov];  if (t && String(t).trim())     tnovSet.add(String(t).trim());
+                    let fn = d[col.fnov]; let lastFnov = (fn && String(fn).trim()) ? String(fn).trim() : '';
+                    let ea = d[col.estAct]; let lastEstAct = (ea && String(ea).trim()) ? String(ea).trim() : '';
+                    seen.set(mapKey, { row: d, leg: legVal, obsSet, tnovSet, lastFnov, lastEstAct, nPagos: 1 });
+                } else {
+                    let e = seen.get(mapKey);
+                    e.nPagos++;
+                    let lv = legKeys.map(k => d[k]).filter(v => v && String(v).trim() !== '')[0];
+                    if (lv) e.leg = String(lv).trim();
+                    let o = d[col.obs];   if (o && String(o).trim())    e.obsSet.add(String(o).trim());
+                    let t = d[col.tnov];  if (t && String(t).trim())    e.tnovSet.add(String(t).trim());
+                    let fn = d[col.fnov]; if (fn && String(fn).trim())  e.lastFnov = String(fn).trim();
+                    let ea = d[col.estAct]; if (ea && String(ea).trim()) e.lastEstAct = String(ea).trim();
+                }
+            });
+
+            const colDefs = [
+                { label: 'RESOLUCIÓN',              get: e => e.row[col.res]                    },
+                { label: '# PAGOS',                 get: e => e.nPagos                          },
+                { label: 'No.',                     get: e => e.row[col.id],          txt: true },
+                { label: 'TIPO DOCUMENTO',          get: e => e.row[col.docPpt],      txt: true },
+                { label: 'NUMERO DOCUMENTO',        get: e => e.row[col.doc],         txt: true },
+                { label: 'NOMBRE BENEFICIARIO',     get: e => e.row[col.ben]                    },
+                { label: '# DOC ARRENDADOR',        get: e => e.row[col.arrDoc],      txt: true },
+                { label: 'NOMBRE ARRENDADOR',       get: e => e.row[col.arrNom]                 },
+                { label: 'VALOR SUBSIDIO MENSUAL',  get: e => e.row[col.valMen]                 },
+                { label: 'CIUDAD',                  get: e => e.row[col.ciu]                    },
+                { label: 'FECHA INICIO PAGOS',      get: e => e.row[col.fecIni]                 },
+                { label: 'TOTAL PAGADO A LA FECHA', get: e => e.row[totalPagadoKey]             },
+                { label: 'PENDIENTE POR PAGAR',     get: e => e.row[col.pend]                   },
+                { label: 'ESTADO GENERAL',          get: e => e.row[col.est]                    },
+                { label: 'LEGALIZADO',              get: e => e.leg                             },
+                { label: '¿PRESENTA NOVEDAD?',      get: e => e.row[col.nov]                    },
+                { label: 'FECHA NOVEDAD',           get: e => e.lastFnov                        },
+                { label: 'TIPO NOVEDAD',            get: e => [...e.tnovSet].join(' | ')        },
+                { label: 'ESTADO ACTUAL',           get: e => e.lastEstAct                      },
+                { label: 'OBSERVACIONES',           get: e => [...e.obsSet].join(' | ')         },
+            ];
+
+            function xe(v) { return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+            let xml = '<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?>' +
+                '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">' +
+                '<Styles><Style ss:ID="t"><NumberFormat ss:Format="@"/></Style></Styles>' +
+                '<Worksheet ss:Name="Filtrados"><Table>';
+            xml += '<Row>' + colDefs.map(c => '<Cell ss:StyleID="t"><Data ss:Type="String">' + xe(c.label) + '</Data></Cell>').join('') + '</Row>';
+            Array.from(seen.values()).forEach(entry => {
+                xml += '<Row>' + colDefs.map(c => {
+                    let val = c.get(entry);
+                    if (val === null || val === undefined || val === '') return '<Cell><Data ss:Type="String"></Data></Cell>';
+                    let s = String(val).replace(/\r?\n/g,' ');
+                    if (c.txt) return '<Cell ss:StyleID="t"><Data ss:Type="String">' + xe(s) + '</Data></Cell>';
+                    if (typeof val === 'number') return '<Cell><Data ss:Type="Number">' + xe(s) + '</Data></Cell>';
+                    return '<Cell><Data ss:Type="String">' + xe(s) + '</Data></Cell>';
+                }).join('') + '</Row>';
+            });
+            xml += '</Table></Worksheet></Workbook>';
+            let blob = new Blob([xml], { type: 'application/vnd.ms-excel' });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Semilleros_FILTRADOS_" + new Date().toISOString().slice(0,10) + ".xls";
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadDataset() { exportData(); }
 
         
         
@@ -2851,8 +3115,7 @@ function updateDashboard() {
     document.getElementById('t2_kpiBenTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
 
     document.getElementById('t2_circBenTxt').innerText = t2_pctBen.toFixed(0) + '%';
-    
-    document.getElementById('t2_circBen').style.strokeDashoffset = 125.6 - (125.6 * t2_pctBen) / 100;
+    document.getElementById('t2_circBen').style.strokeDashoffset = 87.96 - (87.96 * t2_pctBen) / 100;
     document.getElementById('t2_lineBen').style.width = t2_pctBen + '%';
 
     function getTopCat(data, colIndex) {
@@ -2886,14 +3149,14 @@ function updateDashboard() {
     document.getElementById('t2_kpiTNov').innerText = currentBen.toLocaleString();
     document.getElementById('t2_kpiTNovTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
     document.getElementById('t2_circTNovTxt').innerText = dispPct.toFixed(0) + '%';
-    document.getElementById('t2_circTNov').style.strokeDashoffset = 125.6 - (125.6 * dispPct) / 100;
+    document.getElementById('t2_circTNov').style.strokeDashoffset = 87.96 - (87.96 * dispPct) / 100;
     document.getElementById('t2_lineTNov').style.width = dispPct + '%';
 
     // Estado KPI
     document.getElementById('t2_kpiEst').innerText = currentBen.toLocaleString();
     document.getElementById('t2_kpiEstTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
     document.getElementById('t2_circEstTxt').innerText = dispPct.toFixed(0) + '%';
-    document.getElementById('t2_circEst').style.strokeDashoffset = 125.6 - (125.6 * dispPct) / 100;
+    document.getElementById('t2_circEst').style.strokeDashoffset = 87.96 - (87.96 * dispPct) / 100;
     document.getElementById('t2_lineEst').style.width = dispPct + '%';
 
     // Registros KPI (Row count)
@@ -2904,7 +3167,7 @@ function updateDashboard() {
     document.getElementById('t2_kpiReg').innerText = currentReg.toLocaleString();
     document.getElementById('t2_kpiRegTot').innerText = "de " + totalRegUnfiltered.toLocaleString();
     document.getElementById('t2_circRegTxt').innerText = dispPctReg.toFixed(0) + '%';
-    document.getElementById('t2_circReg').style.strokeDashoffset = 125.6 - (125.6 * dispPctReg) / 100;
+    document.getElementById('t2_circReg').style.strokeDashoffset = 87.96 - (87.96 * dispPctReg) / 100;
     document.getElementById('t2_lineReg').style.width = dispPctReg + '%';
 
 
@@ -2996,17 +3259,17 @@ function updateDashboard() {
                     calculable: true,
                     realtime: false,
                     inRange: { color: ['#ff3300', '#ffcc00', '#00ff88'] },
-                    text: ['Mayor $', 'Menor $'],
-                    textStyle: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    text: ['$' + Math.round(maxVal).toLocaleString('es-CO'), '$' + Math.round(minVal).toLocaleString('es-CO')],
+                    textStyle: { color: '#c8ddf0', fontSize: 7, fontFamily: 'Share Tech Mono' },
                     top: 10, left: 10, itemHeight: 60, itemWidth: 8,
-                    formatter: (value) => formatMoneyShort(value)
+                    formatter: (value) => '$' + Math.round(value).toLocaleString('es-CO')
                 },
                 geo: {
                 map: 'colombia',
                 roam: true,
                 scaleLimit: { min: 0.5, max: 10 },
                 aspectScale: 1,
-                zoom: 2.0,
+                zoom: 2.4,
                 center: [-74.0, 7.5],
                 itemStyle: { areaColor: '#071022', borderColor: '#00ccff', borderWidth: 0.5 },
                 emphasis: { itemStyle: { areaColor: '#0a1a3a', shadowBlur: 0, borderWidth: 0.5 }, label: { show: false } }
@@ -3026,10 +3289,10 @@ function updateDashboard() {
                     },
                     {
                         type: 'effectScatter', coordinateSystem: 'geo',
-                        symbolSize: 18, 
-                        itemStyle: { color: '#00ff88', shadowBlur: 10, shadowColor: '#00ff88' },
+                        symbolSize: 14,
+                        itemStyle: { color: '#bf00ff', shadowBlur: 10, shadowColor: '#bf00ff' },
                         data: sinCiudadNodes,
-                        label: { show: true, formatter: '{b}', color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono', position: 'right' },
+                        label: { show: true, formatter: 'SIN\nCIUDAD', color: '#bf00ff', fontSize: 7, fontFamily: 'Share Tech Mono', position: 'right' },
                         rippleEffect: { period: 3, scale: 3, brushType: 'stroke' }
                     }
                 ]
@@ -3214,10 +3477,12 @@ if(document.getElementById('kpiAvancePct')) {
     document.getElementById('kpiAvanceBarT1').style.width = pctPag + "%";
 }
 
-if(document.getElementById('t2_kpiAvance')) {
-    document.getElementById('t2_kpiAvance').innerHTML = pctPag + '% <span class="text-[14px] text-[#00ff88] ml-1">(' + formatMoney(pagados) + ')</span>';
-    document.getElementById('t2_kpiAvanceTot').innerText = "Pend: " + pctPend + "% (" + formatMoney(pendientes) + ")";
-    document.getElementById('t2_kpiAvanceRing').setAttribute('stroke-dasharray', pctPag + ", 100");
+if(document.getElementById('t2_kpiAvancePct')) {
+    document.getElementById('t2_kpiAvancePct').innerText = pctPag + '%';
+    document.getElementById('t2_kpiAvancePagado').innerText = formatMoney(pagados);
+    document.getElementById('t2_kpiAvancePendPct').innerText = pctPend + '%';
+    document.getElementById('t2_kpiAvancePendiente').innerText = formatMoney(pendientes);
+    document.getElementById('t2_kpiAvanceBar').style.width = pctPag + '%';
 }
 
 // Refrescar gráficos de ejecución en ambas vistas
@@ -3735,19 +4000,27 @@ if(document.getElementById('t2_kpiAvance')) {
 
         init();
 
-        // Posicionar tooltips ⓘ con position:fixed para evitar clipping por overflow:hidden
-        document.querySelectorAll('.ptip').forEach(wrap => {
-            const box = wrap.querySelector('.ptip-box');
-            if (!box) return;
-            wrap.addEventListener('mouseenter', () => {
-                const r = wrap.getBoundingClientRect();
-                const boxW = 310;
-                const left = Math.min(r.left, window.innerWidth - boxW - 8);
-                const top = r.bottom + 6;
-                box.style.left = left + 'px';
-                box.style.top = top + 'px';
+        // Tooltips ⓘ: crear el singleton en JS y pegarlo al body para escapar clip-path
+        (function() {
+            const gt = document.createElement('div');
+            gt.id = 'globalTip';
+            document.body.appendChild(gt);
+            document.querySelectorAll('.ptip').forEach(wrap => {
+                const box = wrap.querySelector('.ptip-box');
+                if (!box) return;
+                wrap.addEventListener('mouseenter', () => {
+                    gt.innerHTML = box.innerHTML;
+                    const r = wrap.getBoundingClientRect();
+                    const boxW = 310;
+                    const left = Math.min(r.left, window.innerWidth - boxW - 8);
+                    const top = r.bottom + 6;
+                    gt.style.left = left + 'px';
+                    gt.style.top = top + 'px';
+                    gt.style.display = 'block';
+                });
+                wrap.addEventListener('mouseleave', () => { gt.style.display = 'none'; });
             });
-        });
+        })();
     </script>
 </body>
 </html>

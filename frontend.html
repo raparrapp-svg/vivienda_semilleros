@@ -218,6 +218,7 @@
             <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">OPERACIÓN DIARIA</button>
             <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">ANÁLISIS DE EJECUCIÓN</button>
             <button onclick="switchTab('inteligencia')" id="tab_inteligencia" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">INTELIGENCIA ESTRATÉGICA</button>
+            <button onclick="switchTab('seguimiento')" id="tab_seguimiento" class="text-gray-500 hover:text-[#ffcc00] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">SEGUIMIENTO Y ALERTAS</button>
         </div>
 
         <!-- Breadcrumb Tab2: indicador de nivel de drill-down -->
@@ -638,19 +639,21 @@
 </div> <!-- End view_ejecucion -->
 
     <!-- INTELIGENCIA ESTRATÉGICA TAB -->
-    <div id="view_inteligencia" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+    <div id="view_inteligencia" style="display: none;" class="flex-1 flex flex-col gap-2 w-full min-h-0 overflow-hidden">
 
-        <!-- KPIs Tab 3 -->
-        <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-3 shrink-0">
+        <!-- KPIs Tab 3 — 5 KPIs -->
+        <div class="w-full grid grid-cols-2 md:grid-cols-5 gap-2 shrink-0">
             <!-- KPI: % con novedad -->
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
-                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">BENEFICIARIOS CON NOVEDAD</div>
-                <div class="flex justify-between items-end mt-1">
-                    <div class="flex flex-col">
-                        <div id="t3_kpiPctNov" class="text-lg font-bold text-[#ff0033] hud-font leading-none">0%</div>
-                        <div id="t3_kpiBenConNov" class="text-[9px] text-[#7890b5] hud-font font-bold mt-0.5">0 de 0</div>
+                <div class="flex justify-between items-start w-full">
+                    <div class="flex flex-col gap-0.5">
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">BENS. CON NOVEDAD <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS CON NOVEDAD</b>Porcentaje y conteo de beneficiarios que tienen al menos una novedad activa (distinta de NINGUNA). La barra roja muestra la proporción sobre el total.</span></span></div>
+                        <div class="flex flex-col gap-0">
+                            <div id="t3_kpiPctNov" class="text-lg font-bold text-[#ff0033] hud-font leading-none">0%</div>
+                            <div id="t3_kpiBenConNov" class="text-[10px] text-[#7890b5] hud-font font-bold">0 de 0</div>
+                        </div>
                     </div>
-                    <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_6px_#ff0033] self-center"></div>
+                    <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_6px_#ff0033] mt-0.5 shrink-0"></div>
                 </div>
                 <div class="w-full h-1 bg-[#ff0033]/20 mt-1.5 rounded overflow-hidden">
                     <div id="t3_lineNov" class="h-full bg-[#ff0033] transition-all duration-1000" style="width:0%"></div>
@@ -658,114 +661,123 @@
             </div>
             <!-- KPI: Novedad más frecuente -->
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
-                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">NOVEDAD MÁS FRECUENTE</div>
-                <div class="flex flex-col mt-1">
-                    <div id="t3_kpiNovFrecNom" class="text-sm font-bold text-[#00ccff] hud-font leading-tight truncate">---</div>
-                    <div id="t3_kpiNovFrecCnt" class="text-[9px] text-[#7890b5] hud-font font-bold mt-0.5">0 casos</div>
+                <div class="flex justify-between items-start w-full">
+                    <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">NOVEDAD MÁS FRECUENTE <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>NOVEDAD MÁS FRECUENTE</b>Tipo de novedad que afecta al mayor número de beneficiarios en la selección activa. Excluye NINGUNA.</span></span></div>
+                        <div id="t3_kpiNovFrecNom" class="text-[11px] font-bold text-[#00ccff] hud-font leading-tight">---</div>
+                        <div id="t3_kpiNovFrecCnt" class="text-[10px] text-[#7890b5] hud-font font-bold">0 casos</div>
+                    </div>
+                    <div class="w-1.5 h-1.5 bg-[#00ccff] shadow-[0_0_6px_#00ccff] mt-0.5 shrink-0"></div>
                 </div>
                 <div class="w-full h-1 bg-[#00ccff]/20 mt-1.5 rounded overflow-hidden">
-                    <div class="h-full bg-[#00ccff]" style="width:100%"></div>
+                    <div id="t3_lineNovFrec" class="h-full bg-[#00ccff] transition-all duration-1000" style="width:100%"></div>
                 </div>
             </div>
             <!-- KPI: $ total bloqueado -->
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
-                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">$ TOTAL BLOQUEADO</div>
-                <div class="flex justify-between items-end mt-1">
-                    <div id="t3_kpiBloqueado" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">$0</div>
-                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_6px_#ff5e00] self-center"></div>
+                <div class="flex justify-between items-start w-full">
+                    <div class="flex flex-col gap-0.5">
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">$ TOTAL BLOQUEADO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>$ TOTAL BLOQUEADO</b>Suma del valor pendiente de beneficiarios con novedad activa (excluye NINGUNA). Capital en riesgo directo por novedades no resueltas.</span></span></div>
+                        <div class="flex flex-col gap-0">
+                            <div id="t3_kpiBloqueado" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">$0</div>
+                            <div class="text-[10px] text-[#7890b5] hud-font">en novedad</div>
+                        </div>
+                    </div>
+                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_6px_#ff5e00] mt-0.5 shrink-0"></div>
                 </div>
-                <div class="text-[8px] text-[#7890b5] hud-font mt-0.5">en bens. con novedad activa</div>
-                <div class="w-full h-1 bg-[#ff5e00]/20 mt-1 rounded overflow-hidden">
-                    <div class="h-full bg-[#ff5e00]" style="width:100%"></div>
+                <div class="w-full h-1 bg-[#ff5e00]/20 mt-1.5 rounded overflow-hidden">
+                    <div id="t3_lineBloq" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width:100%"></div>
                 </div>
             </div>
             <!-- KPI: Arrendador mayor riesgo -->
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
-                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase mb-1">ARRENDADOR MAYOR RIESGO</div>
-                <div class="flex flex-col mt-1">
-                    <div id="t3_kpiArrNom" class="text-sm font-bold text-[#ffcc00] hud-font leading-tight truncate">---</div>
-                    <div id="t3_kpiArrCount" class="text-[9px] text-[#7890b5] hud-font font-bold mt-0.5">0 bens.</div>
+                <div class="flex justify-between items-start w-full">
+                    <div class="flex flex-col gap-0.5 min-w-0 flex-1">
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">ARRENDADOR MAYOR RIESGO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>ARRENDADOR MAYOR RIESGO</b>Arrendador con mayor número de beneficiarios con novedad activa. Identifica propietarios con mayor concentración de casos problemáticos.</span></span></div>
+                        <div id="t3_kpiArrNom" class="text-[11px] font-bold text-[#ffcc00] hud-font leading-tight">---</div>
+                        <div id="t3_kpiArrCount" class="text-[10px] text-[#7890b5] hud-font font-bold">0 con novedad</div>
+                    </div>
+                    <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_6px_#ffcc00] mt-0.5 shrink-0"></div>
                 </div>
                 <div class="w-full h-1 bg-[#ffcc00]/20 mt-1.5 rounded overflow-hidden">
-                    <div class="h-full bg-[#ffcc00]" style="width:100%"></div>
+                    <div id="t3_lineArr" class="h-full bg-[#ffcc00] transition-all duration-1000" style="width:100%"></div>
+                </div>
+            </div>
+            <!-- KPI: Total beneficiarios -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-start w-full">
+                    <div class="flex flex-col gap-0.5">
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">TOTAL BENEFICIARIOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>TOTAL BENEFICIARIOS</b>Conteo único de beneficiarios en la selección activa, considerando todos los estados de novedad.</span></span></div>
+                        <div class="flex flex-col gap-0">
+                            <div id="t3_kpiBenTotal" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0</div>
+                            <div class="text-[10px] text-[#7890b5] hud-font">beneficiarios</div>
+                        </div>
+                    </div>
+                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_6px_#00ff88] mt-0.5 shrink-0"></div>
+                </div>
+                <div class="w-full h-1 bg-[#00ff88]/20 mt-1.5 rounded overflow-hidden">
+                    <div id="t3_lineBenTotal" class="h-full bg-[#00ff88] transition-all duration-1000" style="width:100%"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Fila 1: Sunburst + Pareto 80/20 -->
-        <div class="grid grid-cols-12 gap-3 w-full">
-            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[440px]">
-                <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
-                    <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_5px_#ff0033]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">ANATOMÍA DEL BLOQUEO</span>
-                    <span class="text-[9px] hud-font text-[#ff5e00] ml-1">NOV → CIUDAD → RES · TOP 6</span>
-                    <button onclick="resetSunburst()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#00ccff] text-[#00ccff] hover:bg-[#00ccff]/10 transition-colors">↺ REINICIAR</button>
-                </div>
-                <div id="execSunburst" class="flex-1 w-full" style="min-height: 0;"></div>
-            </div>
-            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[440px]">
+        <!-- Fila 1: Pareto + Salud Ciudades + Matriz Novedades — flex:3 = 3/5 del espacio vertical -->
+        <div class="flex gap-2 min-h-0" style="flex:3">
+            <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:5">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN DE DEUDA — 80/20</span>
-                    <button id="btnParetoTop" onclick="toggleParetoTop()" class="ml-auto text-[9px] hud-font px-2 py-0.5 border border-[#bf00ff] text-[#bf00ff] hover:bg-[#bf00ff]/10 transition-colors">TOP 20</button>
+                    <span class="ptip ml-1"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CONCENTRACIÓN DE DEUDA 80/20</b>Muestra qué beneficiarios concentran el 80% del capital pendiente. La línea naranja es la curva de Pareto acumulada. Permite priorizar gestiones de cobro.</span></span>
                 </div>
-                <div id="visionChartPareto" class="flex-1 w-full h-full"></div>
+                <div id="visionChartPareto" class="flex-1 min-h-0"></div>
             </div>
-        </div>
-
-        <!-- Fila 2: Salud Ciudades + Matriz Novedades (desde Tab 2) -->
-        <div class="grid grid-cols-12 gap-3 w-full">
-            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[380px]">
+            <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:3">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">SALUD CIUDADES</span>
-                    <span class="text-[9px] hud-font text-gray-500 ml-auto">ANÁLISIS COMPARATIVO MULTIDIMENSIONAL</span>
+                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>SALUD CIUDADES</b>Radar comparativo multidimensional: % ejecución, volumen presupuesto y beneficiarios para el Top 5 ciudades de la selección activa.</span></span>
                 </div>
-                <div id="execRadar" class="flex-1 w-full min-h-0"></div>
+                <div id="execRadar" class="flex-1 min-h-0"></div>
             </div>
-            <div class="col-span-12 xl:col-span-6 cyber-panel p-3 flex flex-col h-[380px]">
+            <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:4">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">MATRIZ NOVEDADES</span>
-                    <span class="text-[9px] hud-font text-gray-500 ml-auto">CIUDAD × TIPO NOVEDAD · INTENSIDAD</span>
+                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>MATRIZ NOVEDADES</b>Heatmap de intensidad: ciudad × tipo de novedad. Celdas más brillantes indican mayor concentración de casos en esa combinación.</span></span>
                 </div>
-                <div id="execHeatmap" class="flex-1 w-full min-h-0"></div>
+                <div id="execHeatmap" class="flex-1 min-h-0"></div>
             </div>
         </div>
 
-        <!-- Fila 3: Concentración Arrendadores + Distribución de Pagos -->
-        <div class="grid grid-cols-12 gap-3 w-full">
-            <div class="col-span-12 xl:col-span-5 cyber-panel p-3 flex flex-col h-[400px]">
+        <!-- Fila 2: Arrendadores + Distribución Pagos + Flujo Pagos — flex:2 = 2/5 del espacio vertical -->
+        <div class="flex gap-2 min-h-0" style="flex:2">
+            <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:4">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN ARRENDADORES</span>
-                    <span class="text-[9px] hud-font text-gray-500 ml-auto">BENS. SIN/CON NOVEDAD · TOP 15</span>
+                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>CONCENTRACIÓN ARRENDADORES</b>Top 15 arrendadores por número de beneficiarios. Barras verdes = sin novedad, rojas = con novedad activa. Identifica propietarios con mayor riesgo operativo.</span></span>
                 </div>
-                <div id="chartArrendadores" class="flex-1 w-full h-full"></div>
+                <div id="chartArrendadores" class="flex-1 min-h-0"></div>
             </div>
-            <div class="col-span-12 xl:col-span-7 cyber-panel p-3 flex flex-col h-[400px]">
+            <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:4">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">DISTRIBUCIÓN DE PAGOS RECIBIDOS</span>
-                    <span class="text-[9px] hud-font text-gray-500 ml-auto">¿CUÁNTOS BENEFICIARIOS COBRARON N PERIODOS?</span>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">DISTRIBUCIÓN DE PAGOS</span>
+                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>DISTRIBUCIÓN DE PAGOS RECIBIDOS</b>¿Cuántos beneficiarios recibieron exactamente N periodos de pago? Permite identificar dónde se concentra la deserción y cuántos están al día con su cuota máxima.</span></span>
                 </div>
-                <div id="chartDistPagos" class="flex-1 w-full h-full"></div>
+                <div id="chartDistPagos" class="flex-1 min-h-0"></div>
             </div>
-        </div>
-
-        <!-- Fila 4: Flujo Acumulado de Pagos (nuevo) -->
-        <div class="grid grid-cols-12 gap-3 w-full">
-            <div class="col-span-12 cyber-panel p-3 flex flex-col h-[320px]">
+            <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:4">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_5px_#00ff88]"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">FLUJO DE PAGOS — PAGO 1 → PAGO 12</span>
-                    <span class="text-[9px] hud-font text-gray-500 ml-1">$ PAGADO · BENEFICIARIOS ÚNICOS</span>
+                    <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">FLUJO DE PAGOS</span>
+                    <span class="text-[9px] hud-font text-gray-500 ml-1">PAGO 1 → 12</span>
                     <div class="ml-auto flex items-center gap-1">
                         <button id="btnFlujoToggle" data-modo="periodo" onclick="toggleFlujoModo()" class="text-[9px] hud-font px-2 py-0.5 border border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88]/10 transition-colors">ACUMULADO</button>
                         <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>FLUJO DE PAGOS — MODOS</b>POR PERIODO: barras independientes por cada pago (PAGO 1 al 12), útil para ver en qué periodos se concentró el desembolso.<br/><br/>ACUMULADO: área de suma progresiva mostrando la curva total de desembolso a lo largo del tiempo.</span></span>
                     </div>
                 </div>
-                <div id="chartFlujoPagos" class="flex-1 w-full" style="min-height:0"></div>
+                <div id="chartFlujoPagos" class="flex-1 min-h-0"></div>
             </div>
         </div>
 
@@ -873,6 +885,93 @@
         </div>
     </div>
 
+    <!-- TAB SEGUIMIENTO Y ALERTAS -->
+    <div id="view_seguimiento" style="display:none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+
+        <!-- KPI Strip semáforo -->
+        <div class="grid grid-cols-4 gap-3">
+            <div class="cyber-panel p-4 border-l-4 border-[#ff0033] flex flex-col gap-1">
+                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🚨 Crítico</div>
+                <div id="tlKpiCritico" class="text-[34px] font-bold hud-font text-[#ff0033]" style="text-shadow:0 0 15px rgba(255,0,51,0.7)">—</div>
+                <div class="text-[9px] text-[#7890b5]">Subsidio vencido / Pérdida ejecutoriedad</div>
+            </div>
+            <div class="cyber-panel p-4 border-l-4 border-[#ff5e00] flex flex-col gap-1">
+                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🔴 Rojo</div>
+                <div id="tlKpiRojo" class="text-[34px] font-bold hud-font text-[#ff5e00]" style="text-shadow:0 0 15px rgba(255,94,0,0.7)">—</div>
+                <div class="text-[9px] text-[#7890b5]">+365 días sin legalizar ó +90 días sin pago</div>
+            </div>
+            <div class="cyber-panel p-4 border-l-4 border-[#ffcc00] flex flex-col gap-1">
+                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🟡 Amarillo</div>
+                <div id="tlKpiAmarillo" class="text-[34px] font-bold hud-font text-[#ffcc00]" style="text-shadow:0 0 15px rgba(255,204,0,0.7)">—</div>
+                <div class="text-[9px] text-[#7890b5]">+180 días sin legalizar ó +60 días sin pago</div>
+            </div>
+            <div class="cyber-panel p-4 border-l-4 border-[#00ff88] flex flex-col gap-1">
+                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🟢 Verde</div>
+                <div id="tlKpiVerde" class="text-[34px] font-bold hud-font text-[#00ff88]" style="text-shadow:0 0 15px rgba(0,255,136,0.7)">—</div>
+                <div class="text-[9px] text-[#7890b5]">Al día</div>
+            </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="grid grid-cols-2 gap-3" style="min-height:300px;">
+            <div class="cyber-panel p-3 flex flex-col gap-2">
+                <div class="text-[10px] tracking-widest text-[#00ccff] font-bold uppercase">⏱ Pipeline — Días promedio por etapa</div>
+                <div id="tlChartPipeline" class="flex-1 min-h-[240px]"></div>
+            </div>
+            <div class="cyber-panel p-3 flex flex-col gap-2">
+                <div class="text-[10px] tracking-widest text-[#00ccff] font-bold uppercase">📊 Distribución — Días sin legalizar</div>
+                <div id="tlChartDist" class="flex-1 min-h-[240px]"></div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-[10px] text-[#7890b5] tracking-widest uppercase">Semáforo:</span>
+            <button onclick="tlSetFilter('TODOS')"    id="tlf_TODOS"    class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#7890b5] border border-[#142038] hover:border-[#00ccff] transition-all">Todos</button>
+            <button onclick="tlSetFilter('CRITICO')"  id="tlf_CRITICO"  class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#ff0033] border border-[#142038] hover:border-[#ff0033] transition-all">Crítico</button>
+            <button onclick="tlSetFilter('ROJO')"     id="tlf_ROJO"     class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#ff5e00] border border-[#142038] hover:border-[#ff5e00] transition-all">Rojo</button>
+            <button onclick="tlSetFilter('AMARILLO')" id="tlf_AMARILLO" class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#ffcc00] border border-[#142038] hover:border-[#ffcc00] transition-all">Amarillo</button>
+            <button onclick="tlSetFilter('VERDE')"    id="tlf_VERDE"    class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#00ff88] border border-[#142038] hover:border-[#00ff88] transition-all">Verde</button>
+            <span class="text-[10px] text-[#7890b5] tracking-widest uppercase ml-4">Etapa:</span>
+            <select id="tlEtapaFilter" onchange="tlRenderTable()" class="bg-[#0a1128] border border-[#142038] text-[#7890b5] text-[10px] px-2 py-1 rounded uppercase tracking-widest">
+                <option value="">Todas</option>
+                <option value="ASIGNADO">Asignado</option>
+                <option value="LEGALIZADO">Legalizado</option>
+                <option value="CARGADO">Cargado</option>
+            </select>
+            <input id="tlSearch" oninput="tlRenderTable()" type="text" placeholder="Buscar nombre o cédula…"
+                class="ml-auto bg-[#0a1128] border border-[#142038] text-[#e0e0e0] text-[11px] px-3 py-1 rounded w-52 focus:outline-none focus:border-[#00ccff]" />
+            <span id="tlCount" class="text-[10px] text-[#7890b5] tracking-widest ml-2"></span>
+        </div>
+
+        <!-- Tabla -->
+        <div class="cyber-panel p-0 overflow-auto" style="max-height:420px;">
+            <table class="w-full text-[10px]" style="min-width:1100px; border-collapse:collapse;">
+                <thead>
+                    <tr class="bg-[#0a1128] sticky top-0 z-10">
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-16">Alerta</th>
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Nombre</th>
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28">Documento</th>
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Ciudad</th>
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-24">Etapa</th>
+                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28" title="Días postulación → asignación">D1 Post→Asig</th>
+                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28" title="Días asignación → legalización">D2 Asig→Legal</th>
+                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28" title="Días legalización → cargue">D3 Legal→Carg</th>
+                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-24" title="Días desde último pago">D4 Sin Pago</th>
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Gestor</th>
+                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28">Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tlTableBody"></tbody>
+            </table>
+        </div>
+        <div class="flex gap-3 items-center justify-center">
+            <button onclick="tlPrevPage()" id="tlBtnPrev" class="px-4 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] text-[10px] font-bold rounded uppercase tracking-widest transition-all">◀ Anterior</button>
+            <span id="tlPageInfo" class="text-[10px] text-[#7890b5] tracking-widest"></span>
+            <button onclick="tlNextPage()" id="tlBtnNext" class="px-4 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] text-[10px] font-bold rounded uppercase tracking-widest transition-all">Siguiente ▶</button>
+        </div>
+    </div>
+
     <!-- TAB 5: VISION EJECUTIVA -->
     <div id="view_vision" style="display: none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
 
@@ -926,26 +1025,35 @@
 
         function switchTab(tabId) {
             currentTab = tabId;
-            document.getElementById('view_operacion').style.display = tabId === 'operacion' ? 'flex' : 'none';
-            document.getElementById('view_ejecucion').style.display = tabId === 'ejecucion' ? 'flex' : 'none';
+            document.getElementById('view_operacion').style.display    = tabId === 'operacion'    ? 'flex' : 'none';
+            document.getElementById('view_ejecucion').style.display    = tabId === 'ejecucion'    ? 'flex' : 'none';
             document.getElementById('view_inteligencia').style.display = tabId === 'inteligencia' ? 'flex' : 'none';
-            document.getElementById('view_estadistica').style.display = tabId === 'estadistica' ? 'flex' : 'none';
+            document.getElementById('view_estadistica').style.display  = tabId === 'estadistica'  ? 'flex' : 'none';
+            document.getElementById('view_seguimiento').style.display  = tabId === 'seguimiento'  ? 'flex' : 'none';
 
-            let tabs = ['operacion', 'ejecucion', 'inteligencia', 'estadistica'];
+            let tabs = ['operacion', 'ejecucion', 'inteligencia', 'estadistica', 'seguimiento'];
             tabs.forEach(t => {
                 let btn = document.getElementById('tab_' + t);
-                if(btn) {
-                    btn.className = "text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all";
-                    if(t === tabId) {
-                        btn.className = "text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-xs font-bold transition-all";
-                    }
+                if (!btn) return;
+                const isSeg = t === 'seguimiento';
+                const activeColor = isSeg ? '#ffcc00' : '#00ff88';
+                if (t === tabId) {
+                    btn.className = `border-b-2 pb-1 tracking-widest text-xs font-bold transition-all whitespace-nowrap`;
+                    btn.style.color = activeColor;
+                    btn.style.borderBottomColor = activeColor;
+                } else {
+                    btn.className = "text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-xs font-bold transition-all whitespace-nowrap";
+                    btn.style.color = '';
+                    btn.style.borderBottomColor = '';
                 }
             });
 
-            // Resize charts for the active tab — two passes: 50ms (fast) + 200ms (after flex layout resolves)
+            // Resize charts — 3 passes para que el layout flex resuelva antes de que ECharts mida
             setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 50);
-            setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 200);
+            setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 250);
+            setTimeout(() => { Object.values(charts).forEach(c => c && c.resize()); }, 600);
             updateBreadcrumb();
+            if (tabId === 'seguimiento') loadTimeline();
         }
         
         
@@ -1682,7 +1790,6 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
         charts.treemap = echarts.init(document.getElementById('chartTreemap'));
         if(document.getElementById('execRadar')) charts.execRadar = echarts.init(document.getElementById('execRadar'));
         if(document.getElementById('execHeatmap')) charts.execHeatmap = echarts.init(document.getElementById('execHeatmap'));
-        if(document.getElementById('execSunburst')) charts.execSunburst = echarts.init(document.getElementById('execSunburst'));
         if(document.getElementById('intChartNovedades')) charts.intChartNovedades = echarts.init(document.getElementById('intChartNovedades'));
         if(document.getElementById('chartStatIncidencia')) charts.chartStatIncidencia = echarts.init(document.getElementById('chartStatIncidencia'));
         if(document.getElementById('chartStatRiesgo')) charts.chartStatRiesgo = echarts.init(document.getElementById('chartStatRiesgo'));
@@ -2752,190 +2859,172 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
         function renderExecCharts() {
             if(!charts.execRadar) return;
 
-            // 1. Radar Chart Data (Top 5 Ciudades para el Radar)
-            let cityMap = {};
+            // Paso 1: deduplicar por beneficiario para calcular pend correcto (pend es por-beneficiario, no por-fila)
+            let benMapExec = {};
             filteredData.forEach(d => {
-                let c = d[col.ciu];
-                if(c) {
-                    if(!cityMap[c]) cityMap[c] = { pagado: 0, total: 0, bens: new Set() };
-                    let val = parseFloat(d[col.val]) || 0;
-                    let pen = parseFloat(d[col.pend]) || 0;
-                    cityMap[c].pagado += val;
-                    cityMap[c].total += (val + pen);
-                    cityMap[c].bens.add(d[col.doc] || d[col.ben] || 'NO_ID');
-                }
+                let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
+                let ciu = d[col.ciu]; if(!ciu) return;
+                if(!benMapExec[docKey]) benMapExec[docKey] = { ciu, pagado: 0, pend: 0, nov: false };
+                benMapExec[docKey].pagado += parseFloat(d[col.val]) || 0;
+                let p = parseFloat(d[col.pend]) || 0; if(p > 0) benMapExec[docKey].pend = p;
+                if(d[col.tnov] && d[col.tnov] !== 'NINGUNA') benMapExec[docKey].nov = true;
             });
-            let allCitiesSorted = Object.entries(cityMap).map(e => ({
-                name: e[0], pagado: e[1].pagado, total: e[1].total, bens: e[1].bens.size,
-                pct: e[1].total > 0 ? (e[1].pagado / e[1].total) * 100 : 0
+            // Paso 2: agrupar por ciudad
+            let cityMap = {};
+            Object.values(benMapExec).forEach(b => {
+                if(!cityMap[b.ciu]) cityMap[b.ciu] = { pagado: 0, total: 0, bens: 0, bensNov: 0 };
+                cityMap[b.ciu].pagado += b.pagado;
+                cityMap[b.ciu].total  += b.pagado + b.pend;
+                cityMap[b.ciu].bens++;
+                if(b.nov) cityMap[b.ciu].bensNov++;
+            });
+            let allCitiesSorted = Object.entries(cityMap).map(([name, e]) => ({
+                name,
+                pagado: e.pagado, total: e.total,
+                bens: e.bens, bensNov: e.bensNov,
+                pctEjec: e.total > 0 ? (e.pagado / e.total) * 100 : 0,
+                pctNov:  e.bens > 0 ? (e.bensNov / e.bens) * 100 : 0
             })).sort((a,b) => b.total - a.total);
-            
-            // Radar will only use Top 5 to not be crowded
+
+            // 1. RADAR — cada ciudad es una serie; los 3 ejes son las métricas
+            //    → hovear sobre el polígono de una ciudad muestra SOLO esa ciudad
             let cityArrRadar = allCitiesSorted.slice(0, 5);
-            
             let maxTotal = Math.max(...cityArrRadar.map(c => c.total), 1);
-            let maxBens = Math.max(...cityArrRadar.map(c => c.bens), 1);
-            
+            let maxBens  = Math.max(...cityArrRadar.map(c => c.bens), 1);
+            let radarPalette = ['#00ff88','#00ccff','#ff5e00','#ffcc00','#bf00ff'];
+            // Una serie independiente por ciudad → ECharts detecta hover por área, no por vértice más cercano
+            let radarSeries = cityArrRadar.map((c, i) => {
+                let col = radarPalette[i % radarPalette.length];
+                return {
+                    type: 'radar', name: c.name, symbolSize: 4,
+                    emphasis: { focus: 'self', lineStyle: { width: 3 } },
+                    data: [{
+                        value: [+c.pctEjec.toFixed(1), +(c.total/maxTotal*100).toFixed(1), +(c.bens/maxBens*100).toFixed(1)],
+                        name: c.name,
+                        itemStyle: { color: col },
+                        lineStyle: { color: col, width: 2 },
+                        areaStyle: { color: col, opacity: 0.15 }
+                    }]
+                };
+            });
             charts.execRadar.setOption({
                 backgroundColor: 'transparent',
-                tooltip: { show: true, backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff5e00', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
-                radar: {
-                    radius: '75%', // Enlarged!
-                    indicator: cityArrRadar.length ? cityArrRadar.map(c => ({ name: c.name.substring(0,10), max: 100 })) : [{name:'N/A', max:100}],
-                    shape: 'polygon', splitNumber: 4,
-                    axisName: { color: '#00ccff', fontSize: 10, fontFamily: 'Rajdhani', fontWeight: 'bold' },
-                    splitLine: { lineStyle: { color: ['rgba(0, 204, 255, 0.1)', 'rgba(0, 204, 255, 0.3)', 'rgba(0, 204, 255, 0.5)', 'rgba(0, 204, 255, 0.8)'] } },
-                    splitArea: { show: false }, axisLine: { lineStyle: { color: 'rgba(0, 204, 255, 0.5)' } }
+                legend: {
+                    data: cityArrRadar.map((c, i) => ({ name: c.name, icon: 'roundRect', itemStyle: { color: radarPalette[i % radarPalette.length] } })),
+                    top: 2, left: 'center',
+                    textStyle: { color: '#7890b5', fontSize: 7, fontFamily: 'Share Tech Mono' },
+                    itemWidth: 8, itemHeight: 5
                 },
-                series: [
-                    { type: 'radar', symbolSize: 6, lineStyle: { width: 3 }, data: [
-                        { value: cityArrRadar.map(c => c.pct), name: '% Ejecución', itemStyle: { color: '#00ff88' }, areaStyle: { color: 'rgba(0, 255, 136, 0.4)' } },
-                        { value: cityArrRadar.map(c => (c.total/maxTotal)*100), name: 'Presupuesto (Rel)', itemStyle: { color: '#00ccff' }, lineStyle: { type: 'dashed', width: 2 } },
-                        { value: cityArrRadar.map(c => (c.bens/maxBens)*100), name: 'Beneficiarios (Rel)', itemStyle: { color: '#ff5e00' }, lineStyle: { type: 'dotted', width: 2 } }
-                    ]}
-                ]
-            });
+                tooltip: {
+                    show: true, trigger: 'item', appendToBody: true, confine: true,
+                    backgroundColor: 'rgba(3,6,16,0.95)', borderWidth: 1,
+                    textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    formatter: function(p) {
+                        let cityName = p.seriesName;
+                        let c = cityArrRadar.find(x => x.name === cityName) || {};
+                        let idx = cityArrRadar.indexOf(c);
+                        let col = radarPalette[idx >= 0 ? idx % radarPalette.length : 0];
+                        let v = p.value || (p.data && p.data.value) || [0,0,0];
+                        let ejec  = (+v[0]).toFixed(1);
+                        let presP = (+v[1]).toFixed(0);
+                        let benP  = (+v[2]).toFixed(0);
+                        return `<b style="color:${col}">${cityName}</b><br/>
+                            <span style="color:#00ff88">% Ejec.: ${ejec}%</span> · ${formatMoney(c.pagado||0)} / ${formatMoney(c.total||0)}<br/>
+                            <span style="color:#00ccff">Presup.(Rel.): ${presP}% del máx</span><br/>
+                            <span style="color:#ff5e00">Bens.(Rel.): ${benP}% del máx</span> → ${(c.bens||0).toLocaleString()} bens.`;
+                    }
+                },
+                radar: {
+                    radius: '80%', center: ['50%', '56%'],
+                    indicator: [
+                        { name: '% EJECUCIÓN', max: 100 },
+                        { name: 'PRESUPUESTO\n(REL.)', max: 100 },
+                        { name: 'BENEFICIARIOS\n(REL.)', max: 100 }
+                    ],
+                    shape: 'polygon', splitNumber: 4,
+                    axisName: { color: '#7890b5', fontSize: 13, fontFamily: 'Rajdhani', fontWeight: 'bold' },
+                    splitLine: { lineStyle: { color: ['rgba(120,144,181,0.1)','rgba(120,144,181,0.2)','rgba(120,144,181,0.35)','rgba(120,144,181,0.5)'] } },
+                    splitArea: { show: false },
+                    axisLine: { lineStyle: { color: 'rgba(120,144,181,0.4)' } }
+                },
+                series: radarSeries
+            }, true);
 
-            // 2. Heatmap Chart (Expanded to Top 12 Cities)
+            // 2. HEATMAP — todas las ciudades, solo novedades reales (excluye NINGUNA)
             let novs = new Set();
-            filteredData.forEach(d => { if(d[col.tnov]) novs.add(d[col.tnov]); });
-            let novArr = Array.from(novs);
-            if(novArr.length === 0) novArr = ['NINGUNA'];
-            
-            let cityArrHm = allCitiesSorted.slice(0, 12); // Up to 12 cities!
+            filteredData.forEach(d => { if(d[col.tnov] && d[col.tnov] !== 'NINGUNA') novs.add(d[col.tnov]); });
+            let novArr = Array.from(novs).sort();
+            if(novArr.length === 0) novArr = ['SIN NOVEDADES'];
+
+            // Todas las ciudades con al menos un registro
+            let cityArrHm = allCitiesSorted.slice(); // todas
+
+            // Contar NINGUNA separado (usa benMapExec para no re-iterar)
             let hmMap = {};
             cityArrHm.forEach(c => { hmMap[c.name] = {}; novArr.forEach(n => hmMap[c.name][n] = 0); });
             filteredData.forEach(d => {
-                let ciu = d[col.ciu];
-                let nov = d[col.tnov] || 'NINGUNA';
-                if(hmMap[ciu] && hmMap[ciu][nov] !== undefined) hmMap[ciu][nov] += 1;
+                let ciu = d[col.ciu], nov = d[col.tnov];
+                if(nov && nov !== 'NINGUNA' && hmMap[ciu] && hmMap[ciu][nov] !== undefined) hmMap[ciu][nov] += 1;
             });
             let hmData = [];
             cityArrHm.forEach((c, y) => {
-                novArr.forEach((n, x) => { hmData.push([x, y, hmMap[c.name][n]]); });
+                novArr.forEach((n, x) => { hmData.push([x, y, hmMap[c.name]?.[n] || 0]); });
             });
-            
-            // Generate visual pieces so 0 is gray, and >0 uses a gradient from yellow to red
             let maxHm = Math.max(...hmData.map(d=>d[2]), 1);
-            
+            const novShort = v => {
+                if(v === 'NINGUNA') return 'SIN NOV.';
+                const m = {"BENEFICIARIA MANIFIESTA NO HABER RECIBIDO":"NO RECIBIDO","BENEFICIARIO NO RESIDE EN LA VIVIENDA":"NO RESIDE","ACTUALIZACIÓN DE DATOS DE CONTACTO":"ACT. DATOS","FALLECIMIENTO (SOPORTES FORMALIZADOS)":"FALLEC.","ERROR EN LA CUENTA DE COBRO":"ERR. CTA.","CUENTA DE COBRO NO RECIBIDA":"SIN CTA.","VISITA FALLIDA / REPROGRAMAR":"VISITA FALLIDA","ABANDONO DEL INMUEBLE":"ABANDONO","RENUNCIA VOLUNTARIA":"RENUNCIA","SEGUIMIENTO ADMINISTRATIVO":"SEG. ADMIN.","CAMBIO DE ARRENDADOR":"C. ARREND.","CAMBIO DE RESIDENCIA":"C. RESID.","MUERTE DEL ARRENDADOR":"MUERTE ARR."};
+                let s = m[v] || v; return s.length > 13 ? s.substring(0,12)+'..' : s;
+            };
+            // Sin dataZoom: todas las ciudades visibles comprimidas en el espacio disponible
             charts.execHeatmap.setOption({
                 backgroundColor: 'transparent',
-                tooltip: { position: 'top', backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff0033', borderWidth: 1, textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' } },
-                grid: { top: 10, bottom: 85, left: 100, right: 10 }, // Increased bottom margin to 90
-                xAxis: { type: 'category', data: novArr, axisLabel: { color: '#7890b5', fontSize: 8, rotate: 45, margin: 8, formatter: function(val){ 
-    const shortMap = {
-        "BENEFICIARIA MANIFIESTA NO HABER RECIBIDO": "NO RECIBIDO",
-        "BENEFICIARIO NO RESIDE EN LA VIVIENDA": "NO RESIDE",
-        "ACTUALIZACIÓN DE DATOS DE CONTACTO": "ACT. DATOS",
-        "FALLECIMIENTO (SOPORTES FORMALIZADOS)": "FALLECIMIENTO",
-        "ERROR EN LA CUENTA DE COBRO": "ERROR CTA. COBRO",
-        "CUENTA DE COBRO NO RECIBIDA": "NO RECIBIÓ CTA.",
-        "VISITA FALLIDA / REPROGRAMAR": "VISITA FALLIDA",
-        "ABANDONO DEL INMUEBLE": "ABANDONO",
-        "RENUNCIA VOLUNTARIA": "RENUNCIA",
-        "SEGUIMIENTO ADMINISTRATIVO": "SEG. ADMIN.",
-        "CAMBIO DE ARRENDADOR": "C. ARRENDADOR",
-        "CAMBIO DE RESIDENCIA": "C. RESIDENCIA",
-        "MUERTE DEL ARRENDADOR": "MUERTE ARREND."
-    };
-    let s = shortMap[val] || val;
-    return s.length > 18 ? s.substring(0,18) + '...' : s;
-} } }, // Increased rotation and margin
-                yAxis: { type: 'category', data: cityArrHm.map(c=>c.name), axisLabel: { color: '#7890b5', fontSize: 9 } },
-                visualMap: { 
-                    type: 'piecewise', show: false,
-                    pieces: [
-                        { value: 0, color: '#142038' }, // 0 values are just the dark background
-                        { min: 1, max: maxHm * 0.2, color: '#00ccff' }, // Low = Cyan
-                        { min: maxHm * 0.2, max: maxHm * 0.6, color: '#ffcc00' }, // Medium = Yellow
-                        { min: maxHm * 0.6, max: maxHm * 10, color: '#ff0033' }  // High = Red
-                    ]
-                },
-                series: [{ type: 'heatmap', data: hmData, label: { show: true, color: '#fff', fontSize: 10 }, itemStyle: { borderColor: '#030610', borderWidth: 1 } }]
-            });
-
-            // 3. Sunburst 3 niveles: Novedad (Top 6) → Ciudad (Top 6) → Resolución (Top 4)
-            let sbMap = {};
-            filteredData.forEach(d => {
-                let nov = d[col.tnov] || 'NINGUNA';
-                if (nov === 'NINGUNA') return;
-                let ciu = d[col.ciu] || 'SIN CIUDAD';
-                let res = (d[col.res] || 'SIN RES').replace(/RESOLUCI[OÓ]N\s*/i, '').trim();
-                let pen = parseFloat(d[col.pend]) || 0;
-                if (pen <= 0) return;
-                if (!sbMap[nov]) sbMap[nov] = {};
-                if (!sbMap[nov][ciu]) sbMap[nov][ciu] = {};
-                sbMap[nov][ciu][res] = (sbMap[nov][ciu][res] || 0) + pen;
-            });
-
-            const sbColors = ['#ff0033','#ff5e00','#ffcc00','#bf00ff','#00ccff','#00ff88'];
-
-            let sbData = Object.entries(sbMap)
-                .map(([nov, cities]) => {
-                    let novTotal = Object.values(cities).reduce((s, rs) => s + Object.values(rs).reduce((a,b)=>a+b,0), 0);
-                    return { nov, cities, total: novTotal };
-                })
-                .filter(x => x.total > 0)
-                .sort((a,b) => b.total - a.total)
-                .slice(0, 6)
-                .map(({ nov, cities, total }, i) => {
-                    let color = sbColors[i];
-                    let novLabel = nov.length > 20 ? nov.substring(0, 18) + '..' : nov;
-                    return {
-                        name: novLabel,
-                        value: total,
-                        itemStyle: { color },
-                        children: Object.entries(cities)
-                            .map(([ciu, ress]) => {
-                                let ciuTotal = Object.values(ress).reduce((a,b)=>a+b,0);
-                                return {
-                                    name: ciu.length > 13 ? ciu.substring(0,11)+'..' : ciu,
-                                    value: ciuTotal,
-                                    itemStyle: { color, opacity: 0.75 },
-                                    children: Object.entries(ress)
-                                        .filter(([,v]) => v > 0)
-                                        .sort((a,b)=>b[1]-a[1])
-                                        .slice(0, 4)
-                                        .map(([r, val]) => ({
-                                            name: r.length > 10 ? r.substring(0,9)+'..' : r,
-                                            value: val,
-                                            itemStyle: { color, opacity: 0.4, borderColor: '#030610', borderWidth: 1 }
-                                        }))
-                                };
-                            })
-                            .filter(c => c.value > 0)
-                            .sort((a,b) => b.value - a.value)
-                            .slice(0, 6)
-                    };
-                });
-
-            charts.execSunburst.setOption({
-                backgroundColor: 'transparent',
                 tooltip: {
-                    show: true, trigger: 'item', appendToBody: true, confine: true,
-                    backgroundColor: 'rgba(3, 6, 16, 0.95)', borderColor: '#ff0033', borderWidth: 1,
-                    extraCssText: 'min-width: 180px; line-height: 1.8; padding: 10px;',
+                    position: 'top', appendToBody: true, confine: true,
+                    backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#ff5e00', borderWidth: 1,
                     textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
-                    formatter: p => `<b style="color:${p.color}; border-bottom:1px solid #ff5e00; display:block; padding-bottom:3px; margin-bottom:3px;">${p.name}</b>Capital Bloqueado: <span style="color:#ff5e00;">${formatMoney(p.value)}</span>`
+                    formatter: p => {
+                        if(!p.data || p.data[2] === 0) return null;
+                        let novNom = novArr[p.data[0]];
+                        let ciuNom = cityArrHm[p.data[1]]?.name;
+                        return `<b style="color:#00ccff">${ciuNom}</b><br/><span style="color:#ff5e00">${novNom}</span><br/>Casos: <b>${p.data[2]}</b>`;
+                    }
                 },
-                series: [{
-                    type: 'sunburst',
-                    data: sbData,
-                    radius: ['6%', '96%'],
-                    sort: null,
-                    nodeClick: 'rootToNode',
-                    itemStyle: { borderColor: '#030610', borderWidth: 1 },
-                    label: { rotate: 'radial', color: '#fff', fontSize: 9, minAngle: 10, overflow: 'truncate' },
-                    emphasis: { focus: 'ancestor', itemStyle: { shadowBlur: 10 } },
-                    levels: [
-                        {},
-                        { r0: '6%',  r: '36%', label: { fontSize: 10, fontWeight: 'bold', minAngle: 8,  align: 'right' } },
-                        { r0: '38%', r: '66%', label: { fontSize: 9,  minAngle: 10, align: 'right' } },
-                        { r0: '68%', r: '96%', label: { fontSize: 8,  minAngle: 8,  align: 'left'  } }
+                grid: { top: 6, bottom: 58, left: 88, right: 6 },
+                xAxis: { type: 'category', data: novArr, axisLabel: { color: '#7890b5', fontSize: 7, rotate: 42, margin: 5, formatter: novShort } },
+                yAxis: { type: 'category', data: cityArrHm.map(c=>c.name), axisLabel: { color: '#7890b5', fontSize: 8 } },
+                visualMap: {
+                    type: 'piecewise', show: true,
+                    orient: 'horizontal', bottom: 2, left: 'center',
+                    itemWidth: 12, itemHeight: 8,
+                    textStyle: { color: '#7890b5', fontSize: 7, fontFamily: 'Share Tech Mono' },
+                    pieces: [
+                        { value: 0, color: '#0d1929', label: '0' },
+                        { min: 1, max: Math.ceil(maxHm*0.25), color: '#00ccff', label: 'Bajo' },
+                        { min: Math.ceil(maxHm*0.25)+1, max: Math.ceil(maxHm*0.6), color: '#ffcc00', label: 'Medio' },
+                        { min: Math.ceil(maxHm*0.6)+1, max: maxHm*99, color: '#ff0033', label: 'Alto' }
                     ]
+                },
+                series: [{ type: 'heatmap', data: hmData,
+                    label: {
+                        show: true, fontSize: 8, fontWeight: 'bold',
+                        formatter: p => p.value[2] > 0 ? p.value[2] : '',
+                        color: function(params) {
+                            if(!params.value || params.value[2] === 0) return 'transparent';
+                            // Cian (Bajo) y amarillo (Medio) → texto oscuro; rojo (Alto) → blanco
+                            return (params.value[2] / maxHm) > 0.6 ? '#fff' : '#030610';
+                        }
+                    },
+                    itemStyle: { borderColor: '#030610', borderWidth: 1 }
                 }]
-            });
+            }, true);
 
+            // Forzar resize de los charts de Tab 3 para que llenen el panel al tamaño real
+            requestAnimationFrame(() => {
+                [charts.execRadar, charts.execHeatmap, charts.visionChartPareto,
+                 charts.chartArrendadores, charts.chartDistPagos, charts.chartFlujoPagos]
+                .forEach(c => c && c.resize());
+            });
         }
 
 
@@ -3600,17 +3689,12 @@ if(document.getElementById('t2_kpiAvancePct')) {
                 if(el('t3_kpiPctNov')) el('t3_kpiPctNov').innerText = pctNov + '%';
                 if(el('t3_kpiBenConNov')) el('t3_kpiBenConNov').innerText = benConNovSet.size + ' de ' + benTotalSet.size;
                 if(el('t3_lineNov')) el('t3_lineNov').style.width = Math.min(parseFloat(pctNov), 100) + '%';
-                if(el('t3_kpiNovFrecNom')) {
-                    let n = novFrecArr.length > 0 ? novFrecArr[0][0] : '---';
-                    el('t3_kpiNovFrecNom').innerText = n.length > 16 ? n.substring(0,14)+'…' : n;
-                }
+                if(el('t3_kpiNovFrecNom')) el('t3_kpiNovFrecNom').innerText = novFrecArr.length > 0 ? novFrecArr[0][0] : '---';
                 if(el('t3_kpiNovFrecCnt')) el('t3_kpiNovFrecCnt').innerText = (novFrecArr.length > 0 ? novFrecArr[0][1] : 0) + ' casos';
                 if(el('t3_kpiBloqueado')) el('t3_kpiBloqueado').innerText = formatMoney(totalBloqNov);
-                if(el('t3_kpiArrNom')) {
-                    let n = arrRiesArr.length > 0 ? arrRiesArr[0].nombre : '---';
-                    el('t3_kpiArrNom').innerText = n.length > 16 ? n.substring(0,14)+'…' : n;
-                }
-                if(el('t3_kpiArrCount')) el('t3_kpiArrCount').innerText = (arrRiesArr.length > 0 ? arrRiesArr[0].bens.size : 0) + ' bens.';
+                if(el('t3_kpiArrNom')) el('t3_kpiArrNom').innerText = arrRiesArr.length > 0 ? arrRiesArr[0].nombre : '---';
+                if(el('t3_kpiArrCount')) el('t3_kpiArrCount').innerText = (arrRiesArr.length > 0 ? arrRiesArr[0].bens.size : 0) + ' con novedad';
+                if(el('t3_kpiBenTotal')) el('t3_kpiBenTotal').innerText = benTotalSet.size.toLocaleString();
             })();
 
             if(charts.intChartRes) {
@@ -3792,43 +3876,71 @@ if(document.getElementById('t2_kpiAvancePct')) {
 
             // Tab 5 Charts (Vision)
             if(charts.visionChartPareto) {
-                // Pareto: Sort cities by Debt absolute
-                let pCiu = Object.keys(efectCiu).map(k => ({n: k, d: efectCiu[k].t - efectCiu[k].pag})).sort((a,b)=>b.d - a.d);
+                let pCiu = Object.keys(efectCiu).map(k => ({n: k, d: efectCiu[k].t - efectCiu[k].pag, pag: efectCiu[k].pag, t: efectCiu[k].t})).sort((a,b)=>b.d - a.d);
+                let sliced = pCiu; // siempre todas las ciudades
                 let totD = pCiu.reduce((a,b)=>a+b.d, 0);
-                let acc = 0;
-                let cLine = []; let cBar = []; let cNames = [];
-                pCiu.slice(0, paretoTopN).forEach(c => {
+                let acc = 0, cLine = [], cBar = [], cNames = [];
+                sliced.forEach(c => {
                     acc += c.d;
-                    cNames.push(c.n.substring(0,10));
-                    cBar.push(c.d);
-                    cLine.push(totD > 0 ? (acc/totD)*100 : 0);
+                    cNames.push(c.n.length > 17 ? c.n.substring(0,16)+'..' : c.n);
+                    cBar.push(+(c.d).toFixed(0));
+                    cLine.push(totD > 0 ? +((acc/totD)*100).toFixed(1) : 0);
                 });
-                
                 charts.visionChartPareto.setOption({
                     backgroundColor: 'transparent',
-                    tooltip: { trigger: 'axis' },
-                    grid: {left: '5%', right: '5%', bottom: '15%', top: '15%', containLabel: true},
-                    xAxis: {type: 'category', data: cNames, axisLabel: {color:'#aaa', rotate: 45, fontSize:9}},
+                    legend: {
+                        data: [{name:'$ Pendiente',icon:'roundRect'},{name:'% Acumulado',icon:'line'}],
+                        top: 2, left: 'center',
+                        textStyle: { color: '#7890b5', fontSize: 8, fontFamily: 'Share Tech Mono' },
+                        itemWidth: 10, itemHeight: 6
+                    },
+                    tooltip: {
+                        trigger: 'axis', appendToBody: true, confine: true,
+                        backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#bf00ff', borderWidth: 1,
+                        textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                        formatter: function(params) {
+                            let idx = params[0].dataIndex;
+                            let c = sliced[idx];
+                            let pct80 = cLine[idx] >= 80 ? ' <span style="color:#ffcc00">⚠ 80% CONCENTRACIÓN</span>' : '';
+                            return `<b style="color:#bf00ff">${c.n}</b><br/>
+                                Pendiente: <span style="color:#ff0033">${formatMoney(c.d)}</span><br/>
+                                Pagado: <span style="color:#00ff88">${formatMoney(c.pag)}</span> de ${formatMoney(c.t)}<br/>
+                                % Acum.: <span style="color:#00ff88">${cLine[idx]}%</span>${pct80}`;
+                        }
+                    },
+                    grid: { left: '3%', right: '6%', bottom: '12%', top: '20%', containLabel: true },
+                    xAxis: { type: 'category', data: cNames, axisLabel: { color: '#7890b5', rotate: 28, fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0 }, axisLine: { lineStyle: { color: '#142038' } }, axisTick: { show: false } },
                     yAxis: [
-                        {type: 'value', name: 'Deuda ($)', axisLabel: {color:'#aaa', formatter: function(v){return (v/1000000).toFixed(0)+'M';}}},
-                        {type: 'value', name: '% Acumulado', max: 100, axisLabel: {color:'#aaa', formatter: '{value}%'}}
+                        { type: 'value', name: 'Deuda ($)', nameTextStyle: { color: '#7890b5', fontSize: 8 }, axisLabel: { color: '#7890b5', fontSize: 8, formatter: v => formatMoneyShort(v) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                        { type: 'value', name: '% Acum', max: 100, nameTextStyle: { color: '#7890b5', fontSize: 8 }, axisLabel: { color: '#7890b5', fontSize: 8, formatter: '{value}%' }, splitLine: { show: false } }
                     ],
                     series: [
-                        {name: 'Deuda', type: 'bar', itemStyle: {color: '#bf00ff'}, data: cBar},
-                        {name: '% Acum', type: 'line', yAxisIndex: 1, itemStyle: {color: '#00ff88'}, data: cLine}
+                        { name: '$ Pendiente', type: 'bar', data: cBar, barMaxWidth: 28,
+                          itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#bf00ff'},{offset:1,color:'#4a0080'}]), borderRadius: [3,3,0,0] },
+                          emphasis: { itemStyle: { color: '#e070ff' } } },
+                        { name: '% Acumulado', type: 'line', yAxisIndex: 1, data: cLine,
+                          itemStyle: { color: '#00ff88' }, lineStyle: { color: '#00ff88', width: 2 },
+                          symbol: 'circle', symbolSize: 4,
+                          markLine: { silent: true, symbol: 'none', lineStyle: { color: '#ffcc00', type: 'dashed', width: 1 },
+                            data: [{ yAxis: 80, name: '80%', label: { formatter: '80%', color: '#ffcc00', fontSize: 9 } }] }
+                        }
                     ]
                 });
             }
-            // Tab 4: Concentración de Arrendadores (Top 15)
+            // Concentración de Arrendadores (Top 15, stacked + leyenda + novedad detail)
             if(charts.chartArrendadores) {
                 let arrMap = {};
                 filteredData.forEach(d => {
                     let arrKey = String(d[col.arrDoc] || d[col.arrNom] || 'SIN ARRENDADOR').trim();
                     let arrNom = String(d[col.arrNom] || arrKey).trim();
-                    if(!arrMap[arrKey]) arrMap[arrKey] = { nombre: arrNom, bens: new Set(), bensNov: new Set() };
+                    if(!arrMap[arrKey]) arrMap[arrKey] = { nombre: arrNom, bens: new Set(), bensNov: new Set(), novTipos: {} };
                     let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
                     arrMap[arrKey].bens.add(docKey);
-                    if(d[col.tnov] && d[col.tnov] !== 'NINGUNA') arrMap[arrKey].bensNov.add(docKey);
+                    if(d[col.tnov] && d[col.tnov] !== 'NINGUNA') {
+                        arrMap[arrKey].bensNov.add(docKey);
+                        let tn = d[col.tnov];
+                        arrMap[arrKey].novTipos[tn] = (arrMap[arrKey].novTipos[tn] || 0) + 1;
+                    }
                 });
                 let arrData = Object.values(arrMap)
                     .filter(a => a.bens.size > 0)
@@ -3837,29 +3949,39 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     .reverse();
                 charts.chartArrendadores.setOption({
                     backgroundColor: 'transparent',
+                    legend: {
+                        data: [{name:'Sin novedad',icon:'roundRect'},{name:'Con novedad',icon:'roundRect'}],
+                        top: 2, left: 'center',
+                        textStyle: { color: '#7890b5', fontSize: 8, fontFamily: 'Share Tech Mono' },
+                        itemWidth: 10, itemHeight: 6
+                    },
                     tooltip: {
-                        trigger: 'axis', axisPointer: { type: 'shadow' }, appendToBody: true,
+                        trigger: 'axis', axisPointer: { type: 'shadow' }, appendToBody: true, confine: true,
                         backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#bf00ff', borderWidth: 1,
                         textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
                         formatter: p => {
-                            let d = arrData[p[0].dataIndex];
-                            let novPct = d.bens.size > 0 ? (d.bensNov.size / d.bens.size * 100).toFixed(0) : 0;
-                            return `<b style="color:#bf00ff;">${d.nombre.substring(0,30)}</b><br/>
-                                    Beneficiarios: <span style="color:#fff;">${d.bens.size}</span><br/>
-                                    Con novedad: <span style="color:#ff5e00;">${d.bensNov.size} (${novPct}%)</span>`;
+                            let a = arrData[p[0].dataIndex];
+                            if(!a) return '';
+                            let novPct = a.bens.size > 0 ? (a.bensNov.size / a.bens.size * 100).toFixed(0) : 0;
+                            let novDetalle = Object.entries(a.novTipos).sort((x,y)=>y[1]-x[1]).slice(0,4)
+                                .map(([k,v]) => `<span style="color:#ff5e00">▸</span> ${k.substring(0,28)}: <b>${v}</b>`).join('<br/>');
+                            return `<b style="color:#bf00ff">${a.nombre.substring(0,32)}</b><br/>
+                                Total bens.: <span style="color:#fff">${a.bens.size}</span> &nbsp;
+                                Con novedad: <span style="color:#ff5e00">${a.bensNov.size} (${novPct}%)</span>
+                                ${novDetalle ? '<br/><br/><span style="color:#7890b5">Novedades:</span><br/>' + novDetalle : ''}`;
                         }
                     },
-                    grid: { left: '3%', right: '8%', top: '3%', bottom: '3%', containLabel: true },
-                    xAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9 }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
-                    yAxis: { type: 'category', data: arrData.map(a => { let n = a.nombre; return n.length > 20 ? n.substring(0,18)+'..' : n; }), axisLabel: { color: '#7890b5', fontSize: 8 } },
+                    grid: { left: '3%', right: '8%', top: '18%', bottom: '3%', containLabel: true },
+                    xAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 8 }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                    yAxis: { type: 'category', data: arrData.map(a => { let n = a.nombre; return n.length > 18 ? n.substring(0,17)+'..' : n; }), axisLabel: { color: '#7890b5', fontSize: 8 } },
                     series: [
-                        { name: 'Sin novedad', type: 'bar', stack: 'total',
+                        { name: 'Sin novedad', type: 'bar', stack: 'total', barMaxWidth: 16,
                           data: arrData.map(a => a.bens.size - a.bensNov.size),
-                          itemStyle: { color: '#bf00ff' }, barMaxWidth: 18 },
-                        { name: 'Con novedad', type: 'bar', stack: 'total',
+                          itemStyle: { color: '#bf00ff', borderRadius: [0,0,0,0] } },
+                        { name: 'Con novedad', type: 'bar', stack: 'total', barMaxWidth: 16,
                           data: arrData.map(a => a.bensNov.size),
-                          itemStyle: { color: '#ff5e00' }, barMaxWidth: 18,
-                          label: { show: true, position: 'right', formatter: p => p.value > 0 ? p.value : '', color: '#fff', fontSize: 9 } }
+                          itemStyle: { color: '#ff5e00', borderRadius: [0,3,3,0] },
+                          label: { show: true, position: 'right', formatter: p => p.value > 0 ? p.value : '', color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono' } }
                     ]
                 });
             }
@@ -3878,7 +4000,7 @@ if(document.getElementById('t2_kpiAvancePct')) {
                 let maxPagos = Math.max(...Object.keys(distObj).map(Number), 0);
                 let xLabels = [], yValues = [];
                 for(let i = 0; i <= maxPagos; i++) {
-                    xLabels.push(i === 0 ? '0 pagos' : i + (i === 1 ? ' pago' : ' pagos'));
+                    xLabels.push(String(i));
                     yValues.push(distObj[i] || 0);
                 }
                 let totalBens = Object.keys(benPagosMap).length || 1;
@@ -3893,19 +4015,23 @@ if(document.getElementById('t2_kpiAvancePct')) {
                             return `<b style="color:#00ff88;">${p[0].name}</b><br/>Beneficiarios: <span style="color:#fff;">${p[0].value.toLocaleString()}</span><br/>Del total: <span style="color:#00ccff;">${pct}%</span>`;
                         }
                     },
-                    grid: { left: '5%', right: '5%', top: '12%', bottom: '12%', containLabel: true },
-                    xAxis: { type: 'category', data: xLabels, axisLabel: { color: '#7890b5', fontSize: 9, rotate: 30 } },
+                    grid: { left: '5%', right: '5%', top: '8%', bottom: '10%', containLabel: true },
+                    xAxis: { type: 'category', data: xLabels, axisLabel: { color: '#7890b5', fontSize: 9, rotate: 0, interval: 0 }, name: 'Nº de pagos recibidos', nameTextStyle: { color: '#7890b5', fontSize: 8 }, nameLocation: 'middle', nameGap: 22 },
                     yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 9 }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
                     series: [{
-                        type: 'bar',
+                        type: 'bar', barMaxWidth: 36,
                         data: yValues.map((v, i) => ({
                             value: v,
-                            itemStyle: { color: i === 0 ? '#ff003388' : new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                { offset: 0, color: '#00ff88' }, { offset: 1, color: '#00443300' }
-                            ])}
+                            itemStyle: {
+                                color: i === 0
+                                    ? new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#ff003388'},{offset:1,color:'#ff003322'}])
+                                    : new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#00ff88'},{offset:1,color:'#004433'}]),
+                                borderRadius: [4, 4, 0, 0],
+                                shadowColor: i === 0 ? 'rgba(255,0,51,0.3)' : 'rgba(0,255,136,0.3)',
+                                shadowBlur: 6, shadowOffsetY: -2
+                            }
                         })),
-                        barMaxWidth: 40,
-                        label: { show: true, position: 'top', color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono', formatter: p => p.value > 0 ? p.value.toLocaleString() : '' }
+                        label: { show: true, position: 'top', color: '#ccc', fontSize: 8, fontFamily: 'Share Tech Mono', formatter: p => p.value > 0 ? p.value.toLocaleString() : '' }
                     }]
                 });
             }
@@ -3960,30 +4086,22 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     ],
                     series: [
                         { name: '$ Pagado', type: modoAcum ? 'line' : 'bar', data: pagVals, yAxisIndex: 0,
-                          itemStyle: { color: '#00ff88' },
-                          areaStyle: modoAcum ? { color: 'rgba(0,255,136,0.08)' } : undefined,
-                          lineStyle: { width: 2 }, smooth: true, barMaxWidth: 36 },
+                          barMaxWidth: 36,
+                          itemStyle: modoAcum ? { color: '#00ff88' } : {
+                              color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#00ff88'},{offset:1,color:'#004433'}]),
+                              borderRadius: [4,4,0,0], shadowColor: 'rgba(0,255,136,0.4)', shadowBlur: 8, shadowOffsetY: -2
+                          },
+                          areaStyle: modoAcum ? { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(0,255,136,0.25)'},{offset:1,color:'rgba(0,255,136,0)'}]) } : undefined,
+                          lineStyle: { width: 2, color: '#00ff88' }, smooth: true },
                         { name: 'Beneficiarios', type: 'line', data: benVals, yAxisIndex: 1,
-                          itemStyle: { color: '#00ccff' }, lineStyle: { width: 1.5, type: 'dashed' },
-                          smooth: true, symbol: 'circle', symbolSize: 4 }
+                          itemStyle: { color: '#00ccff' }, lineStyle: { width: 2, type: 'dashed', color: '#00ccff' },
+                          smooth: true, symbol: 'circle', symbolSize: 5 }
                     ]
                 });
             }
 
         } // End updateDashboard
 
-        let paretoTopN = 10;
-
-        function resetSunburst() {
-            if(typeof renderExecCharts === 'function') renderExecCharts();
-        }
-
-        function toggleParetoTop() {
-            paretoTopN = paretoTopN === 10 ? 20 : 10;
-            let btn = document.getElementById('btnParetoTop');
-            if(btn) btn.innerText = paretoTopN === 10 ? 'TOP 20' : 'TOP 10';
-            updateDashboard();
-        }
 
         function toggleFlujoModo() {
             let btn = document.getElementById('btnFlujoToggle');
@@ -4021,6 +4139,178 @@ if(document.getElementById('t2_kpiAvancePct')) {
                 wrap.addEventListener('mouseleave', () => { gt.style.display = 'none'; });
             });
         })();
+
+        // ═══════════════════════════════════════════════════════════════
+        // TAB SEGUIMIENTO Y ALERTAS
+        // ═══════════════════════════════════════════════════════════════
+        let tlData = null, tlFiltered = [], tlPage = 0, tlPageSize = 50;
+        let tlSemFilter = 'TODOS';
+
+        async function loadTimeline() {
+            if (tlData) { tlRenderTable(); return; }
+            document.getElementById('tlTableBody').innerHTML =
+                '<tr><td colspan="11" class="text-center py-8 text-[#7890b5] tracking-widest text-[10px]">⏳ CARGANDO DATOS...</td></tr>';
+            try {
+                const r = await fetch('/api/timeline');
+                tlData = await r.json();
+                tlRenderKpis();
+                tlRenderCharts();
+                tlRenderTable();
+            } catch(e) {
+                document.getElementById('tlTableBody').innerHTML =
+                    '<tr><td colspan="11" class="text-center py-8 text-[#ff0033] tracking-widest text-[10px]">⚠ ERROR CARGANDO /api/timeline</td></tr>';
+            }
+        }
+
+        function tlRenderKpis() {
+            const cnt = {CRITICO:0, ROJO:0, AMARILLO:0, VERDE:0};
+            tlData.forEach(d => { if(cnt[d.semaforo] !== undefined) cnt[d.semaforo]++; });
+            document.getElementById('tlKpiCritico').textContent  = cnt.CRITICO.toLocaleString();
+            document.getElementById('tlKpiRojo').textContent     = cnt.ROJO.toLocaleString();
+            document.getElementById('tlKpiAmarillo').textContent = cnt.AMARILLO.toLocaleString();
+            document.getElementById('tlKpiVerde').textContent    = cnt.VERDE.toLocaleString();
+        }
+
+        function tlRenderCharts() {
+            // ── Pipeline: días promedio por etapa ──────────────────────
+            const withD1 = tlData.filter(d => d.d1 != null && d.d1 >= 0);
+            const withD2 = tlData.filter(d => d.d2 != null && d.d2 >= 0);
+            const withD3 = tlData.filter(d => d.d3 != null && d.d3 >= 0);
+            const withD4 = tlData.filter(d => d.d4_sin_pago != null && d.d4_sin_pago >= 0);
+            const avg = arr => arr.length ? Math.round(arr.reduce((s,d)=>s+d,0)/arr.length) : 0;
+            const d1avg = avg(withD1.map(d=>d.d1));
+            const d2avg = avg(withD2.map(d=>d.d2));
+            const d3avg = avg(withD3.map(d=>d.d3));
+            const d4avg = avg(withD4.map(d=>d.d4_sin_pago));
+
+            const pip = echarts.init(document.getElementById('tlChartPipeline'));
+            charts['tlPipeline'] = pip;
+            pip.setOption({
+                backgroundColor: 'transparent',
+                tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
+                    formatter: p => `${p[0].name}<br/><b>${p[0].value} días</b>` },
+                grid: { left:180, right:60, top:10, bottom:30 },
+                xAxis: { type:'value', axisLabel:{color:'#7890b5',fontSize:9},
+                    splitLine:{lineStyle:{color:'#142038'}} },
+                yAxis: { type:'category', data:[
+                    'D4 · Días sin pago','D3 · Legal → Cargue',
+                    'D2 · Asig → Legalización','D1 · Postul → Asignación'],
+                    axisLabel:{color:'#e0e0e0',fontSize:9}, axisTick:{show:false} },
+                series:[{ type:'bar', barWidth:18,
+                    data:[
+                        {value:d4avg, itemStyle:{color: d4avg>90?'#ff0033': d4avg>60?'#ff5e00':'#00ff88'}},
+                        {value:d3avg, itemStyle:{color: d3avg>180?'#ff5e00':'#00ccff'}},
+                        {value:d2avg, itemStyle:{color: d2avg>365?'#ff0033': d2avg>180?'#ff5e00':'#ffcc00'}},
+                        {value:d1avg, itemStyle:{color:'#00ccff'}},
+                    ],
+                    label:{show:true, position:'right', color:'#e0e0e0', fontSize:9,
+                        formatter: p => p.value + ' días'}
+                }]
+            });
+
+            // ── Distribución: días en proceso (no legalizados) ─────────
+            const nleg = tlData.filter(d => d.legalizado === 'No' && d.d_proceso != null);
+            const buckets = [
+                {label:'0–90',  count: nleg.filter(d=>d.d_proceso<=90).length,  color:'#00ff88'},
+                {label:'91–180',count: nleg.filter(d=>d.d_proceso>90&&d.d_proceso<=180).length, color:'#ffcc00'},
+                {label:'181–365',count:nleg.filter(d=>d.d_proceso>180&&d.d_proceso<=365).length,color:'#ff5e00'},
+                {label:'+365',  count: nleg.filter(d=>d.d_proceso>365).length,  color:'#ff0033'},
+            ];
+            const dist = echarts.init(document.getElementById('tlChartDist'));
+            charts['tlDist'] = dist;
+            dist.setOption({
+                backgroundColor:'transparent',
+                tooltip:{trigger:'axis', axisPointer:{type:'shadow'},
+                    formatter: p=>`${p[0].name} días<br/><b>${p[0].value} beneficiarios</b>`},
+                grid:{left:20,right:20,top:10,bottom:30, containLabel:true},
+                xAxis:{type:'category', data:buckets.map(b=>b.label),
+                    axisLabel:{color:'#e0e0e0',fontSize:10},axisTick:{show:false}},
+                yAxis:{type:'value', axisLabel:{color:'#7890b5',fontSize:9},
+                    splitLine:{lineStyle:{color:'#142038'}}},
+                series:[{type:'bar', barWidth:'50%',
+                    data: buckets.map(b=>({value:b.count, itemStyle:{color:b.color, borderRadius:3}})),
+                    label:{show:true, position:'top', color:'#e0e0e0', fontSize:9}
+                }]
+            });
+        }
+
+        function tlSetFilter(sem) {
+            tlSemFilter = sem;
+            tlPage = 0;
+            ['TODOS','CRITICO','ROJO','AMARILLO','VERDE'].forEach(s => {
+                const btn = document.getElementById('tlf_' + s);
+                if (!btn) return;
+                const colors = {TODOS:'#00ccff',CRITICO:'#ff0033',ROJO:'#ff5e00',AMARILLO:'#ffcc00',VERDE:'#00ff88'};
+                const c = colors[s];
+                if (s === sem) {
+                    btn.style.cssText = `background:${c}22;border-color:${c};color:${c};font-weight:bold;`;
+                } else {
+                    btn.style.cssText = '';
+                }
+            });
+            tlRenderTable();
+        }
+
+        function tlRenderTable() {
+            if (!tlData) return;
+            const search = (document.getElementById('tlSearch').value || '').toLowerCase();
+            const etapa  = document.getElementById('tlEtapaFilter').value;
+            tlFiltered = tlData.filter(d => {
+                if (tlSemFilter !== 'TODOS' && d.semaforo !== tlSemFilter) return false;
+                if (etapa && d.etapa !== etapa) return false;
+                if (search) {
+                    const hay = ((d.nombre||'') + ' ' + (d.apellidos||'') + ' ' + (d.documento||'')).toLowerCase();
+                    if (!hay.includes(search)) return false;
+                }
+                return true;
+            });
+            const total = tlFiltered.length;
+            const pages = Math.ceil(total / tlPageSize) || 1;
+            if (tlPage >= pages) tlPage = pages - 1;
+            document.getElementById('tlCount').textContent = `${total.toLocaleString()} registros`;
+            document.getElementById('tlPageInfo').textContent = `Página ${tlPage+1} de ${pages}`;
+            document.getElementById('tlBtnPrev').disabled = tlPage === 0;
+            document.getElementById('tlBtnNext').disabled = tlPage >= pages - 1;
+
+            const semIcon = {CRITICO:'🚨',ROJO:'🔴',AMARILLO:'🟡',VERDE:'🟢'};
+            const semColor= {CRITICO:'#ff0033',ROJO:'#ff5e00',AMARILLO:'#ffcc00',VERDE:'#00ff88'};
+            const fmtD = v => (v != null && v !== '' && !isNaN(v)) ? `<span style="font-variant-numeric:tabular-nums">${Number(v).toLocaleString()}</span>` : '<span style="color:#3a4f6a">—</span>';
+            const fmtDate = s => s ? s.slice(0,10) : '—';
+
+            const slice = tlFiltered.slice(tlPage * tlPageSize, (tlPage+1) * tlPageSize);
+            const tbody = document.getElementById('tlTableBody');
+            tbody.innerHTML = slice.map(d => {
+                const c = semColor[d.semaforo] || '#7890b5';
+                const rowBg = d.semaforo === 'CRITICO' ? 'background:rgba(255,0,51,0.06)' :
+                              d.semaforo === 'ROJO'    ? 'background:rgba(255,94,0,0.04)' : '';
+                return `<tr style="${rowBg}" class="border-b border-[#0d1a30] hover:bg-[#0a1930] transition-colors">
+                    <td class="px-3 py-2 text-center">
+                        <span style="color:${c};font-size:14px" title="${d.semaforo}">${semIcon[d.semaforo]||'?'}</span>
+                    </td>
+                    <td class="px-3 py-2" style="color:#e0e0e0;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${d.nombre||''} ${d.apellidos||''}">
+                        ${d.nombre||''} ${d.apellidos||''}
+                    </td>
+                    <td class="px-3 py-2 font-mono" style="color:#7890b5">${d.documento||'—'}</td>
+                    <td class="px-3 py-2" style="color:#7890b5;white-space:nowrap">${d.ciudad||'—'}</td>
+                    <td class="px-3 py-2">
+                        <span style="color:${d.etapa==='CARGADO'?'#00ff88':d.etapa==='LEGALIZADO'?'#00ccff':'#ffcc00'};font-size:9px;font-weight:bold;letter-spacing:1px">${d.etapa||'—'}</span>
+                    </td>
+                    <td class="px-3 py-2 text-right" style="color:#00ccff">${fmtD(d.d1)}</td>
+                    <td class="px-3 py-2 text-right" style="color:${d.d2>365?'#ff0033':d.d2>180?'#ff5e00':'#ffcc00'}">${fmtD(d.d2)}</td>
+                    <td class="px-3 py-2 text-right" style="color:#00ccff">${fmtD(d.d3)}</td>
+                    <td class="px-3 py-2 text-right" style="color:${d.d4_sin_pago>90?'#ff0033':d.d4_sin_pago>60?'#ff5e00':'#00ff88'}">${fmtD(d.d4_sin_pago)}</td>
+                    <td class="px-3 py-2" style="color:#7890b5;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${d.gestor||''}">${d.gestor||'—'}</td>
+                    <td class="px-3 py-2" style="color:#7890b5;font-size:9px;white-space:nowrap">${d.estado||'—'}</td>
+                </tr>`;
+            }).join('');
+
+            if (slice.length === 0)
+                tbody.innerHTML = '<tr><td colspan="11" class="text-center py-8 text-[#7890b5] tracking-widest text-[10px]">SIN RESULTADOS</td></tr>';
+        }
+
+        function tlPrevPage() { if(tlPage>0){tlPage--;tlRenderTable();} }
+        function tlNextPage() { const p=Math.ceil(tlFiltered.length/tlPageSize)-1; if(tlPage<p){tlPage++;tlRenderTable();} }
+
     </script>
 </body>
 </html>

@@ -99,6 +99,21 @@
             padding: 20px; display: flex; flex-direction: column; overflow-y: auto;
         }
         #sideDrawer.active { transform: translateX(0); }
+
+        /* Drawer derecho Tab 4 */
+        #t4Drawer {
+            position: fixed; top: 0; right: 0; width: 380px; height: 100vh;
+            background: rgba(4, 9, 20, 0.97); border-left: 2px solid #ffcc00;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.9), inset 0 0 20px rgba(255,204,0,0.06);
+            z-index: 60; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; display: flex; flex-direction: column; overflow-y: auto;
+        }
+        #t4Drawer.active { transform: translateX(0); }
+        #t4DrawerOverlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 59; display: none;
+        }
+        #t4DrawerOverlay.active { display: block; }
     </style>
 </head>
 <body>
@@ -180,6 +195,67 @@
         </div>
     </div> <!-- End sideDrawer -->
 
+    <!-- Overlay Tab 4 Drawer -->
+    <div id="t4DrawerOverlay" onclick="tlCloseDrawer()"></div>
+
+    <!-- Drawer Derecho Tab 4 -->
+    <div id="t4Drawer">
+        <div class="flex justify-between items-start mb-4 border-b border-[#ffcc00]/30 pb-4 shrink-0">
+            <div>
+                <div class="text-[9px] text-[#ffcc00] hud-font tracking-widest mb-1">PERFIL · SEGUIMIENTO Y ALERTAS</div>
+                <h2 id="t4drwName" class="text-base font-bold text-white tracking-wider leading-tight hud-font">—</h2>
+                <div id="t4drwDoc" class="text-[10px] text-[#7890b5] hud-font mt-0.5">DOC: —</div>
+            </div>
+            <button onclick="tlCloseDrawer()" class="text-gray-500 hover:text-[#ffcc00] text-2xl leading-none ml-4 shrink-0">&times;</button>
+        </div>
+
+        <!-- Semáforo badge -->
+        <div id="t4drwSem" class="flex items-center gap-2 mb-4 p-2 border border-[#142038] shrink-0" style="background:rgba(255,204,0,0.04)">
+            <span id="t4drwSemIcon" class="text-xl">—</span>
+            <div>
+                <div id="t4drwSemLabel" class="text-[11px] font-bold hud-font tracking-widest">—</div>
+                <div id="t4drwSemDesc" class="text-[9px] text-[#7890b5] hud-font mt-0.5">—</div>
+            </div>
+        </div>
+
+        <!-- Datos geográficos y etapa -->
+        <div class="grid grid-cols-2 gap-3 mb-4 shrink-0">
+            <div class="border border-[#142038] p-2" style="background:rgba(20,32,56,0.4)">
+                <div class="text-[8px] text-[#7890b5] hud-font tracking-widest uppercase mb-1">Ciudad</div>
+                <div id="t4drwCiudad" class="text-[11px] font-bold text-[#00ccff] hud-font">—</div>
+            </div>
+            <div class="border border-[#142038] p-2" style="background:rgba(20,32,56,0.4)">
+                <div class="text-[8px] text-[#7890b5] hud-font tracking-widest uppercase mb-1">Etapa</div>
+                <div id="t4drwEtapa" class="text-[11px] font-bold hud-font">—</div>
+            </div>
+        </div>
+
+        <!-- Pipeline días -->
+        <div class="text-[9px] text-[#ffcc00] hud-font tracking-widest uppercase mb-2 shrink-0">Pipeline de Tiempos</div>
+        <div class="flex flex-col gap-2 mb-4 shrink-0" id="t4drwPipeline">
+            <!-- rows inserted by JS -->
+        </div>
+
+        <!-- Secciones dinámicas extra (fechas, financiero, social, gestores) -->
+        <div id="t4drwExtra" class="flex flex-col gap-3 mb-4 shrink-0"></div>
+
+        <!-- Gestor y Estado -->
+        <div class="grid grid-cols-1 gap-3 mb-4 shrink-0">
+            <div class="border border-[#142038] p-2" style="background:rgba(20,32,56,0.4)">
+                <div class="text-[8px] text-[#7890b5] hud-font tracking-widest uppercase mb-1">Gestor Asignado</div>
+                <div id="t4drwGestor" class="text-[11px] text-[#e0e0e0] hud-font">—</div>
+            </div>
+            <div class="border border-[#142038] p-2" style="background:rgba(20,32,56,0.4)">
+                <div class="text-[8px] text-[#7890b5] hud-font tracking-widest uppercase mb-1">Estado Actual</div>
+                <div id="t4drwEstado" class="text-[11px] text-[#e0e0e0] hud-font">—</div>
+            </div>
+        </div>
+
+        <div class="mt-auto text-center text-[8px] text-gray-700 hud-font tracking-widest pt-4 border-t border-[#142038]">
+            MINVIVIENDA · SEMILLEROS BALANCE PAGOS
+        </div>
+    </div>
+
     <!-- Encabezado Sci-Fi HUD -->
     <div class="flex flex-col xl:flex-row xl:items-center justify-between mb-1 mt-1 border-b border-[#00ff88]/30 pb-1 w-full gap-1 relative">
         
@@ -215,10 +291,10 @@
         
         <!-- Tabs Navegación -->
         <div class="flex gap-4">
-            <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">OPERACIÓN DIARIA</button>
-            <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">ANÁLISIS DE EJECUCIÓN</button>
-            <button onclick="switchTab('inteligencia')" id="tab_inteligencia" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">INTELIGENCIA ESTRATÉGICA</button>
-            <button onclick="switchTab('seguimiento')" id="tab_seguimiento" class="text-gray-500 hover:text-[#ffcc00] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">SEGUIMIENTO Y ALERTAS</button>
+            <button onclick="switchTab('operacion')" id="tab_operacion" class="text-[#00ff88] border-b-2 border-[#00ff88] pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">OPERACIÓN DIARIA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>OPERACIÓN DIARIA</b>Resumen ejecutivo del portafolio: beneficiarios activos, avance financiero (pagado vs pendiente), impacto de novedades y ciudad con mayor deuda. Panel principal de monitoreo diario.</span></span></button>
+            <button onclick="switchTab('ejecucion')" id="tab_ejecucion" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">ANÁLISIS DE EJECUCIÓN <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>ANÁLISIS DE EJECUCIÓN</b>Desempeño financiero por resolución y ciudad: mapa de ejecución regional, ranking de ciudades, Sankey de flujo de capital y gráficas de eficiencia. Permite comparar qué ciudades y resoluciones están más atrasadas.</span></span></button>
+            <button onclick="switchTab('inteligencia')" id="tab_inteligencia" class="text-gray-500 hover:text-[#00ccff] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">INTELIGENCIA ESTRATÉGICA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>INTELIGENCIA ESTRATÉGICA</b>Análisis profundo de novedades y riesgos: heatmap de tipo de novedad por ciudad, concentración de deuda (Pareto 80/20), top arrendadores de riesgo y distribución de pagos recibidos por beneficiario.</span></span></button>
+            <button onclick="switchTab('seguimiento')" id="tab_seguimiento" class="text-gray-500 hover:text-[#ffcc00] border-b-2 border-transparent pb-1 tracking-widest text-[10px] font-bold transition-all whitespace-nowrap">SEGUIMIENTO Y ALERTAS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>SEGUIMIENTO Y ALERTAS</b>Semáforo individual por beneficiario: días sin pago (D4), días en proceso sin legalizar (D2), estado del subsidio. Filtra por nivel de alerta y exporta la lista para gestión operativa.</span></span></button>
         </div>
 
         <!-- Breadcrumb Tab2: indicador de nivel de drill-down -->
@@ -227,7 +303,7 @@
         </div>
 
         <!-- Filtros Integrados -->
-        <div class="flex flex-wrap gap-2 items-center">
+        <div id="globalFiltersBar" class="flex flex-wrap gap-2 items-center">
             <div style="width: 100px;"><select id="f_resolucion" onchange="applyFilters()"><option value="TODAS">RESOLUCIÓN</option></select></div>
             <div style="width: 110px;"><select id="f_ciudad" onchange="applyFilters()"><option value="TODAS">CIUDAD</option></select></div>
             <div style="width: 90px;"><select id="f_periodo" onchange="applyFilters()"><option value="TODAS">PERIODO</option></select></div>
@@ -239,6 +315,11 @@
                 <button onclick="resetFilters()" class="h-[26px] px-3 bg-[#142038] text-[#ff5e00] text-[10px] font-bold tracking-widest border border-[#ff5e00] hover:bg-[#ff5e00] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">BORRAR</button>
                 <button onclick="exportData()" class="h-[26px] px-3 bg-[#142038] text-[#00ff88] text-[10px] font-bold tracking-widest border border-[#00ff88] hover:bg-[#00ff88] hover:text-black transition-all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">💾 DATA</button>
             </div>
+        </div>
+        <!-- Filtros Tab 4 — acciones globales -->
+        <div id="tab4FiltersBar" class="flex flex-nowrap gap-1.5 items-center shrink-0" style="display:none;">
+            <button onclick="tlResetFilters()" class="h-[26px] px-3 bg-[#142038] text-[#ff5e00] text-[10px] font-bold tracking-widest border border-[#ff5e00] hover:bg-[#ff5e00] hover:text-black transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,0 100%)">BORRAR</button>
+            <button onclick="tlExportCSV()" class="h-[26px] px-3 bg-[#142038] text-[#00ff88] text-[10px] font-bold tracking-widest border border-[#00ff88] hover:bg-[#00ff88] hover:text-black transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,0 100%)">💾 XLS</button>
         </div>
     </div>
 
@@ -261,7 +342,7 @@
                 <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">BENEFICIARIOS ÚNICOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS ÚNICOS</b>Conteo de beneficiarios únicos por documento en la selección actual vs. el total sin filtrar. El anillo y la barra muestran qué fracción del universo total representa el filtro activo. Se cuenta por doc único para evitar duplicados del melt por periodo.</span></span></div>
                 <div class="flex items-baseline gap-1">
                     <div id="kpiBeneficiarios" class="text-lg font-bold neon-text-green hud-font leading-none">0</div>
-                    <div id="kpiBenTotal" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                    <div id="kpiBenTotal" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
                 </div>
             </div>
             <div class="relative w-8 h-8 flex-shrink-0">
@@ -269,7 +350,7 @@
                     <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
                     <circle id="circBen" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                 </svg>
-                <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ff88] hud-font font-bold">100%</div>
+                <div id="circBenText" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ff88] hud-font font-bold whitespace-nowrap">100%</div>
             </div>
         </div>
         <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
@@ -305,29 +386,37 @@
 
     <!-- Impacto -->
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
-        <div class="flex justify-between items-start w-full">
-            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none flex items-center gap-1">Impacto Novedades <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>IMPACTO FINANCIERO DE NOVEDADES</b>Suma del valor pendiente de beneficiarios con novedad activa (excluye NINGUNA). La barra roja muestra qué proporción del pendiente total está comprometida por novedades. Cuenta solo el primer registro por beneficiario para evitar doble conteo.</span></span></div>
-            <div class="text-[9px] font-bold text-[#ffcc00] tracking-widest uppercase">EXCLUYE "NINGUNA"</div>
+        <div class="flex justify-between items-center w-full">
+            <div class="flex flex-col">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none mb-1 flex items-center gap-1">IMPACTO NOVEDADES <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>IMPACTO FINANCIERO DE NOVEDADES</b>Suma del valor pendiente de beneficiarios con novedad activa (excluye NINGUNA). La barra roja muestra qué proporción del pendiente total está comprometida por novedades. Cuenta solo el primer registro por beneficiario para evitar doble conteo.</span></span></div>
+                <div class="flex items-baseline gap-1">
+                    <div id="kpiIntImpacto" class="text-lg font-bold text-[#ff0033] hud-font leading-none">$0</div>
+                    <div class="text-[12px] text-[#7890b5] hud-font">del pendiente</div>
+                </div>
+            </div>
+            <div class="relative w-8 h-8 shrink-0">
+                <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="circImpacto" cx="16" cy="16" r="14" fill="transparent" stroke="#ff0033" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                <div id="circImpactoTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#ff0033] hud-font font-bold whitespace-nowrap">0%</div>
+            </div>
         </div>
-        <div class="flex items-end gap-1 mt-1 mb-1">
-            <div id="kpiIntImpacto" class="text-lg font-bold text-[#ff0033] hud-font leading-none">$0</div>
-        </div>
-        <div class="w-full h-1 bg-[#ff0033]/20 mt-0.5 rounded overflow-hidden">
+        <div class="w-full h-1 bg-[#ff0033]/20 mt-1.5 rounded overflow-hidden">
             <div id="lineImpacto" class="h-full bg-[#ff0033] transition-all duration-1000" style="width: 100%;"></div>
         </div>
     </div>
 
     <!-- Ciudad Critica -->
     <div class="cyber-panel p-2 flex flex-col justify-between relative">
-        <div class="flex justify-between items-start w-full">
-            <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none flex items-center gap-1">Ciudad M&aacute;s Cr&iacute;tica <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CIUDAD MÁS CRÍTICA</b>Ciudad con mayor deuda absoluta ($ pendiente de pago) en la selección actual. La barra naranja muestra su peso sobre el total pendiente. No es necesariamente la de peor tasa de ejecución — es la que más $ tiene sin pagar.</span></span></div>
-            <div class="text-[9px] font-bold text-[#ffcc00] tracking-widest uppercase">DEUDA ABSOLUTA</div>
+        <div class="flex justify-between items-center w-full">
+            <div class="flex flex-col flex-1 min-w-0">
+                <div class="text-[9px] font-bold text-[#7890b5] tracking-widest uppercase leading-none mb-1 flex items-center gap-1">CIUDAD MÁS CRÍTICA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CIUDAD MÁS CRÍTICA</b>Ciudad con mayor deuda absoluta ($ pendiente de pago) en la selección actual. La barra naranja muestra su peso sobre el total pendiente. No es necesariamente la de peor tasa de ejecución — es la que más $ tiene sin pagar.</span></span></div>
+                <div class="flex items-baseline gap-1 min-w-0">
+                    <div id="kpiIntCiudad" class="text-lg font-bold text-[#ff5e00] hud-font leading-none truncate flex-1">---</div>
+                    <div id="kpiIntCiudadVal" class="text-[11px] font-bold text-[#ffcc00] hud-font leading-none shrink-0">---</div>
+                    <div id="kpiIntCiudadPct" class="text-[12px] text-[#7890b5] hud-font leading-none shrink-0 whitespace-nowrap">0%</div>
+                </div>
+            </div>
         </div>
-        <div class="flex justify-between items-end mt-1 mb-1 w-full gap-2">
-            <div id="kpiIntCiudad" class="text-lg font-bold text-[#ff5e00] hud-font leading-none truncate w-[50%]">---</div>
-            <div id="kpiIntCiudadVal" class="text-lg font-bold text-[#ffcc00] hud-font leading-none truncate text-right w-[50%]">---</div>
-        </div>
-        <div class="w-full h-1 bg-[#ff5e00]/20 mt-0.5 rounded overflow-hidden">
+        <div class="w-full h-1 bg-[#ff5e00]/20 mt-1.5 rounded overflow-hidden">
             <div id="lineCiudad" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width: 100%;"></div>
         </div>
     </div>
@@ -454,7 +543,7 @@
                         <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">BENEFICIARIOS ÚNICOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS ÚNICOS</b>Conteo de beneficiarios únicos por documento en la selección activa vs. el total sin filtrar. El anillo y la barra muestran qué fracción del universo total representa el filtro activo.</span></span></div>
                         <div class="flex items-baseline gap-1">
                             <div id="t2_kpiBen" class="text-lg font-bold neon-text-green hud-font leading-none">0</div>
-                            <div id="t2_kpiBenTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                            <div id="t2_kpiBenTot" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
                         </div>
                     </div>
                     <div class="relative w-8 h-8 flex-shrink-0">
@@ -462,7 +551,7 @@
                             <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
                             <circle id="t2_circBen" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circBenTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ff88] hud-font font-bold">100%</div>
+                        <div id="t2_circBenTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ff88] hud-font font-bold whitespace-nowrap">100%</div>
                     </div>
                 </div>
                 <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
@@ -474,10 +563,10 @@
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
                 <div class="flex justify-between items-center w-full">
                     <div class="flex flex-col">
-                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">REGISTROS TOTALES <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>REGISTROS TOTALES</b>Total de filas tras el unpivot por periodo (beneficiarios × periodos de pago). Un beneficiario con 12 periodos genera 12 registros. Mide volumen transaccional, no beneficiarios únicos.</span></span></div>
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">PAGOS REALIZADOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>PAGOS REALIZADOS</b>Número de desembolsos efectivos (filas con valor pagado &gt; 0). Refleja el volumen de transacciones ejecutadas en la selección activa vs. el universo total.</span></span></div>
                         <div class="flex items-baseline gap-1">
                             <div id="t2_kpiReg" class="text-lg font-bold text-[#00ccff] hud-font leading-none">0</div>
-                            <div id="t2_kpiRegTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                            <div id="t2_kpiRegTot" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
                         </div>
                     </div>
                     <div class="relative w-8 h-8 flex-shrink-0">
@@ -485,7 +574,7 @@
                             <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
                             <circle id="t2_circReg" cx="16" cy="16" r="14" fill="transparent" stroke="#00ccff" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circRegTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ccff] hud-font font-bold">0%</div>
+                        <div id="t2_circRegTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ccff] hud-font font-bold whitespace-nowrap">0%</div>
                     </div>
                 </div>
                 <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
@@ -523,10 +612,10 @@
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
                 <div class="flex justify-between items-center w-full">
                     <div class="flex flex-col">
-                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">TIPO NOV: <span id="t2_titleTNov" class="text-[#00ccff]">TODAS</span> <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>TIPO DE NOVEDAD ACTIVO</b>Beneficiarios únicos con el filtro de tipo de novedad activo. Cuando dice TODAS muestra el universo completo. El anillo refleja el % sobre el total sin filtrar.</span></span></div>
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">BENEFICIARIOS CON NOVEDAD <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS CON NOVEDAD</b>Beneficiarios únicos con alguna novedad activa (excluye NINGUNA) en la selección actual. El anillo muestra el % sobre el total de beneficiarios filtrados.</span></span></div>
                         <div class="flex items-baseline gap-1">
                             <div id="t2_kpiTNov" class="text-lg font-bold text-[#00ccff] hud-font leading-none">0</div>
-                            <div id="t2_kpiTNovTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                            <div id="t2_kpiTNovTot" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
                         </div>
                     </div>
                     <div class="relative w-8 h-8 flex-shrink-0">
@@ -534,7 +623,7 @@
                             <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
                             <circle id="t2_circTNov" cx="16" cy="16" r="14" fill="transparent" stroke="#00ccff" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circTNovTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ccff] hud-font font-bold">0%</div>
+                        <div id="t2_circTNovTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ccff] hud-font font-bold whitespace-nowrap">0%</div>
                     </div>
                 </div>
                 <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
@@ -546,10 +635,10 @@
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
                 <div class="flex justify-between items-center w-full">
                     <div class="flex flex-col">
-                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">ESTADO: <span id="t2_titleEst" class="text-[#00ff88]">TODAS</span> <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>ESTADO DE PAGO ACTIVO</b>Beneficiarios filtrados por estado de pago (PAGADO / PENDIENTE / TODAS). Combinar con filtros de ciudad o novedad para aislar casos específicos. El anillo muestra el % sobre el total.</span></span></div>
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">CIUDAD TOP <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CIUDAD MÁS EFICIENTE</b>Ciudad con mayor tasa de ejecución ($ pagado / $ total asignado) en la selección activa. El anillo muestra ese porcentaje de cumplimiento.</span></span></div>
                         <div class="flex items-baseline gap-1">
-                            <div id="t2_kpiEst" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0</div>
-                            <div id="t2_kpiEstTot" class="text-[9px] text-[#7890b5] hud-font font-bold">de 0</div>
+                            <div id="t2_kpiEst" class="text-[10px] font-bold text-[#00ff88] hud-font leading-none">---</div>
+                            <div id="t2_kpiEstTot" class="text-[12px] text-[#7890b5] hud-font font-bold"></div>
                         </div>
                     </div>
                     <div class="relative w-8 h-8 flex-shrink-0">
@@ -557,7 +646,7 @@
                             <circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3" />
                             <circle id="t2_circEst" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000" />
                         </svg>
-                        <div id="t2_circEstTxt" class="absolute inset-0 flex items-center justify-center text-[7px] text-[#00ff88] hud-font font-bold">0%</div>
+                        <div id="t2_circEstTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ff88] hud-font font-bold whitespace-nowrap">0%</div>
                     </div>
                 </div>
                 <div class="w-full h-1 bg-[#142038] mt-1.5 rounded overflow-hidden">
@@ -643,17 +732,36 @@
 
         <!-- KPIs Tab 3 — 5 KPIs -->
         <div class="w-full grid grid-cols-2 md:grid-cols-5 gap-2 shrink-0">
-            <!-- KPI: % con novedad -->
+            <!-- KPI: Total beneficiarios -->
             <div class="cyber-panel p-2 flex flex-col justify-between relative">
                 <div class="flex justify-between items-start w-full">
                     <div class="flex flex-col gap-0.5">
-                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">BENS. CON NOVEDAD <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS CON NOVEDAD</b>Porcentaje y conteo de beneficiarios que tienen al menos una novedad activa (distinta de NINGUNA). La barra roja muestra la proporción sobre el total.</span></span></div>
-                        <div class="flex flex-col gap-0">
-                            <div id="t3_kpiPctNov" class="text-lg font-bold text-[#ff0033] hud-font leading-none">0%</div>
-                            <div id="t3_kpiBenConNov" class="text-[10px] text-[#7890b5] hud-font font-bold">0 de 0</div>
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">TOTAL BENEFICIARIOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>TOTAL BENEFICIARIOS</b>Conteo único de beneficiarios en la selección activa, considerando todos los estados de novedad.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t3_kpiBenTotal" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0</div>
+                            <div class="text-[12px] text-[#7890b5] hud-font">beneficiarios</div>
                         </div>
                     </div>
-                    <div class="w-1.5 h-1.5 bg-[#ff0033] shadow-[0_0_6px_#ff0033] mt-0.5 shrink-0"></div>
+                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_6px_#00ff88] mt-0.5 shrink-0"></div>
+                </div>
+                <div class="w-full h-1 bg-[#00ff88]/20 mt-1.5 rounded overflow-hidden">
+                    <div id="t3_lineBenTotal" class="h-full bg-[#00ff88] transition-all duration-1000" style="width:100%"></div>
+                </div>
+            </div>
+            <!-- KPI: % con novedad -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-start w-full">
+                    <div class="flex flex-col gap-0.5 flex-1">
+                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">BENEFICIARIOS CON NOVEDAD <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>BENEFICIARIOS CON NOVEDAD</b>Porcentaje y conteo de beneficiarios que tienen al menos una novedad activa (distinta de NINGUNA). El círculo muestra la proporción sobre el total.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="t3_kpiPctNov" class="text-lg font-bold text-[#ff0033] hud-font leading-none">0%</div>
+                            <div id="t3_kpiBenConNov" class="text-[12px] text-[#7890b5] hud-font font-bold">0 de 0</div>
+                        </div>
+                    </div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="t3_circNov" cx="16" cy="16" r="14" fill="transparent" stroke="#ff0033" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="t3_circNovTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#ff0033] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
                 </div>
                 <div class="w-full h-1 bg-[#ff0033]/20 mt-1.5 rounded overflow-hidden">
                     <div id="t3_lineNov" class="h-full bg-[#ff0033] transition-all duration-1000" style="width:0%"></div>
@@ -664,10 +772,15 @@
                 <div class="flex justify-between items-start w-full">
                     <div class="flex flex-col gap-0.5 min-w-0 flex-1">
                         <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">NOVEDAD MÁS FRECUENTE <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>NOVEDAD MÁS FRECUENTE</b>Tipo de novedad que afecta al mayor número de beneficiarios en la selección activa. Excluye NINGUNA.</span></span></div>
-                        <div id="t3_kpiNovFrecNom" class="text-[11px] font-bold text-[#00ccff] hud-font leading-tight">---</div>
-                        <div id="t3_kpiNovFrecCnt" class="text-[10px] text-[#7890b5] hud-font font-bold">0 casos</div>
+                        <div class="flex items-baseline gap-1 min-w-0">
+                            <div id="t3_kpiNovFrecNom" class="text-[11px] font-bold text-[#00ccff] hud-font leading-tight truncate">---</div>
+                            <div id="t3_kpiNovFrecCnt" class="text-[12px] text-[#7890b5] hud-font font-bold shrink-0">0 beneficiarios</div>
+                        </div>
                     </div>
-                    <div class="w-1.5 h-1.5 bg-[#00ccff] shadow-[0_0_6px_#00ccff] mt-0.5 shrink-0"></div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="t3_circNovFrec" cx="16" cy="16" r="14" fill="transparent" stroke="#00ccff" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="t3_circNovFrecTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ccff] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
                 </div>
                 <div class="w-full h-1 bg-[#00ccff]/20 mt-1.5 rounded overflow-hidden">
                     <div id="t3_lineNovFrec" class="h-full bg-[#00ccff] transition-all duration-1000" style="width:100%"></div>
@@ -678,12 +791,15 @@
                 <div class="flex justify-between items-start w-full">
                     <div class="flex flex-col gap-0.5">
                         <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">$ TOTAL BLOQUEADO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>$ TOTAL BLOQUEADO</b>Suma del valor pendiente de beneficiarios con novedad activa (excluye NINGUNA). Capital en riesgo directo por novedades no resueltas.</span></span></div>
-                        <div class="flex flex-col gap-0">
+                        <div class="flex items-baseline gap-1">
                             <div id="t3_kpiBloqueado" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">$0</div>
-                            <div class="text-[10px] text-[#7890b5] hud-font">en novedad</div>
+                            <div class="text-[12px] text-[#7890b5] hud-font shrink-0">del pendiente</div>
                         </div>
                     </div>
-                    <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_6px_#ff5e00] mt-0.5 shrink-0"></div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="t3_circBloq" cx="16" cy="16" r="14" fill="transparent" stroke="#ff5e00" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="t3_circBloqTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#ff5e00] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
                 </div>
                 <div class="w-full h-1 bg-[#ff5e00]/20 mt-1.5 rounded overflow-hidden">
                     <div id="t3_lineBloq" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width:100%"></div>
@@ -694,29 +810,15 @@
                 <div class="flex justify-between items-start w-full">
                     <div class="flex flex-col gap-0.5 min-w-0 flex-1">
                         <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">ARRENDADOR MAYOR RIESGO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>ARRENDADOR MAYOR RIESGO</b>Arrendador con mayor número de beneficiarios con novedad activa. Identifica propietarios con mayor concentración de casos problemáticos.</span></span></div>
-                        <div id="t3_kpiArrNom" class="text-[11px] font-bold text-[#ffcc00] hud-font leading-tight">---</div>
-                        <div id="t3_kpiArrCount" class="text-[10px] text-[#7890b5] hud-font font-bold">0 con novedad</div>
+                        <div class="flex items-baseline gap-1 min-w-0">
+                            <div id="t3_kpiArrNom" class="text-[11px] font-bold text-[#ffcc00] hud-font leading-tight truncate">---</div>
+                            <div id="t3_kpiArrCount" class="text-[12px] text-[#7890b5] hud-font font-bold shrink-0">0 con novedad</div>
+                        </div>
                     </div>
                     <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_6px_#ffcc00] mt-0.5 shrink-0"></div>
                 </div>
                 <div class="w-full h-1 bg-[#ffcc00]/20 mt-1.5 rounded overflow-hidden">
                     <div id="t3_lineArr" class="h-full bg-[#ffcc00] transition-all duration-1000" style="width:100%"></div>
-                </div>
-            </div>
-            <!-- KPI: Total beneficiarios -->
-            <div class="cyber-panel p-2 flex flex-col justify-between relative">
-                <div class="flex justify-between items-start w-full">
-                    <div class="flex flex-col gap-0.5">
-                        <div class="text-[10px] font-bold text-[#7890b5] tracking-widest leading-none flex items-center gap-1">TOTAL BENEFICIARIOS <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>TOTAL BENEFICIARIOS</b>Conteo único de beneficiarios en la selección activa, considerando todos los estados de novedad.</span></span></div>
-                        <div class="flex flex-col gap-0">
-                            <div id="t3_kpiBenTotal" class="text-lg font-bold text-[#00ff88] hud-font leading-none">0</div>
-                            <div class="text-[10px] text-[#7890b5] hud-font">beneficiarios</div>
-                        </div>
-                    </div>
-                    <div class="w-1.5 h-1.5 bg-[#00ff88] shadow-[0_0_6px_#00ff88] mt-0.5 shrink-0"></div>
-                </div>
-                <div class="w-full h-1 bg-[#00ff88]/20 mt-1.5 rounded overflow-hidden">
-                    <div id="t3_lineBenTotal" class="h-full bg-[#00ff88] transition-all duration-1000" style="width:100%"></div>
                 </div>
             </div>
         </div>
@@ -725,9 +827,9 @@
         <div class="flex gap-2 min-h-0" style="flex:3">
             <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:5">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
-                    <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
+                    <div class="w-1.5 h-1.5 bg-[#00ccff] shadow-[0_0_5px_#00ccff]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN DE DEUDA — 80/20</span>
-                    <span class="ptip ml-1"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CONCENTRACIÓN DE DEUDA 80/20</b>Muestra qué beneficiarios concentran el 80% del capital pendiente. La línea naranja es la curva de Pareto acumulada. Permite priorizar gestiones de cobro.</span></span>
+                    <span class="ptip ml-1"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CONCENTRACIÓN DE DEUDA 80/20</b>Muestra qué ciudades concentran el 80% del capital pendiente. Las barras cian representan la deuda por ciudad ordenada de mayor a menor. La línea verde es la curva de Pareto acumulada; la línea punteada amarilla marca el umbral del 80%. Permite priorizar gestiones de cobro.</span></span>
                 </div>
                 <div id="visionChartPareto" class="flex-1 min-h-0"></div>
             </div>
@@ -735,7 +837,7 @@
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
                     <div class="w-1.5 h-1.5 bg-[#ff5e00] shadow-[0_0_5px_#ff5e00]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">SALUD CIUDADES</span>
-                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>SALUD CIUDADES</b>Radar comparativo multidimensional: % ejecución, volumen presupuesto y beneficiarios para el Top 5 ciudades de la selección activa.</span></span>
+                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>SALUD CIUDADES</b>Radar triangular comparativo para el Top 5 ciudades. Los tres vértices son: % EJECUCIÓN (pagado/total), PRESUPUESTO REL. (presupuesto de la ciudad como % del máximo entre las ciudades mostradas) y BENEFICIARIOS REL. (mismo concepto para el conteo de beneficiarios). Una ciudad que ocupe más área del triángulo tiene mayor ejecución, mayor presupuesto y más beneficiarios relativos.</span></span>
                 </div>
                 <div id="execRadar" class="flex-1 min-h-0"></div>
             </div>
@@ -753,9 +855,9 @@
         <div class="flex gap-2 min-h-0" style="flex:2">
             <div class="cyber-panel p-3 flex flex-col min-h-0" style="flex:4">
                 <div class="flex items-center gap-2 mb-2 border-b border-[#142038] pb-2 shrink-0">
-                    <div class="w-1.5 h-1.5 bg-[#bf00ff] shadow-[0_0_5px_#bf00ff]"></div>
+                    <div class="w-1.5 h-1.5 bg-[#00ccff] shadow-[0_0_5px_#00ccff]"></div>
                     <span class="text-[10px] font-bold tracking-widest text-[#00ccff] uppercase">CONCENTRACIÓN ARRENDADORES</span>
-                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>CONCENTRACIÓN ARRENDADORES</b>Top 15 arrendadores por número de beneficiarios. Barras verdes = sin novedad, rojas = con novedad activa. Identifica propietarios con mayor riesgo operativo.</span></span>
+                    <span class="ptip ml-auto"><i class="ptip-icon">ⓘ</i><span class="ptip-box" style="right:0;left:auto;"><b>CONCENTRACIÓN ARRENDADORES</b>Top 15 arrendadores por número de beneficiarios. Barras cian = sin novedad activa, barras naranjas = con novedad activa. El número naranja a la derecha indica cuántos beneficiarios tienen novedad. Identifica propietarios con mayor concentración de riesgo operativo.</span></span>
                 </div>
                 <div id="chartArrendadores" class="flex-1 min-h-0"></div>
             </div>
@@ -886,89 +988,153 @@
     </div>
 
     <!-- TAB SEGUIMIENTO Y ALERTAS -->
-    <div id="view_seguimiento" style="display:none;" class="flex-1 flex-col gap-3 w-full min-h-0 overflow-y-auto custom-menu pb-10">
+    <div id="view_seguimiento" style="display:none;" class="flex-1 flex-col gap-2 w-full min-h-0 overflow-hidden">
 
-        <!-- KPI Strip semáforo -->
-        <div class="grid grid-cols-4 gap-3">
-            <div class="cyber-panel p-4 border-l-4 border-[#ff0033] flex flex-col gap-1">
-                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🚨 Crítico</div>
-                <div id="tlKpiCritico" class="text-[34px] font-bold hud-font text-[#ff0033]" style="text-shadow:0 0 15px rgba(255,0,51,0.7)">—</div>
-                <div class="text-[9px] text-[#7890b5]">Subsidio vencido / Pérdida ejecutoriedad</div>
+        <!-- KPI Strip semáforo — estilo consistente con otros tabs -->
+        <div class="grid grid-cols-4 gap-2 shrink-0">
+
+            <!-- CRÍTICO -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
+                    <div class="flex flex-col">
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">CRÍTICO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>CRÍTICO</b>Estado: "Apto con subsidio vencido" o "Perdida de ejecutoriedad". El subsidio está en riesgo jurídico independientemente de los días. Requiere gestión inmediata.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="tlKpiCritico" class="text-lg font-bold text-[#ff0033] hud-font leading-none">—</div>
+                            <div id="tlKpiCriticoSub" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
+                    </div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="tlCircCritico" cx="16" cy="16" r="14" fill="transparent" stroke="#ff0033" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="tlCircCriticoTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#ff0033] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1 bg-[#ff0033]/20 mt-1.5 rounded overflow-hidden"><div id="tlLineCritico" class="h-full bg-[#ff0033] transition-all duration-1000" style="width:0%"></div></div>
             </div>
-            <div class="cyber-panel p-4 border-l-4 border-[#ff5e00] flex flex-col gap-1">
-                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🔴 Rojo</div>
-                <div id="tlKpiRojo" class="text-[34px] font-bold hud-font text-[#ff5e00]" style="text-shadow:0 0 15px rgba(255,94,0,0.7)">—</div>
-                <div class="text-[9px] text-[#7890b5]">+365 días sin legalizar ó +90 días sin pago</div>
+
+            <!-- ROJO -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
+                    <div class="flex flex-col">
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">ROJO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>ROJO — Riesgo alto</b>D4 &gt; 90 días sin recibir pago, O más de 365 días desde la asignación sin legalizar. Alta probabilidad de perder el subsidio si no se actúa.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="tlKpiRojo" class="text-lg font-bold text-[#ff5e00] hud-font leading-none">—</div>
+                            <div id="tlKpiRojoSub" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
+                    </div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="tlCircRojo" cx="16" cy="16" r="14" fill="transparent" stroke="#ff5e00" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="tlCircRojoTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#ff5e00] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1 bg-[#ff5e00]/20 mt-1.5 rounded overflow-hidden"><div id="tlLineRojo" class="h-full bg-[#ff5e00] transition-all duration-1000" style="width:0%"></div></div>
             </div>
-            <div class="cyber-panel p-4 border-l-4 border-[#ffcc00] flex flex-col gap-1">
-                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🟡 Amarillo</div>
-                <div id="tlKpiAmarillo" class="text-[34px] font-bold hud-font text-[#ffcc00]" style="text-shadow:0 0 15px rgba(255,204,0,0.7)">—</div>
-                <div class="text-[9px] text-[#7890b5]">+180 días sin legalizar ó +60 días sin pago</div>
+
+            <!-- AMARILLO -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
+                    <div class="flex flex-col">
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">AMARILLO <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>AMARILLO — Seguimiento</b>D4 entre 61-90 días sin pago, O entre 181-365 días desde asignación sin legalizar. Aún dentro de márgenes pero requiere acción preventiva.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="tlKpiAmarillo" class="text-lg font-bold text-[#ffcc00] hud-font leading-none">—</div>
+                            <div id="tlKpiAmarilloSub" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
+                    </div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="tlCircAmarillo" cx="16" cy="16" r="14" fill="transparent" stroke="#ffcc00" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="tlCircAmarilloTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#ffcc00] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1 bg-[#ffcc00]/20 mt-1.5 rounded overflow-hidden"><div id="tlLineAmarillo" class="h-full bg-[#ffcc00] transition-all duration-1000" style="width:0%"></div></div>
             </div>
-            <div class="cyber-panel p-4 border-l-4 border-[#00ff88] flex flex-col gap-1">
-                <div class="text-[10px] tracking-widest text-[#7890b5] uppercase">🟢 Verde</div>
-                <div id="tlKpiVerde" class="text-[34px] font-bold hud-font text-[#00ff88]" style="text-shadow:0 0 15px rgba(0,255,136,0.7)">—</div>
-                <div class="text-[9px] text-[#7890b5]">Al día</div>
+
+            <!-- VERDE -->
+            <div class="cyber-panel p-2 flex flex-col justify-between relative">
+                <div class="flex justify-between items-center w-full">
+                    <div class="flex flex-col">
+                        <div class="text-[9px] font-bold text-[#7890b5] tracking-widest leading-none mb-1 flex items-center gap-1">VERDE <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>VERDE — Al día</b>D4 ≤ 60 días sin pago Y proceso ≤ 180 días desde asignación sin legalizar. Estado normal: sin alertas activas.</span></span></div>
+                        <div class="flex items-baseline gap-1">
+                            <div id="tlKpiVerde" class="text-lg font-bold text-[#00ff88] hud-font leading-none">—</div>
+                            <div id="tlKpiVerdeSub" class="text-[12px] text-[#7890b5] hud-font font-bold">de 0</div>
+                        </div>
+                    </div>
+                    <div class="relative w-8 h-8 shrink-0">
+                        <svg class="w-8 h-8 transform -rotate-90"><circle cx="16" cy="16" r="14" fill="transparent" stroke="#142038" stroke-width="3"/><circle id="tlCircVerde" cx="16" cy="16" r="14" fill="transparent" stroke="#00ff88" stroke-width="3" stroke-dasharray="87.96" stroke-dashoffset="87.96" stroke-linecap="round" class="transition-all duration-1000"/></svg>
+                        <div id="tlCircVerdeTxt" class="absolute inset-0 flex items-center justify-center text-[9px] text-[#00ff88] hud-font font-bold whitespace-nowrap">0%</div>
+                    </div>
+                </div>
+                <div class="w-full h-1 bg-[#00ff88]/20 mt-1.5 rounded overflow-hidden"><div id="tlLineVerde" class="h-full bg-[#00ff88] transition-all duration-1000" style="width:0%"></div></div>
             </div>
         </div>
 
-        <!-- Charts row -->
-        <div class="grid grid-cols-2 gap-3" style="min-height:300px;">
-            <div class="cyber-panel p-3 flex flex-col gap-2">
-                <div class="text-[10px] tracking-widest text-[#00ccff] font-bold uppercase">⏱ Pipeline — Días promedio por etapa</div>
-                <div id="tlChartPipeline" class="flex-1 min-h-[240px]"></div>
-            </div>
-            <div class="cyber-panel p-3 flex flex-col gap-2">
-                <div class="text-[10px] tracking-widest text-[#00ccff] font-bold uppercase">📊 Distribución — Días sin legalizar</div>
-                <div id="tlChartDist" class="flex-1 min-h-[240px]"></div>
-            </div>
-        </div>
+        <!-- Cuerpo principal: gráficas 1/3 + tabla 2/3 -->
+        <div class="flex gap-2 flex-1 min-h-0">
 
-        <!-- Filtros -->
-        <div class="flex flex-wrap gap-2 items-center">
-            <span class="text-[10px] text-[#7890b5] tracking-widest uppercase">Semáforo:</span>
-            <button onclick="tlSetFilter('TODOS')"    id="tlf_TODOS"    class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#7890b5] border border-[#142038] hover:border-[#00ccff] transition-all">Todos</button>
-            <button onclick="tlSetFilter('CRITICO')"  id="tlf_CRITICO"  class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#ff0033] border border-[#142038] hover:border-[#ff0033] transition-all">Crítico</button>
-            <button onclick="tlSetFilter('ROJO')"     id="tlf_ROJO"     class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#ff5e00] border border-[#142038] hover:border-[#ff5e00] transition-all">Rojo</button>
-            <button onclick="tlSetFilter('AMARILLO')" id="tlf_AMARILLO" class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#ffcc00] border border-[#142038] hover:border-[#ffcc00] transition-all">Amarillo</button>
-            <button onclick="tlSetFilter('VERDE')"    id="tlf_VERDE"    class="px-3 py-1 text-[10px] font-bold rounded uppercase tracking-widest bg-[#142038] text-[#00ff88] border border-[#142038] hover:border-[#00ff88] transition-all">Verde</button>
-            <span class="text-[10px] text-[#7890b5] tracking-widest uppercase ml-4">Etapa:</span>
-            <select id="tlEtapaFilter" onchange="tlRenderTable()" class="bg-[#0a1128] border border-[#142038] text-[#7890b5] text-[10px] px-2 py-1 rounded uppercase tracking-widest">
-                <option value="">Todas</option>
-                <option value="ASIGNADO">Asignado</option>
-                <option value="LEGALIZADO">Legalizado</option>
-                <option value="CARGADO">Cargado</option>
-            </select>
-            <input id="tlSearch" oninput="tlRenderTable()" type="text" placeholder="Buscar nombre o cédula…"
-                class="ml-auto bg-[#0a1128] border border-[#142038] text-[#e0e0e0] text-[11px] px-3 py-1 rounded w-52 focus:outline-none focus:border-[#00ccff]" />
-            <span id="tlCount" class="text-[10px] text-[#7890b5] tracking-widest ml-2"></span>
-        </div>
+            <!-- Columna gráficas (1/3) -->
+            <div class="flex flex-col gap-2 shrink-0 min-h-0" style="width:33%">
+                <div class="cyber-panel p-2 flex flex-col gap-1 flex-1 min-h-0">
+                    <div class="panel-header shrink-0"><span class="text-[#ffcc00]">PIPELINE · DÍAS PROMEDIO POR ETAPA <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>PIPELINE DE TIEMPOS</b>Días promedio entre cada hito del proceso: D1 postulación→asignación · D2 asignación→legalización · D3 legalización→cargue · D4 días desde último pago. Permite identificar en qué etapa se genera más demora.</span></span></span></div>
+                    <div id="tlChartPipeline" class="flex-1 min-h-0"></div>
+                </div>
+                <div class="cyber-panel p-2 flex flex-col gap-1 flex-1 min-h-0">
+                    <div class="panel-header shrink-0"><span class="text-[#ffcc00]">BENEFICIARIOS SIN LEGALIZAR · RANGO D2 <span class="ptip"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>DISTRIBUCIÓN D2 — BENEFICIARIOS SIN LEGALIZAR</b>Cantidad de beneficiarios no legalizados agrupados por rangos de días transcurridos desde la asignación (D2). Permite dimensionar cuántos están cerca de los umbrales de alerta (180 y 365 días). Los filtros de semáforo afectan solo la tabla.</span></span></span></div>
+                    <div id="tlChartDist" class="flex-1 min-h-0"></div>
+                </div>
+            </div>
 
-        <!-- Tabla -->
-        <div class="cyber-panel p-0 overflow-auto" style="max-height:420px;">
-            <table class="w-full text-[10px]" style="min-width:1100px; border-collapse:collapse;">
-                <thead>
-                    <tr class="bg-[#0a1128] sticky top-0 z-10">
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-16">Alerta</th>
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Nombre</th>
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28">Documento</th>
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Ciudad</th>
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-24">Etapa</th>
-                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28" title="Días postulación → asignación">D1 Post→Asig</th>
-                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28" title="Días asignación → legalización">D2 Asig→Legal</th>
-                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28" title="Días legalización → cargue">D3 Legal→Carg</th>
-                        <th class="px-3 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-24" title="Días desde último pago">D4 Sin Pago</th>
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Gestor</th>
-                        <th class="px-3 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-28">Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="tlTableBody"></tbody>
-            </table>
-        </div>
-        <div class="flex gap-3 items-center justify-center">
-            <button onclick="tlPrevPage()" id="tlBtnPrev" class="px-4 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] text-[10px] font-bold rounded uppercase tracking-widest transition-all">◀ Anterior</button>
-            <span id="tlPageInfo" class="text-[10px] text-[#7890b5] tracking-widest"></span>
-            <button onclick="tlNextPage()" id="tlBtnNext" class="px-4 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] text-[10px] font-bold rounded uppercase tracking-widest transition-all">Siguiente ▶</button>
+            <!-- Columna tabla (2/3) -->
+            <div class="flex flex-col gap-2 flex-1 min-h-0">
+
+                <!-- Tabla — ocupa todo el espacio restante -->
+                <div class="cyber-panel flex flex-col flex-1 min-h-0">
+                    <div class="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-[#142038] shrink-0">
+                        <div class="w-1.5 h-1.5 bg-[#ffcc00] shadow-[0_0_5px_#ffcc00] shrink-0"></div>
+                        <span class="text-[10px] font-bold tracking-widest text-[#ffcc00] uppercase whitespace-nowrap">SEGUIMIENTO Y ALERTAS</span>
+                        <!-- Semáforo + Etapa inline -->
+                        <div class="flex gap-1 items-center ml-1 flex-wrap">
+                            <button onclick="tlSetFilter('TODOS')"    id="tlf_TODOS"    class="h-[22px] px-2 text-[9px] font-bold uppercase tracking-widest bg-[#142038] text-[#7890b5] border border-[#142038] hover:border-[#00ccff] transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,0 100%)">TODOS <span class="ptip" onclick="event.stopPropagation()"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>TODOS — Sin filtro</b><br>Muestra todos los beneficiarios activos del portafolio.<br><br><b>Glosario de indicadores:</b><br>· <b>D1</b> Días desde postulación hasta asignación del subsidio<br>· <b>D2</b> Días desde asignación hasta legalización del contrato<br>· <b>D3</b> Días desde legalización hasta cargue bancario<br>· <b>D4</b> Días desde el último pago recibido por el beneficiario</span></span></button>
+                            <button onclick="tlSetFilter('CRITICO')"  id="tlf_CRITICO"  class="h-[22px] px-2 text-[9px] font-bold uppercase tracking-widest bg-[#142038] text-[#ff0033] border border-[#142038] hover:border-[#ff0033] transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,0 100%)">🚨 CRÍTICO <span class="ptip" onclick="event.stopPropagation()"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>🚨 CRÍTICO — Acción urgente</b><br>Subsidio vencido o en riesgo de perder ejecutoriedad legal. Requiere intervención inmediata del gestor.<br><br>· <b>D2</b> &gt; 730 días sin legalizar (más de 2 años desde asignación)<br>· O estado administrativo marcado como crítico<br><br>Si no se gestiona, el beneficiario puede perder el derecho al subsidio.</span></span></button>
+                            <button onclick="tlSetFilter('ROJO')"     id="tlf_ROJO"     class="h-[22px] px-2 text-[9px] font-bold uppercase tracking-widest bg-[#142038] text-[#ff5e00] border border-[#142038] hover:border-[#ff5e00] transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,0 100%)">🔴 ROJO <span class="ptip" onclick="event.stopPropagation()"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>🔴 ROJO — Alto riesgo</b><br>El beneficiario presenta retrasos significativos en alguno de estos indicadores:<br><br>· <b>D4 &gt; 90 días</b> El banco no ha realizado el pago en más de 3 meses<br>· <b>D2 &gt; 365 días</b> Más de 1 año desde la asignación sin firmar el contrato de legalización</span></span></button>
+                            <button onclick="tlSetFilter('AMARILLO')" id="tlf_AMARILLO" class="h-[22px] px-2 text-[9px] font-bold uppercase tracking-widest bg-[#142038] text-[#ffcc00] border border-[#142038] hover:border-[#ffcc00] transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,0 100%)">🟡 AMARILLO <span class="ptip" onclick="event.stopPropagation()"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>🟡 AMARILLO — Riesgo medio</b><br>El beneficiario está en zona de monitoreo activo, próximo a umbral rojo:<br><br>· <b>D4 entre 61–90 días</b> Sin recibir pago en 2–3 meses<br>· <b>D2 entre 181–365 días</b> Entre 6 meses y 1 año desde la asignación sin legalizar</span></span></button>
+                            <button onclick="tlSetFilter('VERDE')"    id="tlf_VERDE"    class="h-[22px] px-2 text-[9px] font-bold uppercase tracking-widest bg-[#142038] text-[#00ff88] border border-[#142038] hover:border-[#00ff88] transition-all whitespace-nowrap" style="clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,0 100%)">🟢 VERDE <span class="ptip" onclick="event.stopPropagation()"><i class="ptip-icon">ⓘ</i><span class="ptip-box"><b>🟢 VERDE — Situación normal</b><br>El subsidio avanza dentro de los tiempos esperados del proceso:<br><br>· <b>D4 ≤ 60 días</b> Último pago recibido hace menos de 2 meses<br>· <b>D2 ≤ 180 días</b> Menos de 6 meses desde la asignación hasta la legalización<br><br>Monitoreo de rutina, sin alerta activa.</span></span></button>
+                            <!-- Etapa dropdown — initMultiSelect lo transforma al cargar Tab 4 -->
+                            <div style="width:130px"><select id="tlEtapaFilter" onchange="tlRenderTable()"><option value="">ETAPA</option><option value="ASIGNADO">ASIGNADO</option><option value="LEGALIZADO">LEGALIZADO</option><option value="CARGADO">CARGADO</option></select></div>
+                        </div>
+                        <div class="flex items-center gap-2 ml-auto">
+                            <span class="text-[#ffcc00] text-[10px] hud-font whitespace-nowrap">BÚSQUEDA:</span>
+                            <input id="tlSearch" oninput="tlRenderTable()" type="text" placeholder="Nombre o cédula…"
+                                class="bg-[#142038] border border-[#ffcc00]/40 text-white px-2 py-1 text-[10px] w-44 outline-none hud-font placeholder-gray-600 focus:border-[#ffcc00] focus:shadow-[0_0_8px_rgba(255,204,0,0.3)] transition-all" />
+                            <span id="tlCount" class="text-[9px] text-[#7890b5] tracking-widest whitespace-nowrap"></span>
+                        </div>
+                    </div>
+                    <div class="overflow-auto flex-1 min-h-0">
+                    <table class="w-full text-[10px]" style="min-width:900px; border-collapse:collapse;">
+                        <thead>
+                            <tr class="sticky top-0 z-10" style="background:rgb(4,9,20);border-bottom:1px solid #142038">
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-14">Alerta</th>
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Nombre</th>
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-24">Documento</th>
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Ciudad</th>
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-20">Etapa</th>
+                                <th class="px-2 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-20" title="Días postulación → asignación">D1</th>
+                                <th class="px-2 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-20" title="Días asignación → legalización">D2</th>
+                                <th class="px-2 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-20" title="Días legalización → cargue">D3</th>
+                                <th class="px-2 py-2 text-right text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-20" title="Días desde último pago">D4</th>
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038]">Gestor</th>
+                                <th class="px-2 py-2 text-left text-[#00ccff] tracking-widest uppercase border-b border-[#142038] w-24">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tlTableBody"></tbody>
+                    </table>
+                    </div><!-- /overflow-auto -->
+                </div><!-- /cyber-panel -->
+
+                <!-- Paginación -->
+                <div class="flex gap-3 items-center justify-center shrink-0">
+                    <button onclick="tlPrevPage()" id="tlBtnPrev" class="px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] text-[9px] font-bold rounded uppercase tracking-widest transition-all">◀ Anterior</button>
+                    <span id="tlPageInfo" class="text-[9px] text-[#7890b5] tracking-widest"></span>
+                    <button onclick="tlNextPage()" id="tlBtnNext" class="px-3 py-1 bg-[#142038] text-[#7890b5] hover:text-[#00ccff] text-[9px] font-bold rounded uppercase tracking-widest transition-all">Siguiente ▶</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1030,6 +1196,10 @@
             document.getElementById('view_inteligencia').style.display = tabId === 'inteligencia' ? 'flex' : 'none';
             document.getElementById('view_estadistica').style.display  = tabId === 'estadistica'  ? 'flex' : 'none';
             document.getElementById('view_seguimiento').style.display  = tabId === 'seguimiento'  ? 'flex' : 'none';
+            // Intercambiar barra de filtros según tab activo
+            const isSeguimiento = tabId === 'seguimiento';
+            document.getElementById('globalFiltersBar').style.display  = isSeguimiento ? 'none' : '';
+            document.getElementById('tab4FiltersBar').style.display    = isSeguimiento ? 'flex' : 'none';
 
             let tabs = ['operacion', 'ejecucion', 'inteligencia', 'estadistica', 'seguimiento'];
             tabs.forEach(t => {
@@ -1293,7 +1463,7 @@ function renderTab2Map() {
                 pagado: e[1].pagado,
                 pendiente: e[1].pendiente,
                 label: {
-                    position: labelPos, show: true, fontSize: 7.5, color: '#e0ecff',
+                    position: labelPos, show: true, fontSize: 9, color: '#e0ecff',
                     fontFamily: 'Share Tech Mono',
                     lineHeight: 11,
                     formatter: p => p.name + '\n' + formatMoneyShort(p.value[2])
@@ -1368,7 +1538,7 @@ Beneficiarios: <span style="float:right; margin-left:15px; color:#00ccff;">${ben
                 itemHeight: 60,
                 inRange: { color: ['#ff5e00', '#ffcc00', '#00ff88'] },
                 text: ['$' + Math.round(maxVal).toLocaleString('es-CO'), '$' + Math.round(minVal).toLocaleString('es-CO')],
-                textStyle: { color: '#c8ddf0', fontSize: 7, fontFamily: 'Share Tech Mono' },
+                textStyle: { color: '#c8ddf0', fontSize: 9, fontFamily: 'Share Tech Mono' },
             },
             geo: {
                 map: 'colombia',
@@ -2209,16 +2379,13 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                 let totalImpactoCombo = comboSorted.reduce((s, x) => s + x.impacto, 0) || 1;
                 let novedadVisibles = Math.min(comboReversed.length, 12);
                 const novGradient = (ratio) => {
-                    let c;
-                    if(ratio > 0.7) c = ['#ff0033', 'rgba(255,0,51,0.08)'];
-                    else if(ratio > 0.4) c = ['#ff5e00', 'rgba(255,94,0,0.08)'];
-                    else if(ratio > 0.2) c = ['#ffcc00', 'rgba(255,204,0,0.08)'];
-                    else c = ['#00ccff', 'rgba(0,204,255,0.08)'];
-                    return new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                        { offset: 0, color: c[0] },
-                        { offset: 1, color: c[1] }
-                    ]);
+                    let [neon, dark] = ratio > 0.7 ? ['#ff0033','#1a0008'] :
+                                      ratio > 0.4 ? ['#ff5e00','#1a0800'] :
+                                      ratio > 0.2 ? ['#ffcc00','#1a1400'] :
+                                                    ['#00ff88','#001a0e'];
+                    return new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:neon},{offset:1,color:dark}]);
                 };
+                const novGlow = (ratio) => ratio > 0.7 ? 'rgba(255,0,51,0.55)' : ratio > 0.4 ? 'rgba(255,94,0,0.55)' : ratio > 0.2 ? 'rgba(255,204,0,0.55)' : 'rgba(0,255,136,0.55)';
                 charts.chartNovedadCombo.setOption({
                     backgroundColor: 'transparent',
                     grid: { top: 10, bottom: 10, left: 10, right: 160, containLabel: true },
@@ -2237,7 +2404,7 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                             let item = comboReversed[params.dataIndex];
                             if(!item) return '';
                             let ratio = item.impacto / maxImpacto;
-                            let col = ratio > 0.7 ? '#ff0033' : ratio > 0.4 ? '#ff5e00' : ratio > 0.2 ? '#ffcc00' : '#00ccff';
+                            let col = ratio > 0.7 ? '#ff0033' : ratio > 0.4 ? '#ff5e00' : ratio > 0.2 ? '#ffcc00' : '#00ff88';
                             return `<div style="padding:3px"><span style="color:${col};font-weight:bold">${item.name}</span><br/>
                                 $ Bloqueado: <span style="color:${col}">${formatMoney(item.impacto)}</span><br/>
                                 Casos únicos: <span style="color:#ffcc00">${item.casos}</span><br/>
@@ -2258,7 +2425,9 @@ Pendiente: <span style="float:right; margin-left:15px; color:#ff5e00;">${formatM
                             value: x.impacto,
                             itemStyle: {
                                 color: novGradient(x.impacto / maxImpacto),
-                                borderRadius: [0, 4, 4, 0]
+                                borderRadius: [0,4,4,0],
+                                shadowColor: novGlow(x.impacto / maxImpacto),
+                                shadowBlur: 10, shadowOffsetX: 3
                             },
                             label: {
                                 show: true, position: 'right',
@@ -2328,13 +2497,13 @@ xAxis: { type: 'value', splitLine: { lineStyle: { color: '#142038' } }, axisLabe
                 yAxis: { type: 'category', data: barData.map(d => d.name), axisLabel: { color: '#7890b5', fontSize: 10 } },
                 series: [
                     { name: 'Pagado', type: 'bar', stack: 'total',
-                      itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#00ff88'},{offset:1,color:'rgba(0,255,136,0.15)'}]), borderRadius: [0,0,0,0] },
+                      itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#00ff88'},{offset:1,color:'#001a0e'}]), borderRadius: [0,0,0,0], shadowColor: 'rgba(0,255,136,0.35)', shadowBlur: 6 },
                       data: barData.map(d => {
                           if (!highlightBarName || d.name === highlightBarName) return d.pagado;
                           return { value: d.pagado, itemStyle: { color: 'rgba(0,255,136,0.06)' } };
                       }) },
                     { name: 'Pendiente', type: 'bar', stack: 'total',
-                      itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#ff5e00'},{offset:1,color:'rgba(255,94,0,0.15)'}]), borderRadius: [0,4,4,0] },
+                      itemStyle: { color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#ff5e00'},{offset:1,color:'#1a0800'}]), borderRadius: [0,4,4,0], shadowColor: 'rgba(255,94,0,0.55)', shadowBlur: 10, shadowOffsetX: 3 },
                       data: barData.map(d => {
                           if (!highlightBarName || d.name === highlightBarName) return d.pendiente;
                           return { value: d.pendiente, itemStyle: { color: 'rgba(255,94,0,0.06)' } };
@@ -2411,6 +2580,18 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
             return sel.getCustomValues ? sel.getCustomValues() : sel.value;
         }
 
+        function applyFilterBtnStyle(btn, isActive) {
+            if (isActive) {
+                btn.style.borderColor = '#ff5e00';
+                btn.style.color = '#ff5e00';
+                btn.style.boxShadow = '0 0 8px rgba(255,94,0,0.35)';
+            } else {
+                btn.style.borderColor = '';
+                btn.style.color = '';
+                btn.style.boxShadow = '';
+            }
+        }
+
         function initMultiSelect(selectId, defaultText, opts) {
             opts = opts || {};
             const select = document.getElementById(selectId);
@@ -2441,7 +2622,8 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
                     });
                     let checked = Array.from(menu.querySelectorAll('input:checked'));
                     btn.querySelector('span').innerText = checked.length + ' SELECCIONES';
-                    applyFilters();
+                    applyFilterBtnStyle(btn, true);
+                    (opts.onChange || applyFilters)();
                 };
                 menu.appendChild(quickRow);
             }
@@ -2459,7 +2641,8 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
                     if (checked.length === 0) btn.querySelector('span').innerText = defaultText;
                     else if (checked.length === 1) btn.querySelector('span').innerText = checked[0].value;
                     else btn.querySelector('span').innerText = checked.length + ' SELECCIONES';
-                    applyFilters();
+                    applyFilterBtnStyle(btn, checked.length > 0);
+                    (opts.onChange || applyFilters)();
                 };
                 label.appendChild(cb);
                 label.appendChild(document.createTextNode(opt.text));
@@ -2475,6 +2658,14 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
             document.addEventListener('click', (e) => {
                 if (!container.contains(e.target)) menu.classList.add('hidden');
             });
+
+            if (opts.tooltip) {
+                const tip = document.createElement('span');
+                tip.className = 'ptip';
+                tip.onclick = e => e.stopPropagation();
+                tip.innerHTML = `<i class="ptip-icon">ⓘ</i><span class="ptip-box">${opts.tooltip}</span>`;
+                btn.appendChild(tip);
+            }
 
             container.appendChild(btn);
             container.appendChild(menu);
@@ -2492,11 +2683,13 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
             cb.checked = (cb.value === val);
         });
         btn.querySelector('span').innerText = val;
+        applyFilterBtnStyle(btn, true);
     };
 
             select.resetCustom = () => {
                 menu.querySelectorAll('input').forEach(cb => cb.checked = false);
                 btn.querySelector('span').innerText = defaultText;
+                applyFilterBtnStyle(btn, false);
             };
             
             select.selectCustom = (val) => {
@@ -2505,6 +2698,7 @@ initMultiSelect('f_estado_pago', 'ESTADO PAGO');
                 if (cb) {
                     cb.checked = true;
                     btn.querySelector('span').innerText = val;
+                    applyFilterBtnStyle(btn, true);
                 }
             };
         }
@@ -2911,9 +3105,9 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                 backgroundColor: 'transparent',
                 legend: {
                     data: cityArrRadar.map((c, i) => ({ name: c.name, icon: 'roundRect', itemStyle: { color: radarPalette[i % radarPalette.length] } })),
-                    top: 2, left: 'center',
-                    textStyle: { color: '#7890b5', fontSize: 7, fontFamily: 'Share Tech Mono' },
-                    itemWidth: 8, itemHeight: 5
+                    top: 4, left: 'center',
+                    textStyle: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                    itemWidth: 13, itemHeight: 9
                 },
                 tooltip: {
                     show: true, trigger: 'item', appendToBody: true, confine: true,
@@ -2930,23 +3124,37 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                         let benP  = (+v[2]).toFixed(0);
                         return `<b style="color:${col}">${cityName}</b><br/>
                             <span style="color:#00ff88">% Ejec.: ${ejec}%</span> · ${formatMoney(c.pagado||0)} / ${formatMoney(c.total||0)}<br/>
-                            <span style="color:#00ccff">Presup.(Rel.): ${presP}% del máx</span><br/>
+                            <span style="color:#00ccff">Presup.(Rel.): ${presP}% del máx</span> · ${formatMoney(c.total||0)}<br/>
                             <span style="color:#ff5e00">Bens.(Rel.): ${benP}% del máx</span> → ${(c.bens||0).toLocaleString()} bens.`;
                     }
                 },
                 radar: {
-                    radius: '62%', center: ['50%', '58%'],
+                    radius: '100%', center: ['50%', '62%'],
                     indicator: [
                         { name: '% EJECUCIÓN', max: 100 },
                         { name: 'PRESUPUESTO\n(REL.)', max: 100 },
                         { name: 'BENEFICIARIOS\n(REL.)', max: 100 }
                     ],
                     shape: 'polygon', splitNumber: 4,
-                    axisName: { color: '#7890b5', fontSize: 13, fontFamily: 'Rajdhani', fontWeight: 'bold' },
+                    axisName: { show: false },
                     splitLine: { lineStyle: { color: ['rgba(120,144,181,0.1)','rgba(120,144,181,0.2)','rgba(120,144,181,0.35)','rgba(120,144,181,0.5)'] } },
                     splitArea: { show: false },
                     axisLine: { lineStyle: { color: 'rgba(120,144,181,0.4)' } }
                 },
+                graphic: [
+                    {
+                        type: 'text', top: '16%', left: 'center',
+                        style: { text: '% EJECUCIÓN', fill: '#7890b5', fontSize: 12, fontFamily: 'Rajdhani', fontWeight: 'bold', textAlign: 'center' }
+                    },
+                    {
+                        type: 'text', bottom: '2%', left: '8%',
+                        style: { text: 'PRESUPUESTO\n(REL.)', fill: '#7890b5', fontSize: 12, fontFamily: 'Rajdhani', fontWeight: 'bold', textAlign: 'center', lineHeight: 16 }
+                    },
+                    {
+                        type: 'text', bottom: '2%', right: '8%',
+                        style: { text: 'BENEFICIARIOS\n(REL.)', fill: '#7890b5', fontSize: 12, fontFamily: 'Rajdhani', fontWeight: 'bold', textAlign: 'center', lineHeight: 16 }
+                    }
+                ],
                 series: radarSeries
             }, true);
 
@@ -2992,12 +3200,12 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                 },
                 grid: { top: 6, bottom: 58, left: 88, right: 6 },
                 xAxis: { type: 'category', data: novArr, axisLabel: { color: '#7890b5', fontSize: 7, rotate: 42, margin: 5, formatter: novShort } },
-                yAxis: { type: 'category', data: cityArrHm.map(c=>c.name), axisLabel: { color: '#7890b5', fontSize: 8 } },
+                yAxis: { type: 'category', data: cityArrHm.map(c=>c.name), axisLabel: { color: '#7890b5', fontSize: 9 } },
                 visualMap: {
                     type: 'piecewise', show: true,
                     orient: 'horizontal', bottom: 2, left: 'center',
-                    itemWidth: 12, itemHeight: 8,
-                    textStyle: { color: '#7890b5', fontSize: 7, fontFamily: 'Share Tech Mono' },
+                    itemWidth: 14, itemHeight: 10,
+                    textStyle: { color: '#7890b5', fontSize: 9, fontFamily: 'Share Tech Mono' },
                     pieces: [
                         { value: 0, color: '#0d1929', label: '0' },
                         { min: 1, max: Math.ceil(maxHm*0.25), color: '#00ccff', label: 'Bajo' },
@@ -3007,7 +3215,7 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                 },
                 series: [{ type: 'heatmap', data: hmData,
                     label: {
-                        show: true, fontSize: 8, fontWeight: 'bold',
+                        show: true, fontSize: 9, fontWeight: 'bold',
                         formatter: p => p.value[2] > 0 ? p.value[2] : '',
                         color: function(params) {
                             if(!params.value || params.value[2] === 0) return 'transparent';
@@ -3058,7 +3266,7 @@ yAxis: { type: 'value', axisLabel: { color: '#7890b5', fontSize: 10, fontFamily:
                 radar: {
                     indicator: cityArr.map(c => ({ name: c.name.substring(0,10), max: 100 })),
                     shape: 'polygon', splitNumber: 4,
-                    axisName: { color: '#00ccff', fontSize: 9, fontFamily: 'Rajdhani' },
+                    axisName: { color: '#00ccff', fontSize: 11, fontFamily: 'Rajdhani' },
                     splitLine: { lineStyle: { color: ['rgba(0, 204, 255, 0.1)', 'rgba(0, 204, 255, 0.2)', 'rgba(0, 204, 255, 0.4)', 'rgba(0, 204, 255, 0.6)'] } },
                     splitArea: { show: false }, axisLine: { lineStyle: { color: 'rgba(0, 204, 255, 0.5)' } }
                 },
@@ -3193,7 +3401,7 @@ function updateDashboard() {
 
             // Actualizar circulos (stroke-dasharray="150.8")
             let cBen = document.getElementById('circBen'); if(cBen) cBen.style.strokeDashoffset = 150.8 - (pctBen * 150.8 / 100);
-            document.getElementById('circBenText').innerText = pctBen.toFixed(1) + "%";
+            document.getElementById('circBenText').innerText = pctBen.toFixed(0) + "%";
             document.getElementById('lineBen').style.width = pctBen + "%";
 
     // Tab 2 KPIs Update
@@ -3216,48 +3424,50 @@ function updateDashboard() {
         return { name: topName, count: counts[topName], pct: pct };
     }
 
-    // Mirror the filter values to the KPI titles
-    
-    let valTNov = document.getElementById('f_tnov').value;
-    let valEst = document.getElementById('f_estact').value;
-    
-    
-    document.getElementById('t2_titleTNov').innerText = valTNov.length > 15 ? valTNov.substring(0,15)+'...' : valTNov;
-    document.getElementById('t2_titleEst').innerText = valEst.length > 15 ? valEst.substring(0,15)+'...' : valEst;
-
-    // To prevent "208 de 37" logic errors, the user requested that these KPIs simply reflect 
-    // the current global filtered unique beneficiaries vs total un-filtered unique beneficiaries.
-    // E.g. When no filter is applied -> 1873 de 1873 (100%).
-    // When "SÍ" is selected -> 37 de 1873 (2%).
-    
-    let dispPct = t2_pctBen; // (currentBen / totalBenUnfiltered) * 100
-    
-
-
-    // Tipo Novedad KPI
-    document.getElementById('t2_kpiTNov').innerText = currentBen.toLocaleString();
-    document.getElementById('t2_kpiTNovTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
-    document.getElementById('t2_circTNovTxt').innerText = dispPct.toFixed(0) + '%';
-    document.getElementById('t2_circTNov').style.strokeDashoffset = 87.96 - (87.96 * dispPct) / 100;
-    document.getElementById('t2_lineTNov').style.width = dispPct + '%';
-
-    // Estado KPI
-    document.getElementById('t2_kpiEst').innerText = currentBen.toLocaleString();
-    document.getElementById('t2_kpiEstTot').innerText = "de " + totalBenUnfiltered.toLocaleString();
-    document.getElementById('t2_circEstTxt').innerText = dispPct.toFixed(0) + '%';
-    document.getElementById('t2_circEst').style.strokeDashoffset = 87.96 - (87.96 * dispPct) / 100;
-    document.getElementById('t2_lineEst').style.width = dispPct + '%';
-
-    // Registros KPI (Row count)
-    let totalRegUnfiltered = allData.length;
-    let currentReg = filteredData.length;
-    let dispPctReg = totalRegUnfiltered > 0 ? (currentReg / totalRegUnfiltered) * 100 : 0;
-
-    document.getElementById('t2_kpiReg').innerText = currentReg.toLocaleString();
-    document.getElementById('t2_kpiRegTot').innerText = "de " + totalRegUnfiltered.toLocaleString();
+    // KPI 2: Pagos realizados (filas con val > 0)
+    let totalPagosUnfiltered = allData.filter(d => (parseFloat(d[col.val]) || 0) > 0).length;
+    let currentPagos = filteredData.filter(d => (parseFloat(d[col.val]) || 0) > 0).length;
+    let dispPctReg = totalPagosUnfiltered > 0 ? (currentPagos / totalPagosUnfiltered) * 100 : 0;
+    document.getElementById('t2_kpiReg').innerText = currentPagos.toLocaleString();
+    document.getElementById('t2_kpiRegTot').innerText = "de " + totalPagosUnfiltered.toLocaleString();
     document.getElementById('t2_circRegTxt').innerText = dispPctReg.toFixed(0) + '%';
     document.getElementById('t2_circReg').style.strokeDashoffset = 87.96 - (87.96 * dispPctReg) / 100;
     document.getElementById('t2_lineReg').style.width = dispPctReg + '%';
+
+    // KPI 4: Bens con novedad activa (únicos, excluye NINGUNA)
+    let t2_benConNov = new Set();
+    filteredData.forEach(d => {
+        let nov = d[col.tnov] || 'NINGUNA';
+        if(nov !== 'NINGUNA') t2_benConNov.add(d[col.doc] || d[col.ben] || 'NO_ID');
+    });
+    let t2_novPct = currentBen > 0 ? (t2_benConNov.size / currentBen) * 100 : 0;
+    document.getElementById('t2_kpiTNov').innerText = t2_benConNov.size.toLocaleString();
+    document.getElementById('t2_kpiTNovTot').innerText = "de " + currentBen.toLocaleString();
+    document.getElementById('t2_circTNovTxt').innerText = t2_novPct.toFixed(0) + '%';
+    document.getElementById('t2_circTNov').style.strokeDashoffset = 87.96 - (87.96 * t2_novPct) / 100;
+    document.getElementById('t2_lineTNov').style.width = t2_novPct + '%';
+
+    // KPI 5: Ciudad más eficiente (mayor tasa pagado/total)
+    let t2_ciuEfic = {};
+    filteredData.forEach(d => {
+        let ciu = d[col.ciu] || 'SIN CIUDAD';
+        let pag = parseFloat(d[col.val]) || 0;
+        let pend = parseFloat(d[col.pend]) || 0;
+        if(!t2_ciuEfic[ciu]) t2_ciuEfic[ciu] = { pag: 0, t: 0 };
+        t2_ciuEfic[ciu].pag += pag;
+        t2_ciuEfic[ciu].t += pag + pend;
+    });
+    let t2_topCiu = Object.entries(t2_ciuEfic)
+        .filter(([,v]) => v.t > 0)
+        .map(([k,v]) => ({ name: k, rate: v.pag / v.t * 100 }))
+        .sort((a,b) => b.rate - a.rate)[0];
+    let t2_ciuRate = t2_topCiu ? t2_topCiu.rate : 0;
+    let t2_ciuName = t2_topCiu ? t2_topCiu.name : '---';
+    document.getElementById('t2_kpiEst').innerText = t2_ciuName.length > 18 ? t2_ciuName.substring(0,17)+'..' : t2_ciuName;
+    document.getElementById('t2_kpiEstTot').innerText = t2_ciuRate.toFixed(1) + '%';
+    document.getElementById('t2_circEstTxt').innerText = t2_ciuRate.toFixed(0) + '%';
+    document.getElementById('t2_circEst').style.strokeDashoffset = 87.96 - (87.96 * t2_ciuRate) / 100;
+    document.getElementById('t2_lineEst').style.width = t2_ciuRate + '%';
 
 
 
@@ -3349,7 +3559,7 @@ function updateDashboard() {
                     realtime: false,
                     inRange: { color: ['#ff3300', '#ffcc00', '#00ff88'] },
                     text: ['$' + Math.round(maxVal).toLocaleString('es-CO'), '$' + Math.round(minVal).toLocaleString('es-CO')],
-                    textStyle: { color: '#c8ddf0', fontSize: 7, fontFamily: 'Share Tech Mono' },
+                    textStyle: { color: '#c8ddf0', fontSize: 9, fontFamily: 'Share Tech Mono' },
                     top: 10, left: 10, itemHeight: 60, itemWidth: 8,
                     formatter: (value) => '$' + Math.round(value).toLocaleString('es-CO')
                 },
@@ -3480,21 +3690,20 @@ xAxis: { type: 'value', show: false },
                     axisTick: { show: false } 
                 },
                 series: [{
-                    type: 'bar', 
-                    data: topCiu.map((t, i) => ({ 
-                        value: (typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') ? t[2] : t[1], 
-                        itemStyle: { 
-                            color: (filteredCiu && t[0] !== filteredCiu) ? 'rgba(0,204,255,0.1)' : (() => {
-                                let rate = t[2];
-                                let c = rate > 80 ? ['#ff0033','rgba(255,0,51,0.08)'] :
-                                        rate > 60 ? ['#ff5e00','rgba(255,94,0,0.08)'] :
-                                        rate > 40 ? ['#ffcc00','rgba(255,204,0,0.08)'] :
-                                                    ['#00ff88','rgba(0,255,136,0.08)'];
-                                return new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:c[0]},{offset:1,color:c[1]}]);
-                            })(),
-                            borderRadius: [0, 4, 4, 0]
-                        } 
-                    })),
+                    type: 'bar',
+                    data: topCiu.map((t, i) => {
+                        const active = !filteredCiu || t[0] === filteredCiu;
+                        if (!active) return { value: (typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') ? t[2] : t[1], itemStyle: { color: 'rgba(0,204,255,0.06)', borderRadius: [0,4,4,0] } };
+                        const rate = t[2];
+                        const [neon, dark, glow] = rate > 80 ? ['#ff0033','#1a0008','rgba(255,0,51,0.55)'] :
+                                                   rate > 60 ? ['#ff5e00','#1a0800','rgba(255,94,0,0.55)'] :
+                                                   rate > 40 ? ['#ffcc00','#1a1400','rgba(255,204,0,0.55)'] :
+                                                              ['#00ff88','#001a0e','rgba(0,255,136,0.55)'];
+                        return { value: (typeof avanceSortMode !== 'undefined' && avanceSortMode === 'deuda') ? t[2] : t[1], itemStyle: {
+                            color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:neon},{offset:1,color:dark}]),
+                            borderRadius: [0,4,4,0], shadowColor: glow, shadowBlur: 10, shadowOffsetX: 3
+                        }};
+                    }),
                     barMaxWidth: 15,
                     label: { 
                         show: true, position: 'right', 
@@ -3589,6 +3798,7 @@ if(document.getElementById('t2_kpiAvancePct')) {
             // INTELIGENCIA ESTRATEGICA CALCULATIONS
             // ==========================================
             let dinBloq = 0;
+            let dinBloqSeen = new Set(); // un solo pendiente por beneficiario con novedad
             let ciuDeuda = {};
             let resExito = {};
             let novImpacto = {};
@@ -3599,9 +3809,11 @@ if(document.getElementById('t2_kpiAvancePct')) {
                 let nov = d[col.tnov] || 'NINGUNA';
                 let ciu = d[col.ciu] || 'SIN CIUDAD';
                 let res = d[col.res] || 'SIN CIUDAD';
+                let docKey = d[col.doc] || d[col.ben] || 'NO_ID';
 
-                // Novedades
-                if(nov !== 'NINGUNA' && p > 0) {
+                // Novedades — deduplicado: PENDIENTE es el mismo en todas las filas del mismo beneficiario
+                if(nov !== 'NINGUNA' && p > 0 && !dinBloqSeen.has(docKey)) {
+                    dinBloqSeen.add(docKey);
                     dinBloq += p;
                     novImpacto[nov] = (novImpacto[nov] || 0) + p;
                 }
@@ -3624,6 +3836,8 @@ if(document.getElementById('t2_kpiAvancePct')) {
                 // Barra dinámica: % del pendiente total bloqueado por novedades
                 let pctImpacto = pendientes > 0 ? Math.min(100, dinBloq / pendientes * 100) : 0;
                 let elImpacto = document.getElementById('lineImpacto'); if(elImpacto) elImpacto.style.width = pctImpacto.toFixed(1) + '%';
+                let elCircImp = document.getElementById('circImpacto'); if(elCircImp) elCircImp.style.strokeDashoffset = (87.96 - 87.96 * pctImpacto / 100).toFixed(2);
+                let elCircImpTxt = document.getElementById('circImpactoTxt'); if(elCircImpTxt) elCircImpTxt.innerText = pctImpacto.toFixed(1) + '%';
 
                 // Barra dinámica: % del pendiente total que corresponde a la ciudad más crítica
                 let topCiuArr = Object.keys(ciuDeuda).sort((a,b) => ciuDeuda[b].p - ciuDeuda[a].p);
@@ -3632,10 +3846,12 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     document.getElementById('kpiIntCiudad').innerText = tc.length > 15 ? tc.substring(0,15) + '...' : tc;
                     document.getElementById('kpiIntCiudadVal').innerText = formatMoney(ciuDeuda[tc].p);
                     let pctCiu = pendientes > 0 ? Math.min(100, ciuDeuda[tc].p / pendientes * 100) : 0;
+                    let elCiuPct = document.getElementById('kpiIntCiudadPct'); if(elCiuPct) elCiuPct.innerText = pctCiu.toFixed(1) + '% del pendiente total';
                     let elCiu = document.getElementById('lineCiudad'); if(elCiu) elCiu.style.width = pctCiu.toFixed(1) + '%';
                 } else {
                     document.getElementById('kpiIntCiudad').innerText = "NINGUNA";
                     document.getElementById('kpiIntCiudadVal').innerText = "$0";
+                    let elCiuPct = document.getElementById('kpiIntCiudadPct'); if(elCiuPct) elCiuPct.innerText = '0% del pendiente total';
                     let elCiu = document.getElementById('lineCiudad'); if(elCiu) elCiu.style.width = '0%';
                 }
 
@@ -3663,7 +3879,7 @@ if(document.getElementById('t2_kpiAvancePct')) {
             (function() {
                 let benTotalSet = new Set();
                 let benConNovSet = new Set();
-                let novFrecMap = {};
+                let novFrecMap = {}; // novedad → Set de docKeys únicos
                 let arrRiesgoMap = {};
                 let benPendNovMap = {};
                 filteredData.forEach(d => {
@@ -3673,27 +3889,52 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     let arrKey = String(d[col.arrDoc] || d[col.arrNom] || 'SIN ARRENDADOR').trim();
                     let arrNom = String(d[col.arrNom] || arrKey).trim();
                     benTotalSet.add(docKey);
+                    // Arrendador: siempre acumular total de bens
+                    if(arrKey && arrKey !== 'SIN ARRENDADOR') {
+                        if(!arrRiesgoMap[arrKey]) arrRiesgoMap[arrKey] = { nombre: arrNom, bens: new Set(), total: new Set() };
+                        arrRiesgoMap[arrKey].total.add(docKey);
+                    }
                     if(nov !== 'NINGUNA') {
                         benConNovSet.add(docKey);
-                        novFrecMap[nov] = (novFrecMap[nov] || 0) + 1;
+                        if(!novFrecMap[nov]) novFrecMap[nov] = new Set();
+                        novFrecMap[nov].add(docKey);
                         if(p > 0 && !benPendNovMap[docKey]) benPendNovMap[docKey] = p;
-                        if(!arrRiesgoMap[arrKey]) arrRiesgoMap[arrKey] = { nombre: arrNom, bens: new Set() };
-                        arrRiesgoMap[arrKey].bens.add(docKey);
+                        if(arrKey && arrKey !== 'SIN ARRENDADOR') arrRiesgoMap[arrKey].bens.add(docKey);
                     }
                 });
                 let pctNov = benTotalSet.size > 0 ? ((benConNovSet.size / benTotalSet.size) * 100).toFixed(1) : '0.0';
                 let totalBloqNov = Object.values(benPendNovMap).reduce((s, v) => s + v, 0);
-                let novFrecArr = Object.entries(novFrecMap).sort((a,b) => b[1]-a[1]);
+                let novFrecArr = Object.entries(novFrecMap).sort((a,b) => b[1].size - a[1].size);
                 let arrRiesArr = Object.values(arrRiesgoMap).sort((a,b) => b.bens.size - a.bens.size);
                 let el = id => document.getElementById(id);
                 if(el('t3_kpiPctNov')) el('t3_kpiPctNov').innerText = pctNov + '%';
                 if(el('t3_kpiBenConNov')) el('t3_kpiBenConNov').innerText = benConNovSet.size + ' de ' + benTotalSet.size;
                 if(el('t3_lineNov')) el('t3_lineNov').style.width = Math.min(parseFloat(pctNov), 100) + '%';
+                if(el('t3_circNov')) el('t3_circNov').style.strokeDashoffset = (87.96 - 87.96 * parseFloat(pctNov) / 100).toFixed(2);
+                if(el('t3_circNovTxt')) el('t3_circNovTxt').innerText = pctNov + '%';
                 if(el('t3_kpiNovFrecNom')) el('t3_kpiNovFrecNom').innerText = novFrecArr.length > 0 ? novFrecArr[0][0] : '---';
-                if(el('t3_kpiNovFrecCnt')) el('t3_kpiNovFrecCnt').innerText = (novFrecArr.length > 0 ? novFrecArr[0][1] : 0) + ' casos';
+                if(el('t3_kpiNovFrecCnt')) {
+                    let topCnt = novFrecArr.length > 0 ? novFrecArr[0][1].size : 0;
+                    let topPct = benConNovSet.size > 0 ? (topCnt / benConNovSet.size * 100) : 0;
+                    el('t3_kpiNovFrecCnt').innerText = topCnt + ' beneficiarios';
+                    if(el('t3_circNovFrec')) el('t3_circNovFrec').style.strokeDashoffset = (87.96 - 87.96 * topPct / 100).toFixed(2);
+                    if(el('t3_circNovFrecTxt')) el('t3_circNovFrecTxt').innerText = topPct.toFixed(0) + '%';
+                    if(el('t3_lineNovFrec')) el('t3_lineNovFrec').style.width = Math.min(topPct, 100) + '%';
+                }
                 if(el('t3_kpiBloqueado')) el('t3_kpiBloqueado').innerText = formatMoney(totalBloqNov);
+                {
+                    let pctBloq = pendientes > 0 ? (totalBloqNov / pendientes * 100) : 0;
+                    if(el('t3_circBloq')) el('t3_circBloq').style.strokeDashoffset = (87.96 - 87.96 * pctBloq / 100).toFixed(2);
+                    if(el('t3_circBloqTxt')) el('t3_circBloqTxt').innerText = pctBloq.toFixed(1) + '%';
+                    if(el('t3_lineBloq')) el('t3_lineBloq').style.width = Math.min(pctBloq, 100) + '%';
+                }
                 if(el('t3_kpiArrNom')) el('t3_kpiArrNom').innerText = arrRiesArr.length > 0 ? arrRiesArr[0].nombre : '---';
-                if(el('t3_kpiArrCount')) el('t3_kpiArrCount').innerText = (arrRiesArr.length > 0 ? arrRiesArr[0].bens.size : 0) + ' con novedad';
+                if(el('t3_kpiArrCount')) {
+                    let novCnt = arrRiesArr.length > 0 ? arrRiesArr[0].bens.size : 0;
+                    let totCnt = arrRiesArr.length > 0 ? arrRiesArr[0].total.size : 0;
+                    let arrPct = totCnt > 0 ? (novCnt / totCnt * 100).toFixed(0) : 0;
+                    el('t3_kpiArrCount').innerText = novCnt + ' de ' + totCnt + ' (' + arrPct + '%)';
+                }
                 if(el('t3_kpiBenTotal')) el('t3_kpiBenTotal').innerText = benTotalSet.size.toLocaleString();
             })();
 
@@ -3891,8 +4132,8 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     legend: {
                         data: [{name:'$ Pendiente',icon:'roundRect'},{name:'% Acumulado',icon:'line'}],
                         top: 2, left: 'center',
-                        textStyle: { color: '#7890b5', fontSize: 8, fontFamily: 'Share Tech Mono' },
-                        itemWidth: 10, itemHeight: 6
+                        textStyle: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                        itemWidth: 13, itemHeight: 9
                     },
                     tooltip: {
                         trigger: 'axis', appendToBody: true, confine: true,
@@ -3908,21 +4149,21 @@ if(document.getElementById('t2_kpiAvancePct')) {
                                 % Acum.: <span style="color:#00ff88">${cLine[idx]}%</span>${pct80}`;
                         }
                     },
-                    grid: { left: '3%', right: '6%', bottom: '12%', top: '20%', containLabel: true },
+                    grid: { left: '3%', right: '6%', bottom: '3%', top: '14%', containLabel: true },
                     xAxis: { type: 'category', data: cNames, axisLabel: { color: '#7890b5', rotate: 28, fontSize: 10, fontFamily: 'Share Tech Mono', interval: 0 }, axisLine: { lineStyle: { color: '#142038' } }, axisTick: { show: false } },
                     yAxis: [
-                        { type: 'value', name: 'Deuda ($)', nameTextStyle: { color: '#7890b5', fontSize: 8 }, axisLabel: { color: '#7890b5', fontSize: 8, formatter: v => formatMoneyShort(v) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
-                        { type: 'value', name: '% Acum', max: 100, nameTextStyle: { color: '#7890b5', fontSize: 8 }, axisLabel: { color: '#7890b5', fontSize: 8, formatter: '{value}%' }, splitLine: { show: false } }
+                        { type: 'value', name: 'Deuda ($)', nameTextStyle: { color: '#7890b5', fontSize: 9 }, axisLabel: { color: '#7890b5', fontSize: 9, formatter: v => formatMoneyShort(v) }, splitLine: { lineStyle: { color: '#142038', type: 'dashed' } } },
+                        { type: 'value', name: '% Acum', max: 100, nameTextStyle: { color: '#7890b5', fontSize: 9 }, axisLabel: { color: '#7890b5', fontSize: 9, formatter: '{value}%' }, splitLine: { show: false } }
                     ],
                     series: [
                         { name: '$ Pendiente', type: 'bar', data: cBar, barMaxWidth: 28,
-                          itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#bf00ff'},{offset:1,color:'#4a0080'}]), borderRadius: [3,3,0,0] },
-                          emphasis: { itemStyle: { color: '#e070ff' } } },
+                          itemStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#00ccff'},{offset:1,color:'rgba(0,204,255,0.12)'}]), borderRadius: [5,5,0,0] },
+                          emphasis: { itemStyle: { color: '#66ddff' } } },
                         { name: '% Acumulado', type: 'line', yAxisIndex: 1, data: cLine,
                           itemStyle: { color: '#00ff88' }, lineStyle: { color: '#00ff88', width: 2 },
                           symbol: 'circle', symbolSize: 4,
                           markLine: { silent: true, symbol: 'none', lineStyle: { color: '#ffcc00', type: 'dashed', width: 1 },
-                            data: [{ yAxis: 80, name: '80%', label: { formatter: '80%', color: '#ffcc00', fontSize: 9 } }] }
+                            data: [{ yAxis: 80, name: '80%', label: { formatter: '80%', color: '#ffcc00', fontSize: 9, position: 'insideEndTop' } }] }
                         }
                     ]
                 });
@@ -3952,12 +4193,12 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     legend: {
                         data: [{name:'Sin novedad',icon:'roundRect'},{name:'Con novedad',icon:'roundRect'}],
                         top: 2, left: 'center',
-                        textStyle: { color: '#7890b5', fontSize: 8, fontFamily: 'Share Tech Mono' },
-                        itemWidth: 10, itemHeight: 6
+                        textStyle: { color: '#7890b5', fontSize: 10, fontFamily: 'Share Tech Mono' },
+                        itemWidth: 13, itemHeight: 9
                     },
                     tooltip: {
                         trigger: 'axis', axisPointer: { type: 'shadow' }, appendToBody: true, confine: true,
-                        backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#bf00ff', borderWidth: 1,
+                        backgroundColor: 'rgba(3,6,16,0.95)', borderColor: '#00ccff', borderWidth: 1,
                         textStyle: { color: '#fff', fontSize: 10, fontFamily: 'Share Tech Mono' },
                         formatter: p => {
                             let a = arrData[p[0].dataIndex];
@@ -3977,11 +4218,17 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     series: [
                         { name: 'Sin novedad', type: 'bar', stack: 'total', barMaxWidth: 16,
                           data: arrData.map(a => a.bens.size - a.bensNov.size),
-                          itemStyle: { color: '#bf00ff', borderRadius: [0,0,0,0] } },
+                          itemStyle: {
+                              color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#00ccff'},{offset:1,color:'rgba(0,204,255,0.12)'}]),
+                              borderRadius: [0,4,4,0]
+                          } },
                         { name: 'Con novedad', type: 'bar', stack: 'total', barMaxWidth: 16,
                           data: arrData.map(a => a.bensNov.size),
-                          itemStyle: { color: '#ff5e00', borderRadius: [0,3,3,0] },
-                          label: { show: true, position: 'right', formatter: p => p.value > 0 ? p.value : '', color: '#fff', fontSize: 9, fontFamily: 'Share Tech Mono' } }
+                          itemStyle: {
+                              color: new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#ff5e00'},{offset:1,color:'rgba(255,94,0,0.15)'}]),
+                              borderRadius: [0,4,4,0]
+                          },
+                          label: { show: true, position: 'right', formatter: p => p.value > 0 ? p.value : '', color: '#ff5e00', fontSize: 9, fontFamily: 'Share Tech Mono' } }
                     ]
                 });
             }
@@ -4031,7 +4278,7 @@ if(document.getElementById('t2_kpiAvancePct')) {
                                 shadowBlur: 6, shadowOffsetY: -2
                             }
                         })),
-                        label: { show: true, position: 'top', color: '#ccc', fontSize: 8, fontFamily: 'Share Tech Mono', formatter: p => p.value > 0 ? p.value.toLocaleString() : '' }
+                        label: { show: true, position: 'top', color: '#e0ecff', fontSize: 11, fontFamily: 'Share Tech Mono', formatter: p => p.value > 0 ? p.value.toLocaleString() : '' }
                     }]
                 });
             }
@@ -4118,25 +4365,28 @@ if(document.getElementById('t2_kpiAvancePct')) {
 
         init();
 
-        // Tooltips ⓘ: crear el singleton en JS y pegarlo al body para escapar clip-path
+        // Tooltips ⓘ: event delegation — funciona con elementos estáticos y dinámicos
         (function() {
             const gt = document.createElement('div');
             gt.id = 'globalTip';
             document.body.appendChild(gt);
-            document.querySelectorAll('.ptip').forEach(wrap => {
+            document.body.addEventListener('mouseover', e => {
+                const wrap = e.target.closest('.ptip');
+                if (!wrap) return;
                 const box = wrap.querySelector('.ptip-box');
                 if (!box) return;
-                wrap.addEventListener('mouseenter', () => {
-                    gt.innerHTML = box.innerHTML;
-                    const r = wrap.getBoundingClientRect();
-                    const boxW = 310;
-                    const left = Math.min(r.left, window.innerWidth - boxW - 8);
-                    const top = r.bottom + 6;
-                    gt.style.left = left + 'px';
-                    gt.style.top = top + 'px';
-                    gt.style.display = 'block';
-                });
-                wrap.addEventListener('mouseleave', () => { gt.style.display = 'none'; });
+                gt.innerHTML = box.innerHTML;
+                const r = wrap.getBoundingClientRect();
+                const boxW = 310;
+                const left = Math.min(r.left, window.innerWidth - boxW - 8);
+                const top  = r.bottom + 6;
+                gt.style.left = left + 'px';
+                gt.style.top  = top  + 'px';
+                gt.style.display = 'block';
+            });
+            document.body.addEventListener('mouseout', e => {
+                const wrap = e.target.closest('.ptip');
+                if (wrap && !wrap.contains(e.relatedTarget)) gt.style.display = 'none';
             });
         })();
 
@@ -4148,6 +4398,7 @@ if(document.getElementById('t2_kpiAvancePct')) {
 
         async function loadTimeline() {
             if (tlData) { tlRenderTable(); return; }
+            initMultiSelect('tlEtapaFilter', 'ETAPA', { onChange: () => { tlPage = 0; tlRenderTable(); }, tooltip: '<b>ETAPA</b>Filtra por etapa del proceso: Asignado, Legalizado o Cargado. Puedes marcar varias a la vez.' });
             document.getElementById('tlTableBody').innerHTML =
                 '<tr><td colspan="11" class="text-center py-8 text-[#7890b5] tracking-widest text-[10px]">⏳ CARGANDO DATOS...</td></tr>';
             try {
@@ -4165,10 +4416,21 @@ if(document.getElementById('t2_kpiAvancePct')) {
         function tlRenderKpis() {
             const cnt = {CRITICO:0, ROJO:0, AMARILLO:0, VERDE:0};
             tlData.forEach(d => { if(cnt[d.semaforo] !== undefined) cnt[d.semaforo]++; });
-            document.getElementById('tlKpiCritico').textContent  = cnt.CRITICO.toLocaleString();
-            document.getElementById('tlKpiRojo').textContent     = cnt.ROJO.toLocaleString();
-            document.getElementById('tlKpiAmarillo').textContent = cnt.AMARILLO.toLocaleString();
-            document.getElementById('tlKpiVerde').textContent    = cnt.VERDE.toLocaleString();
+            const total = tlData.length;
+            const el = id => document.getElementById(id);
+            [
+                {key:'Critico',  count:cnt.CRITICO,  color:'#ff0033'},
+                {key:'Rojo',     count:cnt.ROJO,     color:'#ff5e00'},
+                {key:'Amarillo', count:cnt.AMARILLO,  color:'#ffcc00'},
+                {key:'Verde',    count:cnt.VERDE,    color:'#00ff88'}
+            ].forEach(({key, count}) => {
+                const pct = total > 0 ? (count / total * 100) : 0;
+                if(el('tlKpi'+key))       el('tlKpi'+key).textContent       = count.toLocaleString();
+                if(el('tlKpi'+key+'Sub')) el('tlKpi'+key+'Sub').textContent = 'de ' + total.toLocaleString();
+                if(el('tlCirc'+key))      el('tlCirc'+key).style.strokeDashoffset = (87.96 - 87.96 * pct / 100).toFixed(2);
+                if(el('tlCirc'+key+'Txt'))el('tlCirc'+key+'Txt').textContent = pct.toFixed(1) + '%';
+                if(el('tlLine'+key))      el('tlLine'+key).style.width = pct.toFixed(1) + '%';
+            });
         }
 
         function tlRenderCharts() {
@@ -4187,8 +4449,11 @@ if(document.getElementById('t2_kpiAvancePct')) {
             charts['tlPipeline'] = pip;
             pip.setOption({
                 backgroundColor: 'transparent',
-                tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
-                    formatter: p => `${p[0].name}<br/><b>${p[0].value} días</b>` },
+                tooltip: { trigger:'axis', axisPointer:{type:'shadow'}, appendToBody:true, confine:true,
+                    backgroundColor:'rgba(3,6,16,0.95)', borderColor:'#ffcc00', borderWidth:1,
+                    textStyle:{color:'#fff',fontSize:10,fontFamily:'Share Tech Mono'},
+                    extraCssText:'min-width:160px;line-height:1.8;padding:10px;',
+                    formatter: p => `<span style="color:#ffcc00;font-weight:bold">${p[0].name}</span><br/>Promedio: <span style="color:#fff;font-weight:bold">${p[0].value} días</span>` },
                 grid: { left:180, right:60, top:10, bottom:30 },
                 xAxis: { type:'value', axisLabel:{color:'#7890b5',fontSize:9},
                     splitLine:{lineStyle:{color:'#142038'}} },
@@ -4198,10 +4463,10 @@ if(document.getElementById('t2_kpiAvancePct')) {
                     axisLabel:{color:'#e0e0e0',fontSize:9}, axisTick:{show:false} },
                 series:[{ type:'bar', barWidth:18,
                     data:[
-                        {value:d4avg, itemStyle:{color: d4avg>90?'#ff0033': d4avg>60?'#ff5e00':'#00ff88'}},
-                        {value:d3avg, itemStyle:{color: d3avg>180?'#ff5e00':'#00ccff'}},
-                        {value:d2avg, itemStyle:{color: d2avg>365?'#ff0033': d2avg>180?'#ff5e00':'#ffcc00'}},
-                        {value:d1avg, itemStyle:{color:'#00ccff'}},
+                        {value:d4avg, itemStyle: (c=>(({color:new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:c[0]},{offset:1,color:c[1]}]),borderRadius:[0,4,4,0],shadowColor:c[2],shadowBlur:10,shadowOffsetX:3})))(d4avg>90?['#ff0033','#1a0008','rgba(255,0,51,0.55)']:d4avg>60?['#ff5e00','#1a0800','rgba(255,94,0,0.55)']:['#00ff88','#001a0e','rgba(0,255,136,0.55)'])},
+                        {value:d3avg, itemStyle: (c=>(({color:new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:c[0]},{offset:1,color:c[1]}]),borderRadius:[0,4,4,0],shadowColor:c[2],shadowBlur:10,shadowOffsetX:3})))(d3avg>180?['#ff5e00','#1a0800','rgba(255,94,0,0.55)']:['#00ff88','#001a0e','rgba(0,255,136,0.55)'])},
+                        {value:d2avg, itemStyle: (c=>(({color:new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:c[0]},{offset:1,color:c[1]}]),borderRadius:[0,4,4,0],shadowColor:c[2],shadowBlur:10,shadowOffsetX:3})))(d2avg>365?['#ff0033','#1a0008','rgba(255,0,51,0.55)']:d2avg>180?['#ff5e00','#1a0800','rgba(255,94,0,0.55)']:['#ffcc00','#1a1400','rgba(255,204,0,0.55)'])},
+                        {value:d1avg, itemStyle:{color:new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#00ff88'},{offset:1,color:'#001a0e'}]),borderRadius:[0,4,4,0],shadowColor:'rgba(0,255,136,0.55)',shadowBlur:10,shadowOffsetX:3}},
                     ],
                     label:{show:true, position:'right', color:'#e0e0e0', fontSize:9,
                         formatter: p => p.value + ' días'}
@@ -4220,18 +4485,47 @@ if(document.getElementById('t2_kpiAvancePct')) {
             charts['tlDist'] = dist;
             dist.setOption({
                 backgroundColor:'transparent',
-                tooltip:{trigger:'axis', axisPointer:{type:'shadow'},
-                    formatter: p=>`${p[0].name} días<br/><b>${p[0].value} beneficiarios</b>`},
+                tooltip:{trigger:'axis', axisPointer:{type:'shadow'}, appendToBody:true, confine:true,
+                    backgroundColor:'rgba(3,6,16,0.95)', borderColor:'#ffcc00', borderWidth:1,
+                    textStyle:{color:'#fff',fontSize:10,fontFamily:'Share Tech Mono'},
+                    extraCssText:'min-width:160px;line-height:1.8;padding:10px;',
+                    formatter: p=>`<span style="color:#ffcc00;font-weight:bold">${p[0].name} días</span><br/>Beneficiarios: <span style="color:#fff;font-weight:bold">${p[0].value}</span>`},
                 grid:{left:20,right:20,top:10,bottom:30, containLabel:true},
                 xAxis:{type:'category', data:buckets.map(b=>b.label),
                     axisLabel:{color:'#e0e0e0',fontSize:10},axisTick:{show:false}},
                 yAxis:{type:'value', axisLabel:{color:'#7890b5',fontSize:9},
                     splitLine:{lineStyle:{color:'#142038'}}},
                 series:[{type:'bar', barWidth:'50%',
-                    data: buckets.map(b=>({value:b.count, itemStyle:{color:b.color, borderRadius:3}})),
+                    data: buckets.map(b=>{
+                        const dk={'#00ff88':'#001a0e','#ffcc00':'#1a1400','#ff5e00':'#1a0800','#ff0033':'#1a0008'};
+                        const gl={'#00ff88':'rgba(0,255,136,0.55)','#ffcc00':'rgba(255,204,0,0.55)','#ff5e00':'rgba(255,94,0,0.55)','#ff0033':'rgba(255,0,51,0.55)'};
+                        return {value:b.count, itemStyle:{
+                            color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:b.color},{offset:1,color:dk[b.color]}]),
+                            borderRadius:[4,4,0,0], shadowColor:gl[b.color], shadowBlur:10, shadowOffsetY:-2
+                        }};
+                    }),
                     label:{show:true, position:'top', color:'#e0e0e0', fontSize:9}
                 }]
             });
+        }
+
+        function tlResetFilters() {
+            document.getElementById('tlSearch').value = '';
+            const etapaSel = document.getElementById('tlEtapaFilter');
+            if (etapaSel.resetCustom) etapaSel.resetCustom(); else etapaSel.value = '';
+            tlSetFilter('TODOS');
+        }
+
+        function tlExportCSV() {
+            if (!tlFiltered || !tlFiltered.length) return;
+            const cols  = ['semaforo','nombre','apellidos','documento','ciudad','etapa','d1','d2','d3','d4_sin_pago','gestor','estado'];
+            const heads = ['Semáforo','Nombre','Apellidos','Documento','Ciudad','Etapa','D1','D2','D3','D4 Sin Pago','Gestor','Estado'];
+            const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+            const rows = [heads.map(esc).join(','), ...tlFiltered.map(d => cols.map(c => esc(d[c])).join(','))];
+            const blob = new Blob(['﻿' + rows.join('\r\n')], {type:'text/csv;charset=utf-8'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = 'seguimiento_alertas_' + new Date().toISOString().slice(0,10) + '.csv';
+            a.click();
         }
 
         function tlSetFilter(sem) {
@@ -4254,10 +4548,12 @@ if(document.getElementById('t2_kpiAvancePct')) {
         function tlRenderTable() {
             if (!tlData) return;
             const search = (document.getElementById('tlSearch').value || '').toLowerCase();
-            const etapa  = document.getElementById('tlEtapaFilter').value;
+            const etapaSel = document.getElementById('tlEtapaFilter');
+            const etapaRaw = etapaSel.getCustomValues ? etapaSel.getCustomValues() : etapaSel.value;
+            const etapaList = Array.isArray(etapaRaw) ? etapaRaw : (etapaRaw && etapaRaw !== 'TODAS' ? [etapaRaw] : []);
             tlFiltered = tlData.filter(d => {
                 if (tlSemFilter !== 'TODOS' && d.semaforo !== tlSemFilter) return false;
-                if (etapa && d.etapa !== etapa) return false;
+                if (etapaList.length > 0 && !etapaList.includes(d.etapa)) return false;
                 if (search) {
                     const hay = ((d.nombre||'') + ' ' + (d.apellidos||'') + ' ' + (d.documento||'')).toLowerCase();
                     if (!hay.includes(search)) return false;
@@ -4277,13 +4573,16 @@ if(document.getElementById('t2_kpiAvancePct')) {
             const fmtD = v => (v != null && v !== '' && !isNaN(v)) ? `<span style="font-variant-numeric:tabular-nums">${Number(v).toLocaleString()}</span>` : '<span style="color:#3a4f6a">—</span>';
             const fmtDate = s => s ? s.slice(0,10) : '—';
 
-            const slice = tlFiltered.slice(tlPage * tlPageSize, (tlPage+1) * tlPageSize);
+            const startIdx = tlPage * tlPageSize;
+            const slice = tlFiltered.slice(startIdx, startIdx + tlPageSize);
             const tbody = document.getElementById('tlTableBody');
-            tbody.innerHTML = slice.map(d => {
+            tbody.innerHTML = slice.map((d, i) => {
+                const globalIdx = startIdx + i;
                 const c = semColor[d.semaforo] || '#7890b5';
-                const rowBg = d.semaforo === 'CRITICO' ? 'background:rgba(255,0,51,0.06)' :
-                              d.semaforo === 'ROJO'    ? 'background:rgba(255,94,0,0.04)' : '';
-                return `<tr style="${rowBg}" class="border-b border-[#0d1a30] hover:bg-[#0a1930] transition-colors">
+                const rowBg = d.semaforo === 'CRITICO' ? 'background:rgba(255,0,51,0.07);' :
+                              d.semaforo === 'ROJO'    ? 'background:rgba(255,94,0,0.05);' :
+                              '';
+                return `<tr style="${rowBg}cursor:pointer" onclick="tlOpenDrawer(${globalIdx})" class="border-b border-[#0d1a30] hover:bg-[#ffcc00]/5 transition-colors">
                     <td class="px-3 py-2 text-center">
                         <span style="color:${c};font-size:14px" title="${d.semaforo}">${semIcon[d.semaforo]||'?'}</span>
                     </td>
@@ -4306,6 +4605,124 @@ if(document.getElementById('t2_kpiAvancePct')) {
 
             if (slice.length === 0)
                 tbody.innerHTML = '<tr><td colspan="11" class="text-center py-8 text-[#7890b5] tracking-widest text-[10px]">SIN RESULTADOS</td></tr>';
+        }
+
+        function tlOpenDrawer(idx) {
+            const d = tlFiltered[idx];
+            if (!d) return;
+            const semColor = {CRITICO:'#ff0033',ROJO:'#ff5e00',AMARILLO:'#ffcc00',VERDE:'#00ff88'};
+            const semIcon  = {CRITICO:'🚨',ROJO:'🔴',AMARILLO:'🟡',VERDE:'🟢'};
+            const semDesc  = {
+                CRITICO:'Subsidio vencido o ejecutoriedad perdida. Acción urgente.',
+                ROJO:   'D4 > 90 días sin pago, o D2 > 365 días sin legalizar.',
+                AMARILLO:'D4 entre 61-90 días sin pago, o D2 entre 181-365 días.',
+                VERDE:  'D4 ≤ 60 días sin pago y D2 ≤ 180 días desde asignación.'
+            };
+            const c = semColor[d.semaforo] || '#7890b5';
+            const etapaColor = d.etapa==='CARGADO'?'#00ff88':d.etapa==='LEGALIZADO'?'#00ccff':'#ffcc00';
+            const fmt  = v => (v != null && v !== '') ? v : '—';
+            const fmtN = v => (v != null && !isNaN(v)) ? Number(v).toLocaleString('es-CO') : '—';
+            const fmtM = v => (v != null && !isNaN(v)) ? '$ ' + Number(v).toLocaleString('es-CO', {minimumFractionDigits:0}) : '—';
+            const fmtD = s => {
+                if (!s) return '—';
+                const p = String(s).slice(0,10);
+                return p.length === 10 ? p : s;
+            };
+
+            document.getElementById('t4drwName').textContent = (d.nombre||'') + ' ' + (d.apellidos||'');
+            document.getElementById('t4drwDoc').textContent = 'DOC: ' + (d.documento||'—');
+            document.getElementById('t4drwSemIcon').textContent = semIcon[d.semaforo]||'?';
+            document.getElementById('t4drwSemLabel').textContent = d.semaforo||'—';
+            document.getElementById('t4drwSemLabel').style.color = c;
+            document.getElementById('t4drwSemDesc').textContent = semDesc[d.semaforo]||'—';
+            document.getElementById('t4drwSem').style.borderColor = c;
+            document.getElementById('t4drwSem').style.background = c + '0a';
+            document.getElementById('t4drwCiudad').textContent = d.ciudad||'—';
+            document.getElementById('t4drwEtapa').textContent = d.etapa||'—';
+            document.getElementById('t4drwEtapa').style.color = etapaColor;
+            document.getElementById('t4drwGestor').textContent = d.gestor||'—';
+            document.getElementById('t4drwEstado').textContent = d.estado||'—';
+
+            // Pipeline de tiempos
+            const pipeRows = [
+                { label:'D1 · Postulación → Asignación',  val: d.d1,          color:'#00ff88',  ref: null },
+                { label:'D2 · Asignación → Legalización', val: d.d2,          color: d.d2>365?'#ff0033':d.d2>180?'#ff5e00':'#ffcc00', ref: 365 },
+                { label:'D3 · Legalización → Cargue',     val: d.d3,          color:'#00ff88',  ref: null },
+                { label:'D4 · Días sin pago',              val: d.d4_sin_pago, color: d.d4_sin_pago>90?'#ff0033':d.d4_sin_pago>60?'#ff5e00':'#00ff88', ref: 90 },
+            ];
+            document.getElementById('t4drwPipeline').innerHTML = pipeRows.map(r => {
+                const v   = (r.val != null && !isNaN(r.val)) ? Number(r.val) : null;
+                const pct = (v != null && r.ref) ? Math.min(100, (v / r.ref) * 100) : (v != null ? 40 : 0);
+                return `<div style="background:rgba(20,32,56,0.4);border:1px solid #142038;padding:8px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:9px;color:#7890b5;font-family:'Share Tech Mono';letter-spacing:.05em">${r.label}</span>
+                        <span style="font-size:11px;font-weight:bold;color:${r.color};font-family:'Share Tech Mono'">${v != null ? v + ' días' : '—'}</span>
+                    </div>
+                    <div style="height:3px;background:#142038;border-radius:2px;overflow:hidden">
+                        <div style="height:100%;width:${pct}%;background:${r.color};border-radius:2px;transition:width .6s"></div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // ── Secciones extra del Excel ──────────────────────────────────
+            const row2 = (label, val, color='#e0e0e0') =>
+                `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-bottom:1px solid #142038">
+                    <span style="font-size:9px;color:#7890b5;font-family:'Share Tech Mono';letter-spacing:.04em">${label}</span>
+                    <span style="font-size:10px;font-weight:bold;color:${color};font-family:'Share Tech Mono'">${val}</span>
+                </div>`;
+            const sec = (title, rows) =>
+                `<div style="background:rgba(20,32,56,0.4);border:1px solid #142038;padding:8px;">
+                    <div style="font-size:9px;color:#ffcc00;font-family:'Share Tech Mono';letter-spacing:.1em;margin-bottom:6px;text-transform:uppercase">${title}</div>
+                    ${rows}
+                </div>`;
+
+            // Resolución
+            const resolucionRow = d.resolucion
+                ? row2('Resolución Asig.', fmt(d.resolucion), '#00ccff')
+                : '';
+
+            document.getElementById('t4drwExtra').innerHTML = [
+
+                // 1 · Fechas clave
+                sec('Cronograma', [
+                    row2('Fecha Postulación',  fmtD(d.fecha_postulacion)),
+                    row2('Fecha Asignación',   fmtD(d.fecha_asignacion)),
+                    row2('Fecha Legalización', fmtD(d.fecha_legalizacion), d.fecha_legalizacion ? '#00ccff' : '#3a4f6a'),
+                    row2('Fecha Cargue',       fmtD(d.fecha_cargue),       d.fecha_cargue       ? '#00ff88' : '#3a4f6a'),
+                    row2('Último Pago',        fmtD(d.fecha_ultimo_pago),  d.fecha_ultimo_pago  ? '#00ff88' : '#3a4f6a'),
+                ].join('')),
+
+                // 2 · Financiero
+                sec('Subsidio y Pagos', [
+                    resolucionRow,
+                    row2('Valor Subsidio',  fmtM(d.valor_subsidio), '#ffcc00'),
+                    row2('Núm. Pagos',      fmtN(d.num_pagos),      '#00ccff'),
+                    row2('Total Pagado',    fmtM(d.total_pagado),   d.total_pagado >= d.valor_subsidio ? '#00ff88' : '#ff5e00'),
+                    row2('Legalizado',      fmt(d.legalizado)),
+                ].join('')),
+
+                // 3 · Gestor inmobiliario
+                (d.gestor_legal ? sec('Gestor Inmobiliario', row2('Nombre', fmt(d.gestor_legal), '#e0e0e0')) : ''),
+
+                // 4 · Perfil social
+                sec('Perfil Beneficiario', [
+                    row2('Sexo',        fmt(d.sexo)),
+                    row2('Nacionalidad',fmt(d.nacionalidad)),
+                    row2('Mujer Cab. Familia', d.mujer_cab_fam  === 'SI' || d.mujer_cab_fam  === true || d.mujer_cab_fam  == 1 ? '<span style="color:#00ff88">SÍ</span>' : 'No'),
+                    row2('Adulto Mayor',        d.adulto_mayor   === 'SI' || d.adulto_mayor   === true || d.adulto_mayor   == 1 ? '<span style="color:#ffcc00">SÍ</span>' : 'No'),
+                    row2('Discapacitado',       d.discapacitado  === 'SI' || d.discapacitado  === true || d.discapacitado  == 1 ? '<span style="color:#ffcc00">SÍ</span>' : 'No'),
+                    row2('Víctima Desplazamiento', d.victima === 'SI' || d.victima === true || d.victima == 1 ? '<span style="color:#ff5e00">SÍ</span>' : 'No'),
+                ].join('')),
+
+            ].join('');
+
+            document.getElementById('t4Drawer').classList.add('active');
+            document.getElementById('t4DrawerOverlay').classList.add('active');
+        }
+
+        function tlCloseDrawer() {
+            document.getElementById('t4Drawer').classList.remove('active');
+            document.getElementById('t4DrawerOverlay').classList.remove('active');
         }
 
         function tlPrevPage() { if(tlPage>0){tlPage--;tlRenderTable();} }

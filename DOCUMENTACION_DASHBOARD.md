@@ -119,3 +119,205 @@ Es vital entender cómo se transforman los datos de Excel a JSON antes de modifi
 ### Backup de esta sesión
 - `frontend_backup_20261013_export_xls.html` — estado previo al export XLS.
 - `frontend_backup_20261014_kpi_subtitles_radar_labels.html` — estado luego de ajustes V5.
+
+---
+
+## Actualizaciones V6 (Leyendas, KPI orden, Pareto — Sesión 2026-10-14)
+
+### Radar SALUD CIUDADES
+- **Centro bajado**: `['50%', '55%']` → `['50%', '62%']` — el triángulo queda más pegado a los labels inferiores (PRESUPUESTO/BENEFICIARIOS).
+- **Leyenda ampliada**: fontSize 7 → **10**, itemWidth 8 → **13**, itemHeight 5 → **9**, top 2 → 4.
+
+### Leyendas y textos en todos los artefactos
+| Artefacto | Cambio |
+|---|---|
+| Heatmap (Matriz Novedades) | yAxis fontSize 8 → **9**; visualMap fontSize 7 → **9**, items 12×8 → 14×10; label celdas fontSize 8 → **9** |
+| Heatmap xAxis | Revertido a fontSize 7 (las etiquetas rotadas 42° se desbordaban con 9) |
+| Pareto (Concentración Deuda) | Leyenda fontSize 8 → **10**, items 10×6 → 13×9; ejes Y nameTextStyle y axisLabel fontSize 8 → **9** |
+| Mapas Tab 1 y Tab 2 | Scatter city labels fontSize 7.5 → **9**; barra de color (visualMap) fontSize 7 → **9** |
+| labRadar (Tab 4) | axisName fontSize 9 → **11** |
+
+### Strip KPIs Tab 3 — reorden
+- **TOTAL BENEFICIARIOS** movido a la primera posición (antes era el último).
+- Nuevo orden: TOTAL BENEFICIARIOS · BENS. CON NOVEDAD · NOVEDAD MÁS FRECUENTE · $ TOTAL BLOQUEADO · ARRENDADOR MAYOR RIESGO.
+
+### Pareto — aprovechamiento vertical
+- Grid: `bottom: '12%'` → **`'3%'`**, `top: '20%'` → **`'14%'`** (con `containLabel: true` ECharts ajusta las etiquetas solas; el área de barras ocupa casi todo el panel).
+- Label "80%": posición `insideEndTop` (arriba de la línea punteada, extremo derecho) para no montarse sobre el "100%" del eje derecho.
+
+### Backup de esta sesión
+- `frontend_backup_20261014_legends_kpi_pareto.html` — estado luego de ajustes V6 iniciales.
+- `frontend_backup_20261014_v6_colores_leyendas.html` — estado luego de ajustes V6 finales (ver V6b abajo).
+
+---
+
+## Actualizaciones V6b (Colores, Leyendas, Tooltips — Sesión 2026-10-14 continuación)
+
+### Concentración Arrendadores
+- Barras "Sin novedad": color magenta → **cian** (`#00ccff`) con gradiente, `borderRadius: [0,4,4,0]`.
+- Barras "Con novedad": gradiente naranja con `borderRadius: [0,4,4,0]`.
+- Labels de barras: color `#fff` → **`#ff5e00`** (naranja, igual que la serie).
+- Leyenda: fontSize 8 → **10**, items 10×6 → **13×9**.
+- Tooltip border: magenta → **cian**.
+
+### Concentración de Deuda — Pareto
+- Barras: gradiente magenta → **cian** (`#00ccff` → fade), `borderRadius: [5,5,0,0]`.
+- Label 80%: `position: 'insideEndTop'` (arriba de la línea, extremo derecho).
+- Grid: `bottom: '3%'`, `top: '14%'` (más aprovechamiento vertical).
+- Leyenda Pareto: fontSize 8 → **10**, items 10×6 → **13×9**.
+
+### Distribución de Pagos
+- Labels sobre barras: fontSize 8 → **11**, color `#ccc` → **`#e0ecff`**.
+
+### KPIs Tab 3 — compactación
+- Subtextos (beneficiarios, de 0, en novedad, casos, con novedad): de `flex-col` → **`flex items-baseline gap-1`** (al lado del número, igual que Tab 1 y 2).
+
+### Cuadraditos de panel (indicadores de color)
+- CONCENTRACIÓN DE DEUDA: `■ magenta` → **`■ cian`** (alineado con barras).
+- CONCENTRACIÓN ARRENDADORES: `■ magenta` → **`■ cian`** (alineado con barras).
+
+### Tooltips ptip actualizados
+| Panel | Cambio |
+|---|---|
+| Concentración Deuda 80/20 | "línea naranja" → "línea verde"; barras descritas como cian |
+| Concentración Arrendadores | Colores actualizados (cian/naranja); descripción del número naranja |
+| Salud Ciudades | Explicación de REL.: porcentaje relativo al máximo de las ciudades mostradas |
+
+### Radar SALUD CIUDADES — tooltip
+- Línea "Presup.(Rel.)" ahora incluye valor absoluto: `32% del máx · $3,169,399,875`.
+
+---
+
+## V7 — Filtros Activos con Highlight Naranja (14 oct 2026)
+**Backup:** `frontend_backup_20261014_filtros_activos.html`
+
+### Problema resuelto
+Al navegar entre tabs con filtros activos, no había indicación visual de que un filtro seguía aplicado. El usuario podía estar viendo datos filtrados sin saberlo.
+
+### Implementación
+Nueva función `applyFilterBtnStyle(btn, isActive)` (justo antes de `initMultiSelect`):
+- **Activo** → `borderColor: #ff5e00`, `color: #ff5e00`, `boxShadow: 0 0 8px rgba(255,94,0,0.35)`
+- **Inactivo** → limpia estilos inline (Tailwind recupera `text-[#00ff88] border-[#1f2940]`)
+
+Llamada en 5 puntos dentro de `initMultiSelect`:
+| Punto | Cuándo | isActive |
+|---|---|---|
+| `cb.onchange` | usuario marca/desmarca checkbox | `checked.length > 0` |
+| `quickRow.onclick` | "TODAS (excl. X)" | `true` |
+| `select.resetCustom` | BORRAR o reset programático | `false` |
+| `select.setCustomValue` | asignación programática de 1 valor | `true` |
+| `select.selectCustom` | clic en mapa/barra activa filtro | `true` |
+
+Aplica a los 6 filtros: RESOLUCIÓN, CIUDAD, PERIODO, TIPO NOVEDAD, ESTADO ACTUAL, ESTADO PAGO.
+
+---
+
+## V8 — Bug fixes, Tab 2 KPI redesign, círculos legibles (14 oct 2026)
+**Backup:** `frontend_backup_20261014_kpis_circles_fix.html`
+
+### Bug: IMPACTO NOVEDADES (Tab 1 KPI 3) — conteo 8-9× inflado
+**Causa:** el formato "melt" del ETL genera ~9 filas por beneficiario (una por periodo de pago). `dinBloq` sumaba el valor `PENDIENTE` por cada fila, multiplicando el monto real 8-9 veces.
+**Fix:** Set `dinBloqSeen` que registra `docKey = DOC_PPT + novedad`; sólo acumula la primera ocurrencia por par (beneficiario × tipo_novedad).
+- Valor antes: ~$1,279,236,500 (ficticio) → Valor después: $142,248,500 (coincide con Tab 3 `$ TOTAL BLOQUEADO` ✓).
+
+### Tab 2 (ANÁLISIS DE EJECUCIÓN) — rediseño de KPIs
+Los 5 KPIs del strip de Tab 2 rediseñados con cálculos reales:
+
+| KPI | Título anterior | Título nuevo | Cálculo |
+|---|---|---|---|
+| KPI 1 | BENEFICIARIOS ÚNICOS | BENEFICIARIOS ÚNICOS | sin cambio (% filtrado/total) |
+| KPI 2 | REGISTROS TOTALES | **PAGOS REALIZADOS** | filas con `VALOR_PAGADO > 0` |
+| KPI 3 | sin cambio | sin cambio | sin cambio |
+| KPI 4 | TIPO NOV: [span] | **BENS CON NOVEDAD** | Set único de DOC_PPT con novedad ≠ NINGUNA → tamaño/currentBen |
+| KPI 5 | ESTADO: [span] | **CIUDAD TOP** | ciudad con mayor ratio `pagos/total` en el filtro activo |
+
+- KPI 5 subtexto (`t2_kpiEstTot`): muestra `"xx.x% ejecución"` (tasa de la ciudad top).
+
+### Tab 2 — círculos KPI: texto legible
+- Tamaño de fuente: `text-[7px]` → **`text-[9px]`** en todos los círculos del strip.
+- Añadido **`whitespace-nowrap`** para evitar que valores como "100%" se partan en 2 líneas dentro del círculo de 32px.
+- **Tab 1** `circBenText`: cambio de `.toFixed(1)` → **`.toFixed(0)`** (eliminaba el decimal "88.0%" que se veía extraño en el círculo).
+
+### Tab ESTADÍSTICA — eliminada
+- La 5ª pestaña ("ESTADÍSTICA") fue activada temporalmente para revisión y luego removida (botón de navegación eliminado del nav).
+- El `div#view_estadistica` permanece en el HTML pero inaccesible; sus KPIs tenían el mismo bug de `dinBloq` duplicado.
+
+### Radar Tab 3 — radio recortado
+- `radius: '80%'` → **`'62%'`** para que las etiquetas de los vértices no queden cortadas por el borde del panel.
+
+---
+
+## V9 — Etiquetas completas y % visibles en subtítulos (14 oct 2026)
+**Backup:** `frontend_backup_20261014_benef_pct_labels.html`
+
+### Sin abreviatura "BENS" en ningún tab
+| Tab | Antes | Después |
+|---|---|---|
+| Tab 2 KPI 4 | `BENS CON NOVEDAD` | `BENEFICIARIOS CON NOVEDAD` |
+| Tab 3 KPI 2 | `BENS. CON NOVEDAD` | `BENEFICIARIOS CON NOVEDAD` |
+
+Tab 1 ya usaba "BENEFICIARIOS ÚNICOS" completo — sin cambio.
+
+### Porcentajes como texto en subtítulos Tab 2
+Patrón estandarizado para KPIs de conteo en Tab 2: número absoluto grande + subtítulo gris `"de N · X%"`.
+Antes el % sólo aparecía en el círculo de 32px (difícil de leer). Ahora también como texto en el subtítulo gris.
+
+| KPI | Subtítulo antes | Subtítulo después |
+|---|---|---|
+| BENEFICIARIOS ÚNICOS | `de 1,873` | `de 1,873 · 100%` |
+| PAGOS REALIZADOS | `de 16,580` | `de 16,580 · 100%` |
+| BENEFICIARIOS CON NOVEDAD | `de 1,873` | `de 1,873 · 2%` |
+
+El círculo se mantiene como indicador visual; el subtítulo es la lectura rápida.
+
+---
+
+## V10 — Tab 4 rediseño + porcentajes Tab 1/3 + correcciones (14 oct 2026)
+**Backup:** `frontend_backup_20261014_tab4_redesign.html`
+
+### Tab 4 SEGUIMIENTO Y ALERTAS — rediseño completo
+- **KPI strip**: Mismo estilo que Tab 1/2/3 — `text-lg` + círculo gauge + subtítulo `de N` + barra inferior + borde izquierdo de color. Eliminado el `text-[34px]` desproporcionado anterior.
+- **Círculos KPI**: Muestran qué % del total (1983 bens) está en cada nivel: 🚨0.9% · 🔴47.8% · 🟡51.2% · 🟢0.2%
+- **Layout cuerpo**: `flex-row` con columna izquierda `33%` (gráficas apiladas) y columna derecha `flex-1` (tabla).
+- **Gráficas**: Pipeline (encima) + Distribución días (debajo), cada una `flex-1 min-h-0` dentro de su columna.
+- **Tabla**: Ocupa toda la altura disponible (`flex-1 min-h-0 overflow-auto`), eliminado `max-height:420px`.
+- **Campo Estado** — solo 3 valores en datos actuales: `Asignados` / `Apto con subsidio vencido` (→CRÍTICO) / `Perdida de ejecutoriedad de asignación de SFV` (→CRÍTICO).
+
+### Tab 1 CIUDAD MÁS CRÍTICA — % añadido
+- Nuevo elemento `kpiIntCiudadPct` bajo la ciudad/valor: muestra `"65.5% del pendiente total"`.
+- `pctCiu` ya estaba calculado para la barra; ahora también se muestra como texto.
+
+### Tab 3 correcciones de porcentajes
+| KPI | Antes | Después |
+|---|---|---|
+| NOVEDAD MÁS FRECUENTE | `93 casos` (conteo de filas) | `17 bens (46%)` — beneficiarios únicos, % sobre total con novedad |
+| $ TOTAL BLOQUEADO | `$142M en novedad` | `$142M` + `0.2%` del pendiente total |
+| ARRENDADOR MAYOR RIESGO | `1 con novedad` | `1 de 1 (100%)` — novedad/total del arrendador |
+- `novFrecMap` cambió de `count++` a `Set.add(docKey)` para contar beneficiarios únicos.
+- `arrRiesgoMap` ahora tiene campo `total` (Set de todos los bens) además de `bens` (solo con novedad).
+
+### Tab 2 — subtítulos sin % duplicado
+- Revertida la adición `· X%` en subtítulos de KPIs 1, 2 y 4. El % solo aparece en el círculo.
+
+### Estándar de KPI resultante
+- **Número absoluto**: valor principal (grande, coloreado)
+- **Subtítulo gris**: `"de TOTAL · X%"` — contexto inmediato sin mirar el círculo
+- **Círculo/anillo**: gauge visual del porcentaje
+- Tab 3 KPI "BENEFICIARIOS CON NOVEDAD" mantiene su patrón inverso (`XX%` grande + `N de M` pequeño) porque ahí el % de riesgo es el dato primario.
+
+## V11 — Tab 3 dot izquierda + Tab 4 tooltips ptip (14 oct 2026)
+**Backup:** `frontend_backup_20261014_tab4_tooltips.html`
+
+### Tab 3 BENEFICIARIOS CON NOVEDAD — indicador al lado izquierdo
+- El cuadrado rojo `w-1.5 h-1.5 bg-[#ff0033]` movido del lado derecho al lado izquierdo del panel.
+- El layout pasó de `justify-between` a `flex gap-1.5` con el dot como primer hijo, coherente con la lectura izquierda→derecha y el patrón "invertido" (% es el dato primario).
+
+### Tab 4 KPIs — tooltips ⓘ añadidos
+Todos los 4 encabezados de KPI de semáforo tienen ahora botón ⓘ con `.ptip`:
+| KPI | Texto tooltip |
+|---|---|
+| 🚨 CRÍTICO | Estado subsidio vencido o pérdida de ejecutoriedad. Gestión inmediata. |
+| 🔴 ROJO | +90 días sin pago o +365 días en proceso sin legalizar. Riesgo alto. |
+| 🟡 AMARILLO | 60-90 días sin pago o 180-365 días en proceso. Seguimiento activo. |
+| 🟢 VERDE | Pagos al día, proceso dentro de plazos normales. |
+- El sistema `ptip` se inicializa al cargar la página (IIFE); los paneles de Tab 4 son HTML estático, por lo que los tooltips quedan registrados correctamente.
